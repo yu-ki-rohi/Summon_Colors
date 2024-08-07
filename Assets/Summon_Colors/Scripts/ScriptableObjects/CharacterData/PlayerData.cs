@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerData : ScriptableObject
+[CreateAssetMenu(menuName = "ScriptableObject/CharacterData/Player",fileName = "PlayerData")]
+public class PlayerData : CharacterData
 {
-    public int MaxHp = 100;
-    public int Attack = 10;
     public int ColorCapacity = 255;
     public int SummonMax = 3;
     public int Money = 0;

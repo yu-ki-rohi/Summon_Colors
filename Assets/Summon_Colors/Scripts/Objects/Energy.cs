@@ -9,7 +9,7 @@ public class Energy : MonoBehaviour
     [SerializeField] private float _horizontallyRange = 20.0f;
     [SerializeField] private float _rotateSpeed = 5.0f;
     [SerializeField] private float _changeTime = 3.0f;
-    private AbsorbAndSummon _absorb;
+    private Absorb _absorb;
     private Transform _player;
     private ColorElements.ColorType _colorType;
     private Color _color;
@@ -19,7 +19,7 @@ public class Energy : MonoBehaviour
     private float _timer = 0.0f;
 
 
-    public void Initialize(AbsorbAndSummon absorb, ColorElements.ColorType colorType, int energy)
+    public void Initialize(Absorb absorb, ColorElements.ColorType colorType, int energy)
     {
         _absorb = absorb;
         _player = absorb.gameObject.transform;
@@ -47,7 +47,8 @@ public class Energy : MonoBehaviour
         transform.LookAt(_player.position);
         float up = Random.Range(-_varticalRange, _varticalRange);
         float right = Random.Range(-_horizontallyRange, _horizontallyRange);
-        transform.forward = (transform.forward + Vector3.up * up + Vector3.right * right).normalized;
+        transform.forward = (transform.forward + transform.up * up + transform.right * right).normalized;
+        _timer = 0.0f;
 
         _movePattern = Random.Range(0, 2);
     }

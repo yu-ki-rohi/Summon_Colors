@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Player))]
-public class AbsorbAndSummon : MonoBehaviour
+public class Absorb : MonoBehaviour
 {
     [SerializeField] private ObjectPoolBase _pool;
     [SerializeField] private GameObject _absorbBullet;
@@ -50,6 +50,11 @@ public class AbsorbAndSummon : MonoBehaviour
         {
             _GemIcon[id].fillAmount = _colorElements.GetRemaining(colorType);
         }
+    }
+
+    public int ReduceColor(ColorElements.ColorType colorType, int value)
+    {
+        return _colorElements.Reduce(colorType, value);
     }
 
     public void OnAbsorb(InputAction.CallbackContext context)

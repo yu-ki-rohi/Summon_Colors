@@ -122,4 +122,4 @@ MonoBehaviour:
   _varticalRange: 800
   _horizontallyRange: 800
   _rotateSpeed: 8
-  _changeTime: 0.8
+  _changeTime: 0.3

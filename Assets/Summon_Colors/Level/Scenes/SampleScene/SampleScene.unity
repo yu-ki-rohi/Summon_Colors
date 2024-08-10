@@ -1190,11 +1190,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _colorElements:
-    Blue: 1000
-    Red: 100
-    Yellow: 1000
+    Blue: 50
+    Red: 0
+    Yellow: 50
   _absorbMagnification: 0.5
-  _coolTime: 0.8
+  _coolTime: 0.4
 --- !u!54 &542511018
 Rigidbody:
   m_ObjectHideFlags: 0

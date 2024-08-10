@@ -10,11 +10,11 @@ public class Elements : MonoBehaviour
 
     private MeshRenderer _meshRenderer;
     private Material _material;
-    private AbsorbAndSummon _absorb;
+    private Absorb _absorb;
     private Vector3 _generatePosition = Vector3.zero;
     private float _timer = 0.0f;
 
-    public void RegisterAbsorb(AbsorbAndSummon absorb, Vector3 generatePosition)
+    public void RegisterAbsorb(Absorb absorb, Vector3 generatePosition)
     {
         _absorb = absorb;
         _generatePosition = generatePosition;

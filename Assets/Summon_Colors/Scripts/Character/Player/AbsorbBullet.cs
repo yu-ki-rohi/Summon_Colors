@@ -7,9 +7,9 @@ public class AbsorbBullet : MonoBehaviour
     [SerializeField] private float _range = 5.0f;
     [SerializeField] private float _speed = 3.0f;
     private float _distance = 0.0f;
-    private AbsorbAndSummon _absorb;
+    private Absorb _absorb;
 
-    public void Initialize(AbsorbAndSummon absorb, Vector3 forward)
+    public void Initialize(Absorb absorb, Vector3 forward)
     {
         _absorb = absorb;
         transform.forward = forward;

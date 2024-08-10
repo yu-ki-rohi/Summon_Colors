@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerData : CharacterData
 {
     public int ColorCapacity = 255;
+    public int AbsorbPower = 10;
     public int SummonMax = 3;
     public int Money = 0;
 }

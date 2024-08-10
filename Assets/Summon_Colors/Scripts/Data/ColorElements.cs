@@ -1,4 +1,5 @@
 using System;
+using static UnityEngine.Rendering.DebugUI;
 
 /// <summary>
 /// 保持している色の量
@@ -8,27 +9,62 @@ public class ColorElements
 {
     public enum ColorType
     {
-        Cyan,
-        Magenta,
-        Yellow
+        Blue,
+        Red,
+        Yellow,
+        Orange,
+        Green,
+        Violet,
+        All
     }
 
-    public int Cyan = 0;
-    public int Magenta = 0;
+    public int Blue = 0;
+    public int Red = 0;
     public int Yellow = 0;
 
-    private int _cyan;
-    private int _magenta;
-    private int _yellow;
+    private int _blue = 0;
+    private int _red = 0;
+    private int _yellow = 0;
 
     /// <summary>
     /// 初期化メソッド
     /// </summary>
     public void Initialize()
     {
-        _cyan = Cyan;
-        _magenta = Magenta;
+        _blue = Blue;
+        _red = Red;
         _yellow = Yellow;
+    }
+
+    public int GetColorMaxSum()
+    {
+        return Blue + Red + Yellow;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="color"></param>
+    /// <returns></returns>
+    public float GetRemaining(ColorType color)
+    {
+        switch (color)
+        {
+            case ColorType.Blue:
+                return GetRemainingColor(_blue, Blue);
+            case ColorType.Red:
+                return GetRemainingColor(_red, Red);
+            case ColorType.Yellow:
+                return GetRemainingColor(_yellow, Yellow);
+            case ColorType.Orange:
+                return GetRemainingColor(_red + _yellow, Red + Yellow);
+            case ColorType.Green:
+                return GetRemainingColor(_blue + _yellow, Blue + Yellow);
+            case ColorType.Violet:
+                return GetRemainingColor(_red + _blue, Red + Blue);
+            default:
+                return GetRemainingColor(_blue + _red + _yellow, GetColorMaxSum());
+        }
     }
 
     /// <summary>
@@ -40,13 +76,30 @@ public class ColorElements
     {
         switch (color)
         {
-            case ColorType.Cyan:
-                AddColor(ref _cyan, Cyan, value);
+            case ColorType.Blue:
+                AddColor(ref _blue, Blue, value);
                 break;
-            case ColorType.Magenta:
-                AddColor(ref _magenta, Magenta, value);
+            case ColorType.Red:
+                AddColor(ref _red, Red, value);
                 break;
             case ColorType.Yellow:
+                AddColor(ref _yellow, Yellow, value);
+                break;
+            case ColorType.Orange:
+                AddColor(ref _red, Red, value);
+                AddColor(ref _yellow, Yellow, value);
+                break;
+            case ColorType.Green:
+                AddColor(ref _blue, Blue, value);
+                AddColor(ref _yellow, Yellow, value);
+                break;
+            case ColorType.Violet:
+                AddColor(ref _blue, Blue, value);
+                AddColor(ref _red, Red, value);
+                break;
+            default:
+                AddColor(ref _blue, Blue, value);
+                AddColor(ref _red, Red, value);
                 AddColor(ref _yellow, Yellow, value);
                 break;
         }
@@ -62,15 +115,37 @@ public class ColorElements
     {
         switch (color)
         {
-            case ColorType.Cyan:
-                return ReduceColor(ref _cyan, value);
-            case ColorType.Magenta:
-                return ReduceColor(ref _magenta, value);
+            case ColorType.Blue:
+                return ReduceColor(ref _blue, value);
+            case ColorType.Red:
+                return ReduceColor(ref _red, value);
             case ColorType.Yellow:
                 return ReduceColor(ref _yellow, value);
+            case ColorType.Orange:
+                return ReduceColor(ref _red, value) + ReduceColor(ref _yellow, value);
+            case ColorType.Green:
+                return ReduceColor(ref _blue, value) + ReduceColor(ref _yellow, value);
+            case ColorType.Violet:
+                return ReduceColor(ref _blue, value) + ReduceColor(ref _red, value);
             default:
-                return 0;
+                return ReduceColor(ref _blue, value) + ReduceColor(ref _red, value) + ReduceColor(ref _yellow, value);
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="current"></param>
+    /// <param name="max"></param>
+    /// <returns></returns>
+    private float GetRemainingColor(int current, int max)
+    {
+        if (max == 0)
+        {
+            return 0.0f;
+        }
+
+        return  ((float)current / max);
     }
 
     /// <summary>

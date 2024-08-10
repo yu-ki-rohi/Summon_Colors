@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Drain",
+                    "name": "Absorb",
                     "type": "Button",
                     "id": "042545ff-0a88-46d7-902d-90ebdcad3e19",
                     "expectedControlType": "Button",
@@ -61,7 +61,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Drain",
+                    "action": "Absorb",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

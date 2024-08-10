@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class CharacterBase : MonoBehaviour
 {
-    [SerializeField] private CharacterData _characterData;
-
+    protected CharacterData _characterData;
     private int _currentHp;
 
     public int Hp { get {  return _currentHp; } }
@@ -16,13 +15,18 @@ public class CharacterBase : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
+        if(_characterData == null)
+        {
+            Debug.LogError("Character Data is Null!!");
+            return;
+        }
         _currentHp = _characterData.MaxHp;
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         
     }

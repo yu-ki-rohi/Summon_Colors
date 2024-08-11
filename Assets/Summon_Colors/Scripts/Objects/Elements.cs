@@ -19,6 +19,7 @@ public class Elements : MonoBehaviour
         _absorb = absorb;
         _generatePosition = generatePosition;
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +41,7 @@ public class Elements : MonoBehaviour
                     GenerateEnergy(ColorElements.ColorType.Blue);
                     GenerateEnergy(ColorElements.ColorType.Red);
                     GenerateEnergy(ColorElements.ColorType.Yellow);
-
+                    ReflectColorRemaining();
                 }
                 else
                 {
@@ -53,8 +54,7 @@ public class Elements : MonoBehaviour
             }
         }
 
-        Color newColor = new Color(0.0f, 0.0f, 0.0f, 1.0f - _colorElements.GetRemaining(ColorElements.ColorType.All));
-        _material.SetColor("_BaseColor", newColor);
+        
     }
 
     private void GenerateEnergy(ColorElements.ColorType colorType)
@@ -87,5 +87,11 @@ public class Elements : MonoBehaviour
                 energy.Initialize(_absorb, colorType, value);
             }
         }
+    }
+
+    private void ReflectColorRemaining()
+    {
+        Color newColor = new Color(0.0f, 0.0f, 0.0f, 1.0f - _colorElements.GetRemaining(ColorElements.ColorType.All));
+        _material.SetColor("_BaseColor", newColor);
     }
 }

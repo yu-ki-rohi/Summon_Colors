@@ -68,8 +68,7 @@ public class CameraMove : MonoBehaviour
     }
 
     private float SetDistance()
-    {
-        
+    {       
         Ray ray = new Ray(_target.position, _cameraVec);
         RaycastHit hit;
         int layerNum = LayerMask.NameToLayer("Stage");

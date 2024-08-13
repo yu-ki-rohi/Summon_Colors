@@ -24,6 +24,16 @@ public class CameraMove : MonoBehaviour
         _virtualCameraTransposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
     }
 
+    public void ChangeTarget(Transform target)
+    {
+        _target = target;
+    }
+
+    public void MoveCamera(InputAction.CallbackContext callbackContext)
+    {
+        _rightStick = callbackContext.ReadValue<Vector2>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -33,11 +43,6 @@ public class CameraMove : MonoBehaviour
         {
             _virtualCameraTransposer.m_FollowOffset = _cameraVec * SetDistance();
         }
-    }
-
-    public void MoveCamera(InputAction.CallbackContext callbackContext)
-    {
-        _rightStick = callbackContext.ReadValue<Vector2>();
     }
 
     private void RotateCameraInfo()

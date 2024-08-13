@@ -7,6 +7,8 @@ public class NPCBase : CharacterBase
     protected CharacterBase _targetCharacter = null;
     protected Dictionary<CharacterBase,int> _hate = new Dictionary<CharacterBase,int>();
 
+    public CharacterBase TargetCharacter { get { return _targetCharacter; } }
+
     public override void Damaged(int attack, int hate = 0, CharacterBase attacker = null)
     {
         base.Damaged(attack, hate, attacker);

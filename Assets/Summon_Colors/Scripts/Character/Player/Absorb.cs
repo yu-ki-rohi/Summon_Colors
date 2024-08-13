@@ -15,10 +15,10 @@ public class Absorb : MonoBehaviour
     private ColorElements _colorElements = new ColorElements();
 
     public ObjectPoolBase Pool { get { return _pool; } }
-
+    public PlayerActionController ActionController { get { return _player.ActionController;} }
     public bool IsAbsorbing()
     {
-        return _player.IsAbsorbing();
+        return _player.ActionController.IsAbsorbing();
     }
 
     public int GetPower()
@@ -61,7 +61,7 @@ public class Absorb : MonoBehaviour
     {
         if (context.performed)
         {
-            if(_player.ChangeToAbsorb())
+            if (_player.ActionController.ChangeToAbsorb())
             {
                 GameObject bullet = Instantiate(_absorbBullet, _firePosition.position, Quaternion.identity);
                 if (bullet.TryGetComponent<AbsorbBullet>(out var absorbBullet))
@@ -72,7 +72,7 @@ public class Absorb : MonoBehaviour
         }
         else if(context.canceled)
         {
-            _player.TurnToIdle();
+            _player.ActionController.TurnToIdle();
         }
     }
 

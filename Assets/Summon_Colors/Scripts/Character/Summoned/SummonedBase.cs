@@ -11,6 +11,7 @@ public class SummonedBase : NPCBase
     public ColorElements.ColorType ColorType { get { return _summonedData.ColorType; } }
     public int Costs { get { return _summonedData.Costs; } }
 
+    public Transform StandByPosition { get { return _standByPosition; } }
     public void Initialize(Transform standByPosition)
     {
         _standByPosition = standByPosition;

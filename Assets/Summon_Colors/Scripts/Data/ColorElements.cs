@@ -110,24 +110,65 @@ public class ColorElements
     /// </summary>
     /// <param name="color">減少させる色</param>
     /// <param name="value">減少させる量</param>
+    /// <param name="exhaust">足りない際使い切るか</param>
     /// <returns>どれだけ減らしたか</returns>
-    public int Reduce(ColorType color,int value)
+    public int Reduce(ColorType color, int value, bool exhaust = true)
     {
         switch (color)
         {
             case ColorType.Blue:
+                if(!exhaust &&
+                    _blue < value)
+                {
+                    return 0;
+                }
                 return ReduceColor(ref _blue, value);
             case ColorType.Red:
+                if (!exhaust &&
+                    _red < value)
+                {
+                    return 0;
+                }
                 return ReduceColor(ref _red, value);
             case ColorType.Yellow:
+                if (!exhaust &&
+                    _yellow < value)
+                {
+                    return 0;
+                }
                 return ReduceColor(ref _yellow, value);
             case ColorType.Orange:
+                if (!exhaust &&
+                    (_red < value ||
+                    _yellow < value))
+                {
+                    return 0;
+                }
                 return ReduceColor(ref _red, value) + ReduceColor(ref _yellow, value);
             case ColorType.Green:
+                if (!exhaust &&
+                   (_blue < value ||
+                    _yellow < value))
+                {
+                    return 0;
+                }
                 return ReduceColor(ref _blue, value) + ReduceColor(ref _yellow, value);
             case ColorType.Violet:
+                if (!exhaust &&
+                    (_red < value ||
+                    _blue < value))
+                {
+                    return 0;
+                }
                 return ReduceColor(ref _blue, value) + ReduceColor(ref _red, value);
             default:
+                if (!exhaust &&
+                    (_blue < value ||
+                    _red < value ||
+                    _yellow < value))
+                {
+                    return 0;
+                }
                 return ReduceColor(ref _blue, value) + ReduceColor(ref _red, value) + ReduceColor(ref _yellow, value);
         }
     }

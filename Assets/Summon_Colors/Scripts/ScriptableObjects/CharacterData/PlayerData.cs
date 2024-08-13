@@ -9,4 +9,15 @@ public class PlayerData : CharacterData
     public int AbsorbPower = 10;
     public int SummonMax = 3;
     public int Money = 0;
+
+    public bool PayMoney(int amount)
+    {
+        if(Money < amount)
+        {
+            return false;
+        }
+
+        Money -= amount;
+        return true;
+    }
 }

@@ -57,24 +57,15 @@ public class Absorb : MonoBehaviour
         return _colorElements.Reduce(colorType, value);
     }
 
-    public void OnAbsorb(InputAction.CallbackContext context)
+    public void Shoot()
     {
-        if (context.performed)
-        {
-            if (_player.ActionController.ChangeToAbsorb())
-            {
-                GameObject bullet = Instantiate(_absorbBullet, _firePosition.position, Quaternion.identity);
+         GameObject bullet = Instantiate(_absorbBullet, _firePosition.position, Quaternion.identity);
                 if (bullet.TryGetComponent<AbsorbBullet>(out var absorbBullet))
                 {
                     absorbBullet.Initialize(this, Camera.main.transform.forward);
                 }
-            }          
-        }
-        else if(context.canceled)
-        {
-            _player.ActionController.TurnToIdle();
-        }
     }
+
 
     // Start is called before the first frame update
     void Start()

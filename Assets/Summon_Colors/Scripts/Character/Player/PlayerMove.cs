@@ -9,9 +9,8 @@ public class PlayerMove : MonoBehaviour
     private Player _player;
     private Vector3 _velocity = Vector3.zero;
 
-    public void OnMove(InputAction.CallbackContext context)
+    public void Move(Vector2 stick)
     {
-        var stick = context.ReadValue<Vector2>();
 #if false
         float stickTheta = Mathf.Atan2(stick.x, stick.y);
         float cameraTheta = Mathf.Atan2(Camera.main.transform.forward.x, Camera.main.transform.forward.z);
@@ -24,6 +23,7 @@ public class PlayerMove : MonoBehaviour
         _velocity = (horizontalCameraForward.normalized * stick.y + Camera.main.transform.right * stick.x).normalized * _player.Agility;
 #endif
     }
+
 
     // Start is called before the first frame update
     void Start()

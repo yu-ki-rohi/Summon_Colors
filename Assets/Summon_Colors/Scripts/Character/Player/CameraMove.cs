@@ -29,9 +29,9 @@ public class CameraMove : MonoBehaviour
         _target = target;
     }
 
-    public void MoveCamera(InputAction.CallbackContext callbackContext)
+    public void MoveCamera(Vector2 stick)
     {
-        _rightStick = callbackContext.ReadValue<Vector2>();
+        _rightStick = stick;
     }
 
     // Update is called once per frame

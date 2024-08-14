@@ -430,8 +430,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 854161389}
-        m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
+      - m_Target: {fileID: 854161399}
+        m_TargetAssemblyTypeName: PlayerActionController, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -446,8 +446,8 @@ MonoBehaviour:
     m_ActionName: Player/Move
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 854161397}
-        m_TargetAssemblyTypeName: AbsorbAndSummon, Assembly-CSharp
+      - m_Target: {fileID: 854161399}
+        m_TargetAssemblyTypeName: PlayerActionController, Assembly-CSharp
         m_MethodName: OnAbsorb
         m_Mode: 0
         m_Arguments:
@@ -462,9 +462,9 @@ MonoBehaviour:
     m_ActionName: Player/Drain
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 330585549}
-        m_TargetAssemblyTypeName: CameraMove, Assembly-CSharp
-        m_MethodName: MoveCamera
+      - m_Target: {fileID: 854161399}
+        m_TargetAssemblyTypeName: PlayerActionController, Assembly-CSharp
+        m_MethodName: OnMoveCamera
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2021,6 +2021,8 @@ GameObject:
   - component: {fileID: 854161389}
   - component: {fileID: 854161397}
   - component: {fileID: 854161398}
+  - component: {fileID: 854161400}
+  - component: {fileID: 854161399}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2203,6 +2205,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _collider: {fileID: 374162991}
+  _summonPosition: {fileID: 0}
+  _homeBases: []
+  _summonedBases: []
+--- !u!114 &854161399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854161388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fea76e4ce089a1049abff06240450946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cameraMove: {fileID: 330585549}
+--- !u!114 &854161400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854161388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49b2b4d05088c114b9f7fe761d94aaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &935854830
 GameObject:
   m_ObjectHideFlags: 0

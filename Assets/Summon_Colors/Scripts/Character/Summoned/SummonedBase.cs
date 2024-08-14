@@ -6,15 +6,19 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class SummonedBase : NPCBase
 {
     [SerializeField] private SummonedData _summonedData;
+    private int _id;
     private Transform _standByPosition;
+    private Summon _summon;
 
     public ColorElements.ColorType ColorType { get { return _summonedData.ColorType; } }
     public int Costs { get { return _summonedData.Costs; } }
 
     public Transform StandByPosition { get { return _standByPosition; } }
-    public void Initialize(Transform standByPosition)
+    public void Initialize(int id, Transform standByPosition, Summon summon)
     {
+        _id = id;
         _standByPosition = standByPosition;
+        _summon = summon;
     }
 
     public override void RecognizeCharacter(Collider collider)
@@ -31,6 +35,15 @@ public class SummonedBase : NPCBase
         {
             base.LostCharacter(collider);
         }
+    }
+
+    protected override void Die()
+    {
+        if (_summon != null)
+        {
+            _summon.Release(ColorType, _id);
+        }
+        base.Die();
     }
 
     // Start is called before the first frame update

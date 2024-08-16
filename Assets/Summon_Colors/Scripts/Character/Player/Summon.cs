@@ -10,15 +10,13 @@ public class Summon : MonoBehaviour
     [SerializeField] private Collider _collider;
     [SerializeField] private Transform _summonPosition;
     [SerializeField] private HomeBase[] _homeBases;
-    [SerializeField] private SummonedBase[] _summonedBases;
+    [SerializeField] private SummonedPool[] _summonedPools;
     private Player _player;
     private Absorb _absorb;
-    private ColorElements.ColorType _color;
+    private ColorElements.ColorType _color = ColorElements.ColorType.Red;
 
-    private Dictionary<ColorElements.ColorType, Transform[]> _summonBasePositions;
-    private Dictionary<ColorElements.ColorType, bool[]> _isSummoned;
-
-    private float _timer = 0.0f;
+    private Dictionary<ColorElements.ColorType, Transform[]> _summonBasePositions = new Dictionary<ColorElements.ColorType, Transform[]>();
+    private Dictionary<ColorElements.ColorType, bool[]> _isSummoned = new Dictionary<ColorElements.ColorType, bool[]>();
 
 
     public ColorElements.ColorType Color { get { return _color; } }
@@ -35,6 +33,19 @@ public class Summon : MonoBehaviour
         return null;
     }
 
+    public int GetSummonedNum(ColorElements.ColorType color)
+    {
+        int num = 0;
+        foreach(var isSummoned in _isSummoned[color])
+        {
+            if(isSummoned)
+            {
+                num++;
+            }
+        }
+        return num;
+    }
+
     public void Inform(Collider other)
     {
         if(other.tag == "Enemy")
@@ -45,22 +56,31 @@ public class Summon : MonoBehaviour
 
     public void SummonColor()
     {
+        SummonedPool summonedPool = _summonedPools[0];
+        foreach (var summonedPools in _summonedPools)
+        {
+            if (summonedPools.ColorType == _color)
+            {
+                summonedPool = summonedPools;
+                break;
+            }
+        }
+        if(_absorb.ReduceColor(_color, summonedPool.GetCosts()) == 0)
+        {
+            return;
+        }
+
         for(int i = 0; i < _player.SummonMax;i++)
         {
             if (!_isSummoned[_color][i] && i < _summonBasePositions[_color].Length)
             {
-                for(int j = 0; j < _summonedBases.Length; j++)
+                _isSummoned[_color][i] = true;
+                // 生成処理
+                GameObject summoned = summonedPool.Get(_summonPosition.position);
+                // 初期化処理
+                if (summoned.TryGetComponent<SummonedBase>(out var summonedBase))
                 {
-                    if (_summonedBases[j].ColorType == _color)
-                    {
-                        _isSummoned[_color][i] = true;
-                        // 生成処理
-
-                        // 初期化処理
-
-
-                        break;
-                    }
+                    summonedBase.Initialize(i, _summonBasePositions[_color][i], this);
                 }
                 break;
             }

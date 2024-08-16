@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using static ColorElements;
 
 [RequireComponent(typeof(Player))]
 public class Absorb : MonoBehaviour
@@ -29,32 +30,14 @@ public class Absorb : MonoBehaviour
     public void AddColor(ColorElements.ColorType colorType, int value)
     {
         _colorElements.Add(colorType, value);
-
-        int id;
-        switch(colorType)
-        {
-            case ColorElements.ColorType.Blue:
-                id = 0;
-                break;
-            case ColorElements.ColorType.Red:
-                id = 1;
-                break;
-            case ColorElements.ColorType.Yellow:
-                id = 2;
-                break;
-            default:
-                id = -1;
-                break;
-        }
-        if(id >= 0)
-        {
-            _GemIcon[id].fillAmount = _colorElements.GetRemaining(colorType);
-        }
+        ReflectGemIcon();
     }
 
-    public int ReduceColor(ColorElements.ColorType colorType, int value)
+    public int ReduceColor(ColorElements.ColorType colorType, int value, bool exhoust = false)
     {
-        return _colorElements.Reduce(colorType, value);
+        int diff = _colorElements.Reduce(colorType, value, exhoust);
+        ReflectGemIcon();
+        return diff;
     }
 
     public void Shoot()
@@ -90,5 +73,13 @@ public class Absorb : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void ReflectGemIcon()
+    {
+        for(int i = 0; i < _GemIcon.Length; i++)
+        {
+            _GemIcon[i].fillAmount = _colorElements.GetRemaining((ColorType)i);
+        }
     }
 }

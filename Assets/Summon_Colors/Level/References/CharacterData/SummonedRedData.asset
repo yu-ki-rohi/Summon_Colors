@@ -18,4 +18,4 @@ MonoBehaviour:
   Agility: 5
   CoolTime: 3
   ColorType: 1
-  Costs: 0
+  Costs: 10

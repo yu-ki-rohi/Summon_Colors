@@ -32,6 +32,7 @@ public class NPCBase : CharacterBase
             if (!IsCharacterRecognized(character) &&
                 IsInView(character))
             {
+                Debug.Log("Recognized");
                 _hate.Add(character, 1);
                 if (_targetCharacter == null)
                 {
@@ -92,7 +93,7 @@ public class NPCBase : CharacterBase
 
     private bool IsInView(CharacterBase character)
     {
-        Vector3 dir = character.gameObject.transform.position - transform.position;
+        Vector3 dir = character.transform.position - transform.position;
         Ray ray = new Ray(transform.position, dir);
         RaycastHit hit;
         int layerNum = LayerMask.NameToLayer("Stage");

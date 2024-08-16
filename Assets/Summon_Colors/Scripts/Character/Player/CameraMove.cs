@@ -7,7 +7,7 @@ using UnityEngine.Windows;
 
 public class CameraMove : MonoBehaviour
 {
-    [SerializeField] private Transform _target;
+    [SerializeField] private Transform _player;
     [SerializeField] private CinemachineVirtualCamera _virtualCamera;
     [SerializeField] private float _baseDistance = 4.0f;
     [SerializeField] private float _horizontalSpeed = 2.0f;
@@ -15,18 +15,17 @@ public class CameraMove : MonoBehaviour
     [SerializeField, Range(0.5f,1.0f)] private float _baffa = 0.85f;
     [SerializeField] private bool _horizontalInvert = false;
     [SerializeField] private bool _verticalInvert = true;
+    private Transform _target;
     private Vector3 _cameraVec = Vector3.back;
     private CinemachineTransposer _virtualCameraTransposer;
     private Vector2 _rightStick;
-    // Start is called before the first frame update
-    void Start()
-    {
-        _virtualCameraTransposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
-    }
-
-    public void ChangeTarget(Transform target)
+    private bool _isDirecting = false;
+    
+    public void ChangeTarget(Transform target, bool isDirecting)
     {
         _target = target;
+        _isDirecting = isDirecting;
+        _virtualCamera.LookAt = _target;
     }
 
     public void MoveCamera(Vector2 stick)
@@ -34,10 +33,24 @@ public class CameraMove : MonoBehaviour
         _rightStick = stick;
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        _virtualCameraTransposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+        _target = _player;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        RotateCameraInfo();
+        if (_isDirecting)
+        {
+            _cameraVec = (_player.position - _target.position).normalized;
+        }
+        else
+        {
+            RotateCameraInfo();
+        }
     
         if (_virtualCameraTransposer != null)
         {
@@ -74,14 +87,14 @@ public class CameraMove : MonoBehaviour
 
     private float SetDistance()
     {       
-        Ray ray = new Ray(_target.position, _cameraVec);
+        Ray ray = new Ray(_player.position, _cameraVec);
         RaycastHit hit;
         int layerNum = LayerMask.NameToLayer("Stage");
         int layerMask = 1 << layerNum;
 
         if (Physics.Raycast(ray, out hit, _baseDistance, layerMask))
         {
-            return Vector3.Distance(hit.point,_target.position) * _baffa;
+            return Vector3.Distance(hit.point,_player.position) * _baffa;
         }
         else
         {

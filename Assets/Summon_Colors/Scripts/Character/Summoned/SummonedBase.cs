@@ -9,9 +9,11 @@ public class SummonedBase : NPCBase
     private int _id;
     private Transform _standByPosition;
     private Summon _summon;
+    private HomeBase _home;
 
     public ColorElements.ColorType ColorType { get { return _summonedData.ColorType; } }
     public int Costs { get { return _summonedData.Costs; } }
+    public HomeBase Home { get { return _home; } set { _home = value; } }
 
     public Transform StandByPosition { get { return _standByPosition; } }
     public void Initialize(int id, Transform standByPosition, Summon summon)
@@ -35,6 +37,11 @@ public class SummonedBase : NPCBase
         {
             base.LostCharacter(collider);
         }
+    }
+
+    public void ReleaseCharacters()
+    {
+        _hate.Clear();
     }
 
     protected override void Die()

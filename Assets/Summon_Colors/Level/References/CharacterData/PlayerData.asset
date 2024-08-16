@@ -19,5 +19,5 @@ MonoBehaviour:
   CoolTime: 3
   ColorCapacity: 255
   AbsorbPower: 5
-  SummonMax: 3
+  SummonMax: 30
   Money: 0

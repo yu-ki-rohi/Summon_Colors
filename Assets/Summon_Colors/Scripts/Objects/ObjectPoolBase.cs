@@ -5,7 +5,7 @@ using UnityEngine.Pool;
 
 public class ObjectPoolBase : MonoBehaviour
 {
-    [SerializeField] private GameObject _prefab;
+    [SerializeField] protected GameObject _prefab;
     [SerializeField] private int _baseNum = 10;
     [SerializeField] private int _maxNum = 100;
     private ObjectPool<GameObject> _pool;
@@ -25,29 +25,29 @@ public class ObjectPoolBase : MonoBehaviour
         _pool.Release(obj);
     }
 
-    private GameObject OnCreatePoolObject()
+    protected virtual GameObject OnCreatePoolObject()
     {
         GameObject o = Instantiate(_prefab,this.transform);
         return o;
     }
 
-    private void OnTakeFromPool(GameObject target)
+    protected virtual void OnTakeFromPool(GameObject target)
     {
         target.SetActive(true);
     }
 
-    private void OnReturnedToPool(GameObject target)
+    protected virtual void OnReturnedToPool(GameObject target)
     {
         target.SetActive(false);
     }
 
-    private void OnDestroyPoolObject(GameObject target)
+    protected virtual void OnDestroyPoolObject(GameObject target)
     {
         Destroy(target);
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         _pool = new ObjectPool<GameObject>(
             OnCreatePoolObject,

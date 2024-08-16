@@ -18,6 +18,7 @@ public class PlayerActionController : MonoBehaviour
     }
 
     [SerializeField] private CameraMove _cameraMove;
+    [SerializeField, Range(0.0f,1.0f)] private float _delayScale = 0.5f;
     private PlayerMove _playerMove;
     private Absorb _absorb;
     private Summon _summon;
@@ -39,10 +40,12 @@ public class PlayerActionController : MonoBehaviour
         if (_state == State.Direction)
         {
             _cameraMove.MoveCamera(Vector2.zero);
+            _direction.Direct(stick);
         }
         else
         {
             _cameraMove.MoveCamera(stick);
+            _direction.Direct(Vector2.zero);
         }
     }
 
@@ -50,13 +53,14 @@ public class PlayerActionController : MonoBehaviour
     {
         var stick = context.ReadValue<Vector2>();
 
-        if(_state == State.Idle)
+        if(_state == State.Absorb ||
+            _state == State.Summon)
         {
-            _playerMove.Move(stick);
+            _playerMove.Move(Vector2.zero);
         }
         else
         {
-            _playerMove.Move(Vector2.zero);
+            _playerMove.Move(stick);
         }
     }
 
@@ -64,12 +68,18 @@ public class PlayerActionController : MonoBehaviour
     {
         if (context.performed)
         {
-            _state = State.Absorb;
-            _absorb.Shoot();
+            if(_state == State.Idle)
+            {
+                _state = State.Absorb;
+                _absorb.Shoot();
+            }
         }
         else if (context.canceled)
         {
-            _state = State.Idle;
+            if (_state == State.Absorb)
+            {
+                _state = State.Idle;
+            }
         }
     }
 
@@ -77,11 +87,18 @@ public class PlayerActionController : MonoBehaviour
     {
         if (context.performed)
         {
-            
+            if (_state == State.Idle)
+            {
+                _state = State.Summon;
+                _summon.SummonColor();
+            }
         }
         else if (context.canceled)
         {
-            
+            if (_state == State.Summon)
+            {
+                _state = State.Idle;
+            }
         }
     }
 
@@ -89,7 +106,18 @@ public class PlayerActionController : MonoBehaviour
     {
         if (context.performed)
         {
-
+            if (_state == State.Direction)
+            {
+                _state = State.Idle;
+                Time.timeScale = 1.0f;
+                _cameraMove.ChangeTarget(transform, false);
+            }
+            else
+            {
+                _state = State.Direction;
+                Time.timeScale = _delayScale;
+                _cameraMove.ChangeTarget(_summon.GetHomeBase(_summon.Color).transform, true);
+            }
         }
         else if (context.canceled)
         {

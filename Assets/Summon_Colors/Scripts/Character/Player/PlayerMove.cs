@@ -11,6 +11,11 @@ public class PlayerMove : MonoBehaviour
 
     public void Move(Vector2 stick)
     {
+        if(stick == Vector2.zero)
+        {
+            _velocity = Vector3.zero;
+            return;
+        }
 #if false
         float stickTheta = Mathf.Atan2(stick.x, stick.y);
         float cameraTheta = Mathf.Atan2(Camera.main.transform.forward.x, Camera.main.transform.forward.z);

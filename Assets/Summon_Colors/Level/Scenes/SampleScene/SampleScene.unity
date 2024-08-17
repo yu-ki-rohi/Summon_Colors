@@ -508,6 +508,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e9152121-95b0-4bce-993c-3b4dc38955c1
     m_ActionName: Player/Direct[/XInputControllerWindows/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 854161399}
+        m_TargetAssemblyTypeName: PlayerActionController, Assembly-CSharp
+        m_MethodName: OnReturn
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 16e19139-e1b4-4dfc-a80a-5fef05a0a030
+    m_ActionName: Player/Return[/XInputControllerWindows/buttonSouth]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -6378,6 +6394,7 @@ GameObject:
   - component: {fileID: 1114429540041763396}
   - component: {fileID: 1114429540041763397}
   - component: {fileID: 1114429540041763398}
+  - component: {fileID: 1114429540041763399}
   m_Layer: 0
   m_Name: Demon
   m_TagString: Enemy
@@ -8701,6 +8718,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
+--- !u!114 &1114429540041763399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 305382137053606142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9c7bdf05f1ee24d91dd9473b25f07c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyData: {fileID: 11400000, guid: 73c668847a7a48f449df898a9ccfaad1, type: 2}
 --- !u!1 &1120325535884428939
 GameObject:
   m_ObjectHideFlags: 0

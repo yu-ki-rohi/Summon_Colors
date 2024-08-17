@@ -26,6 +26,7 @@ public class SummonedPool : ObjectPoolBase
         if(o.TryGetComponent<SummonedBase>(out var summonedBase))
         {
             summonedBase.Home = _homeBase;
+            summonedBase.SummonedPool = this;
         }
         return o;
     }

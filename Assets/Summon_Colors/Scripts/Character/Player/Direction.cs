@@ -22,6 +22,11 @@ public class Direction : MonoBehaviour
         _summon.GetHomeBase(_summon.Color).Velocity = (horizontalCameraForward.normalized * stick.y + Camera.main.transform.right * stick.x).normalized * _speed;
     }
 
+    public void Return()
+    {
+        _summon.GetHomeBase(_summon.Color).SetReturn(2.0f);
+    }
+
     // Start is called before the first frame update
     void Start()
     {

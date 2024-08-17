@@ -10,10 +10,12 @@ public class SummonedBase : NPCBase
     private Transform _standByPosition;
     private Summon _summon;
     private HomeBase _home;
+    private SummonedPool _pool;
 
     public ColorElements.ColorType ColorType { get { return _summonedData.ColorType; } }
     public int Costs { get { return _summonedData.Costs; } }
     public HomeBase Home { get { return _home; } set { _home = value; } }
+    public SummonedPool SummonedPool { get { return _pool; } set { _pool = value; } }
 
     public Transform StandByPosition { get { return _standByPosition; } }
     public void Initialize(int id, Transform standByPosition, Summon summon)
@@ -42,6 +44,7 @@ public class SummonedBase : NPCBase
     public void ReleaseCharacters()
     {
         _hate.Clear();
+        _targetCharacter = null;
     }
 
     protected override void Die()
@@ -51,6 +54,7 @@ public class SummonedBase : NPCBase
             _summon.Release(ColorType, _id);
         }
         base.Die();
+        _pool.Release(gameObject);
     }
 
     // Start is called before the first frame update
@@ -68,6 +72,6 @@ public class SummonedBase : NPCBase
     // Update is called once per frame
     protected override void Update()
     {
-        
+        base .Update();
     }
 }

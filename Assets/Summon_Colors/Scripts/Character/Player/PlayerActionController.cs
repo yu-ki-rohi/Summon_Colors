@@ -125,6 +125,25 @@ public class PlayerActionController : MonoBehaviour
         }
     }
 
+    public void OnReturn(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (_state == State.Direction)
+            {
+                _direction.Return();
+            }
+            else
+            {
+               
+            }
+        }
+        else if (context.canceled)
+        {
+
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {

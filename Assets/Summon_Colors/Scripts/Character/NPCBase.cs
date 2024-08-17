@@ -6,6 +6,7 @@ public class NPCBase : CharacterBase
 {
     protected CharacterBase _targetCharacter = null;
     protected Dictionary<CharacterBase,int> _hate = new Dictionary<CharacterBase,int>();
+    private Vector3 _eyesPosition = Vector3.zero;
 
     public CharacterBase TargetCharacter { get { return _targetCharacter; } }
 
@@ -27,7 +28,8 @@ public class NPCBase : CharacterBase
     }
     public virtual void RecognizeCharacter(Collider collider)
     {
-        if (collider.gameObject.TryGetComponent<CharacterBase>(out var character))
+        CharacterBase character = collider.gameObject.GetComponentInParent<CharacterBase>();
+        if (character != null)
         {
             if (!IsCharacterRecognized(character) &&
                 IsInView(character))
@@ -44,7 +46,8 @@ public class NPCBase : CharacterBase
 
     public virtual void LostCharacter(Collider collider)
     {
-        if (collider.gameObject.TryGetComponent<CharacterBase>(out var character))
+        CharacterBase character = collider.gameObject.GetComponentInParent<CharacterBase>();
+        if (character != null)
         {
             if (IsCharacterRecognized(character))
             {
@@ -56,6 +59,7 @@ public class NPCBase : CharacterBase
             }
         }
     }
+
     protected bool IsCharacterRecognized(CharacterBase character)
     {
         foreach(CharacterBase chara in _hate.Keys)
@@ -90,22 +94,21 @@ public class NPCBase : CharacterBase
         }
         return character;
     }
+    protected override void Update()
+    {
+        _eyesPosition = transform.position;
+        base.Update();
+    }
 
     private bool IsInView(CharacterBase character)
     {
-        Vector3 dir = character.transform.position - transform.position;
-        Ray ray = new Ray(transform.position, dir);
+        Debug.Log(_eyesPosition);
+        Vector3 dir = character.transform.position - _eyesPosition;
+        Ray ray = new Ray(_eyesPosition, dir);
         RaycastHit hit;
         int layerNum = LayerMask.NameToLayer("Stage");
         int layerMask = 1 << layerNum;
 
-        if (Physics.Raycast(ray, out hit, dir.magnitude, layerMask))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return !Physics.Raycast(ray, out hit, dir.magnitude, layerMask);
     }
 }

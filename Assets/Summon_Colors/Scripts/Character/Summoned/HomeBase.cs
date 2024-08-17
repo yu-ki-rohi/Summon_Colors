@@ -33,7 +33,7 @@ public class HomeBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_timer > 0.0f)
+        if (IsReturn())
         {
             _timer -= Time.deltaTime;
         }

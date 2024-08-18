@@ -18,26 +18,42 @@ public class PlayerActionController : MonoBehaviour
     }
 
     [SerializeField] private CameraMove _cameraMove;
+    [SerializeField] private ColorPalette _colorPalette;
     [SerializeField, Range(0.0f,1.0f)] private float _delayScale = 0.5f;
     private PlayerMove _playerMove;
     private Absorb _absorb;
     private Summon _summon;
     private Direction _direction;
     private State _state = State.Idle;
+    private bool _isChangingColor = false;
 
     public bool IsAbsorbing()
     {
-        if (_state == State.Absorb)
-        {
-            return true;
-        }
-        return false;
+        return _state == State.Absorb;
+    }
+
+    public bool IsSummoning()
+    {
+        return _state == State.Summon;
+    }
+
+    public void ChangeToIdle()
+    {
+        _state = State.Idle;
     }
 
     public void OnMoveCamera(InputAction.CallbackContext context)
     {
         var stick = context.ReadValue<Vector2>();
-        if (_state == State.Direction)
+        if (_isChangingColor && 
+            (_state == State.Direction || _state == State.Idle))
+        {
+            _summon.ChangeColors(stick);
+            _colorPalette.ReflectStick(stick);
+            _cameraMove.MoveCamera(Vector2.zero);
+            _direction.Direct(Vector2.zero);
+        }
+        else if (_state == State.Direction)
         {
             _cameraMove.MoveCamera(Vector2.zero);
             _direction.Direct(stick);
@@ -90,7 +106,6 @@ public class PlayerActionController : MonoBehaviour
             if (_state == State.Idle)
             {
                 _state = State.Summon;
-                _summon.SummonColor();
             }
         }
         else if (context.canceled)
@@ -141,6 +156,30 @@ public class PlayerActionController : MonoBehaviour
         else if (context.canceled)
         {
 
+        }
+    }
+
+    public void OnChange(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (_state == State.Direction || _state == State.Idle)
+            {
+                _isChangingColor = true;
+                Time.timeScale = _delayScale;
+                _colorPalette.DisplayColorPalette();
+            }
+            
+        }
+        else if (context.canceled)
+        {
+            if (_state != State.Direction)
+            {
+                Time.timeScale = 1.0f;
+            }
+            _colorPalette.ReflectStick(Vector2.zero);
+            _isChangingColor = false;
+            _colorPalette.HideColorPalette();
         }
     }
 

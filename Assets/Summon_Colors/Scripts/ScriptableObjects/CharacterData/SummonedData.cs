@@ -6,5 +6,5 @@ using UnityEngine;
 public class SummonedData : CharacterData
 {
     public ColorElements.ColorType ColorType;
-    public int Costs;
+    public int Costs = 10;
 }

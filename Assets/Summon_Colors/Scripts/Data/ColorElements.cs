@@ -27,6 +27,15 @@ public class ColorElements
     private int _yellow = 0;
 
     /// <summary>
+    /// ColorTypeの項目数を取得
+    /// </summary>
+    /// <returns>ColorTypeの項目数</returns>
+    static public int GetColorTypeNum()
+    {
+        return Enum.GetNames(typeof(ColorType)).Length;
+    }
+
+    /// <summary>
     /// 初期化メソッド
     /// </summary>
     public void Initialize()

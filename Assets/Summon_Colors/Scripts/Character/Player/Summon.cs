@@ -13,11 +13,13 @@ public class Summon : MonoBehaviour
     [SerializeField] private SummonedPool[] _summonedPools;
     private Player _player;
     private Absorb _absorb;
-    private ColorElements.ColorType _color = ColorElements.ColorType.Red;
+    private PlayerActionController _actionController;
+    [SerializeField] private ColorElements.ColorType _color = ColorElements.ColorType.Red;
 
     private Dictionary<ColorElements.ColorType, Transform[]> _summonBasePositions = new Dictionary<ColorElements.ColorType, Transform[]>();
     private Dictionary<ColorElements.ColorType, bool[]> _isSummoned = new Dictionary<ColorElements.ColorType, bool[]>();
 
+    private float _timer = 0.0f;
 
     public ColorElements.ColorType Color { get { return _color; } }
 
@@ -46,44 +48,69 @@ public class Summon : MonoBehaviour
         return num;
     }
 
-    public void Inform(Collider other)
-    {
-        if(other.tag == "Enemy")
-        {
-            Debug.Log("Hit!");
-        }
-    }
 
-    public void SummonColor()
+    public bool SummonColor()
     {
-        SummonedPool summonedPool = _summonedPools[0];
-        foreach (var summonedPools in _summonedPools)
-        {
-            if (summonedPools.ColorType == _color)
-            {
-                summonedPool = summonedPools;
-                break;
-            }
-        }
-        if(_absorb.ReduceColor(_color, summonedPool.GetCosts()) == 0)
-        {
-            return;
-        }
-
         for(int i = 0; i < _player.SummonMax;i++)
         {
             if (!_isSummoned[_color][i] && i < _summonBasePositions[_color].Length)
             {
-                _isSummoned[_color][i] = true;
-                // 生成処理
-                GameObject summoned = summonedPool.Get(_summonPosition.position);
-                // 初期化処理
-                if (summoned.TryGetComponent<SummonedBase>(out var summonedBase))
+                foreach (var summonedPools in _summonedPools)
                 {
-                    summonedBase.Initialize(i, _summonBasePositions[_color][i], this);
+                    if (summonedPools.ColorType == _color)
+                    {
+                        if (_absorb.ReduceColor(_color, summonedPools.GetCosts()) == 0)
+                        {
+                            return false;
+                        }
+                        _isSummoned[_color][i] = true;
+                        // 生成処理
+                        GameObject summoned = summonedPools.Get(_summonPosition.position);
+                        // 初期化処理
+                        if (summoned.TryGetComponent<SummonedBase>(out var summonedBase))
+                        {
+                            summonedBase.Initialize(i, _summonBasePositions[_color][i], this);
+                        }
+                        return true;
+                    }
                 }
-                break;
+                return false;
             }
+        }
+        return false;
+    }
+
+    public void ChangeColors(Vector2 stick)
+    {
+        if(stick == Vector2.zero)
+        {
+            return;
+        }
+        ColorElements.ColorType[] colorTypes =
+        {
+            ColorElements.ColorType.Blue,
+            ColorElements.ColorType.Red,
+            ColorElements.ColorType.Yellow,
+            ColorElements.ColorType.Orange,
+            ColorElements.ColorType.Green,
+            ColorElements.ColorType.Violet,
+            ColorElements.ColorType.All,
+        };
+        float theta = Mathf.Atan2(-stick.x, -stick.y);
+        theta += Mathf.PI;
+        float partition = 2.0f * Mathf.PI / colorTypes.Length;
+        for(int i = 0; i < colorTypes.Length; i++)
+        {
+            if(theta < partition / 2.0f + partition * i)
+            {
+                _color = colorTypes[i];
+                return;
+            }
+        }
+
+        if (theta >= partition / 2.0f + partition * (colorTypes.Length - 1))
+        {
+            _color = colorTypes[0];
         }
     }
 
@@ -91,24 +118,14 @@ public class Summon : MonoBehaviour
     {
         _isSummoned[color][id] = false;
     }
-
-    public void OnSummon(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            _collider.enabled = true;
-        }
-        else if (context.canceled)
-        {
-            _collider.enabled = false;
-        }
-    }
+   
 
     // Start is called before the first frame update
     void Start()
     {
         _player = GetComponent<Player>();
         _absorb = GetComponent<Absorb>();
+        _actionController = GetComponent<PlayerActionController>();
 
         _collider.enabled = false;
 
@@ -118,7 +135,24 @@ public class Summon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(_actionController.IsSummoning())
+        {
+            if(_timer > 0.0f)
+            {
+                _timer -= Time.deltaTime;
+            }
+            else
+            {
+                if(SummonColor())
+                {
+                    _timer = _player.CoolTime;
+                }
+                else
+                {
+                    _actionController.ChangeToIdle();
+                }
+            }
+        }
     }
 
     private void SetSummonPositions()

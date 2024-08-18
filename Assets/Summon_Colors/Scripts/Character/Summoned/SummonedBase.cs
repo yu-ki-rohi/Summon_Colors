@@ -23,6 +23,8 @@ public class SummonedBase : NPCBase
         _id = id;
         _standByPosition = standByPosition;
         _summon = summon;
+        _characterData = _summonedData;
+        Heal(MaxHp);
     }
 
     public override void RecognizeCharacter(Collider collider)

@@ -71,7 +71,7 @@ public class SummonedAction : MonoBehaviour
 
     protected virtual void Combat()
     {
-        _agent.SetDestination(_summonedBase.TargetCharacter.transform.position);
+        _agent.SetDestination(_summonedBase.TargetCharacter.GetNearestPart(this.transform).position);
     }
 
     protected virtual void Return()

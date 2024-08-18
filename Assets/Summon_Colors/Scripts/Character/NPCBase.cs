@@ -34,7 +34,6 @@ public class NPCBase : CharacterBase
             if (!IsCharacterRecognized(character) &&
                 IsInView(character))
             {
-                Debug.Log("Recognized");
                 _hate.Add(character, 1);
                 if (_targetCharacter == null)
                 {
@@ -102,7 +101,6 @@ public class NPCBase : CharacterBase
 
     private bool IsInView(CharacterBase character)
     {
-        Debug.Log(_eyesPosition);
         Vector3 dir = character.transform.position - _eyesPosition;
         Ray ray = new Ray(_eyesPosition, dir);
         RaycastHit hit;

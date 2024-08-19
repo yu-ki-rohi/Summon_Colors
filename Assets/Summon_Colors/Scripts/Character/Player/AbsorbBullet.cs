@@ -32,7 +32,8 @@ public class AbsorbBullet : MonoBehaviour
     {
         if(other.tag == "Element")
         {
-            if(other.TryGetComponent<Elements>(out var element))
+            Elements element = other.GetComponentInParent<Elements>();
+            if (element != null)
             {
                 element.RegisterAbsorb(_absorb, other.ClosestPointOnBounds(this.transform.position));
                 Destroy(gameObject);

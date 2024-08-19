@@ -177,6 +177,10 @@ public class PlayerActionController : MonoBehaviour
             {
                 Time.timeScale = 1.0f;
             }
+            else
+            {
+                _cameraMove.ChangeTarget(_summon.GetHomeBase(_summon.Color).transform, true);
+            }
             _colorPalette.ReflectStick(Vector2.zero);
             _isChangingColor = false;
             _colorPalette.HideColorPalette();

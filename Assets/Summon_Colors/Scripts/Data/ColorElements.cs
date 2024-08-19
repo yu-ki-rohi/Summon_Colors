@@ -50,6 +50,11 @@ public class ColorElements
         return Blue + Red + Yellow;
     }
 
+    public int GetColorSum()
+    {
+        return _blue + _red + _yellow;
+    }
+
     /// <summary>
     /// 
     /// </summary>

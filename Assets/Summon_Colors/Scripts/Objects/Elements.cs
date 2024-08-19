@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Elements : MonoBehaviour
 {
     [SerializeField] private ColorElements _colorElements;
     [SerializeField] private float _absorbMagnification = 1.0f;
     [SerializeField] private float _coolTime = 0.2f;
+    [SerializeField] private MeshRenderer[] _meshRenderers;
 
     private MeshRenderer _meshRenderer;
+    private Material[] _materials;
     private Material _material;
     private Absorb _absorb;
     private Vector3 _generatePosition = Vector3.zero;
@@ -25,7 +28,19 @@ public class Elements : MonoBehaviour
     {
         _colorElements.Initialize();
         _meshRenderer = GetComponent<MeshRenderer>();
-        _material = _meshRenderer.materials[_meshRenderer.materials.Length - 1];
+        if(_meshRenderer != null)
+        {
+            _material = _meshRenderer.materials[_meshRenderer.materials.Length - 1];
+        }
+        if(_meshRenderers.Length > 0)
+        {
+            _materials = new Material[_meshRenderers.Length];
+        }
+        for (int i = 0; i < _meshRenderers.Length; i++)
+        {
+            _materials[i] = _meshRenderers[i].materials[_meshRenderers[i].materials.Length - 1];
+        }
+        
     }
 
     // Update is called once per frame
@@ -63,13 +78,13 @@ public class Elements : MonoBehaviour
         switch(colorType)
         {
             case ColorElements.ColorType.Blue:
-                value = (int)(_absorb.GetPower() * _absorbMagnification * (float)_colorElements.Blue / _colorElements.GetColorMaxSum());
+                value = (int)(_absorb.GetPower() * _absorbMagnification * (float)_colorElements.Blue / _colorElements.GetColorSum());
                 break;
             case ColorElements.ColorType.Red:
-                value = (int)(_absorb.GetPower() * _absorbMagnification * (float)_colorElements.Red / _colorElements.GetColorMaxSum());
+                value = (int)(_absorb.GetPower() * _absorbMagnification * (float)_colorElements.Red / _colorElements.GetColorSum());
                 break;
             case ColorElements.ColorType.Yellow:
-                value = (int)(_absorb.GetPower() * _absorbMagnification * (float)_colorElements.Yellow / _colorElements.GetColorMaxSum());
+                value = (int)(_absorb.GetPower() * _absorbMagnification * (float)_colorElements.Yellow / _colorElements.GetColorSum());
                 break;
             default:
                 value = 0;
@@ -92,6 +107,13 @@ public class Elements : MonoBehaviour
     private void ReflectColorRemaining()
     {
         Color newColor = new Color(0.0f, 0.0f, 0.0f, 1.0f - _colorElements.GetRemaining(ColorElements.ColorType.All));
-        _material.SetColor("_BaseColor", newColor);
+        for (int i = 0; i < _meshRenderers.Length; i++)
+        {
+            _materials[i].SetColor("_BaseColor", newColor);
+        }
+        if (_material != null)
+        {
+            _material.SetColor("_BaseColor", newColor);
+        }
     }
 }

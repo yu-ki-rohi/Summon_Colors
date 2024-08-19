@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4258198798419040500}
   - component: {fileID: 7152194681387247033}
   - component: {fileID: 5669437951323100766}
-  - component: {fileID: 3606659862427168348}
+  - component: {fileID: -4293234475832838004}
   m_Layer: 7
   m_Name: PP_Rock_Pile_Forest_Moss_05
   m_TagString: Element
@@ -133,8 +133,8 @@ MonoBehaviour:
   _absorbMagnification: 1
   _coolTime: 0.2
   _meshRenderers: []
---- !u!65 &3606659862427168348
-BoxCollider:
+--- !u!64 &-4293234475832838004
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -151,6 +151,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 4.6078434, y: 5.5743732, z: 4.0216823}
-  m_Center: {x: 0.1547674, y: 2.7871866, z: -0.13653755}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7011766824195413768, guid: b0ba9b7cecd675b45894beca57389899, type: 3}

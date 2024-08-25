@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class HomeBase : MonoBehaviour
 {
@@ -28,6 +30,17 @@ public class HomeBase : MonoBehaviour
     void Start()
     {
         SetStandByPosition();
+        float distance = 30.0f;
+        Ray ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        int layerNum = LayerMask.NameToLayer("Stage");
+        int layerMask = 1 << layerNum;
+
+        if (Physics.Raycast(ray, out hit, distance, layerMask))
+        {
+            transform.position = hit.point;
+            transform.up = hit.normal;
+        }
     }
 
     // Update is called once per frame
@@ -40,8 +53,23 @@ public class HomeBase : MonoBehaviour
 
         if (_velocity != Vector3.zero)
         {
+            Vector3 newPos = transform.position;
             transform.forward = _velocity.normalized;
-            transform.position += _velocity * Time.deltaTime;
+            newPos += _velocity * Time.deltaTime;
+            float height = 10.0f;
+            float distance = 30.0f;
+            newPos.y += height;
+
+            Ray ray = new Ray(newPos, Vector3.down);
+            RaycastHit hit;
+            int layerNum = LayerMask.NameToLayer("Stage");
+            int layerMask = 1 << layerNum;
+
+            if (Physics.Raycast(ray, out hit, distance, layerMask))
+            {
+                transform.position = hit.point;
+                transform.up = hit.normal;
+            }
         }
     }
 

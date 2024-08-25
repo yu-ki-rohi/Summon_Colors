@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class SummonedBase : NPCBase
@@ -11,20 +12,40 @@ public class SummonedBase : NPCBase
     private Summon _summon;
     private HomeBase _home;
     private SummonedPool _pool;
-
+    private SummonedAction _action;
+    private Vector3 _initialPos;
     public ColorElements.ColorType ColorType { get { return _summonedData.ColorType; } }
     public int Costs { get { return _summonedData.Costs; } }
+    public float StopDistance { get { return _summonedData.StopDistance; } }    
     public HomeBase Home { get { return _home; } set { _home = value; } }
     public SummonedPool SummonedPool { get { return _pool; } set { _pool = value; } }
 
     public Transform StandByPosition { get { return _standByPosition; } }
-    public void Initialize(int id, Transform standByPosition, Summon summon)
+
+    public override void Damaged(int attack, int hate = 0, CharacterBase attacker = null)
+    {
+        base.Damaged(attack, hate, attacker);
+        if(Hp <= 0)
+        {
+            Die();
+        }
+    }
+    public void Initialize(int id, Transform standByPosition, Summon summon, Vector3 summonedPosition)
     {
         _id = id;
         _standByPosition = standByPosition;
         _summon = summon;
         _characterData = _summonedData;
+        _action = GetComponent<SummonedAction>();
+        if( _action != null )
+        {
+
+            _action.Warp(summonedPosition);
+        }
+        _initialPos = summonedPosition;
         Heal(MaxHp);
+        _targetCharacter = null;
+        ReleaseCharacters();
     }
 
     public override void RecognizeCharacter(Collider collider)
@@ -68,6 +89,11 @@ public class SummonedBase : NPCBase
             return;
         }
         _characterData = _summonedData;
+        _action = GetComponent<SummonedAction>();
+        if (_action != null)
+        {
+            _action.Warp(_initialPos);
+        }
         base.Start();
     }
 

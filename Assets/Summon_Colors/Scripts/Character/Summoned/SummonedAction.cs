@@ -16,16 +16,29 @@ public class SummonedAction : MonoBehaviour
     }
     protected SummonedBase _summonedBase;
     protected NavMeshAgent _agent;
+    protected Animator _animator;
     protected State _state = State.Idle;
-    protected float _timer;
+    protected float _timer = 0.0f;
+
+    public void Warp(Vector3 pos)
+    {
+        if (_agent == null)
+        {
+            _agent = GetComponent<NavMeshAgent>();
+        }
+        _agent.Warp(pos);
+    }
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        _summonedBase = GetComponent<SummonedBase>();
-        _agent = GetComponent<NavMeshAgent>();
+        _summonedBase = GetComponent<SummonedBase>(); 
+        if (_agent == null)
+        {
+            _agent = GetComponent<NavMeshAgent>();
+        }
         _state = State.Idle;
-
+        _animator = GetComponent<Animator>();
         _agent.speed = _summonedBase.Agility;
     }
 
@@ -40,13 +53,20 @@ public class SummonedAction : MonoBehaviour
             }
             else
             {
-                _state = State.Idle;
+                if(_summonedBase.SetTarget())
+                {
+                    _state = State.Combat;
+                }
+                else
+                {
+                    _state = State.Idle;
+                }
             }
-        }
 
-        if (_summonedBase.Home.IsReturn())
-        {
-            _state = State.Return;
+            if (_summonedBase.Home.IsReturn())
+            {
+                _state = State.Return;
+            }
         }
 
         switch(_state)

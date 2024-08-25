@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class NPCBase : CharacterBase
 {
@@ -18,14 +19,34 @@ public class NPCBase : CharacterBase
             if(IsCharacterRecognized(attacker))
             {
                 _hate[attacker] += hate;
-                if(_hate[attacker] > _hate[_targetCharacter])
-                {
-                    _targetCharacter = attacker;
-                }
                 _targetCharacter = GetCharacterHaveMostHate();
             }
         }
     }
+
+    public bool SetTarget()
+    {
+        _targetCharacter = GetCharacterHaveMostHate();
+        if(_targetCharacter != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public float GetDistance()
+    {
+        if (_targetCharacter == null)
+        {
+            return -1.0f;
+        }
+
+        return (_targetCharacter.transform.position - transform.position).sqrMagnitude;
+    }
+
     public virtual void RecognizeCharacter(Collider collider)
     {
         CharacterBase character = collider.gameObject.GetComponentInParent<CharacterBase>();
@@ -96,6 +117,7 @@ public class NPCBase : CharacterBase
     protected override void Update()
     {
         _eyesPosition = transform.position;
+        RemoveNull();
         base.Update();
     }
 
@@ -108,5 +130,21 @@ public class NPCBase : CharacterBase
         int layerMask = 1 << layerNum;
 
         return !Physics.Raycast(ray, out hit, dir.magnitude, layerMask);
+    }
+
+    private void RemoveNull()
+    {
+        Dictionary<CharacterBase, int> hate = new Dictionary<CharacterBase, int>(_hate);
+        foreach (CharacterBase chara in hate.Keys)
+        {
+            if(chara == null)
+            {
+                _hate.Remove(chara);
+            }
+            else if(!chara.gameObject.activeSelf)
+            {
+                _hate.Remove(chara);
+            }
+        }
     }
 }

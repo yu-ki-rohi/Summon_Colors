@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
@@ -63,15 +64,19 @@ public class Summon : MonoBehaviour
                         {
                             return false;
                         }
-                        _isSummoned[_color][i] = true;
-                        // 生成処理
-                        GameObject summoned = summonedPools.Get(_summonPosition.position);
-                        // 初期化処理
-                        if (summoned.TryGetComponent<SummonedBase>(out var summonedBase))
+                        NavMeshHit navMeshHit;
+                        if(NavMesh.SamplePosition(_summonPosition.position, out navMeshHit,10.0f,NavMesh.AllAreas))
                         {
-                            summonedBase.Initialize(i, _summonBasePositions[_color][i], this);
+                            _isSummoned[_color][i] = true;
+                            // 生成処理
+                            GameObject summoned = summonedPools.Get(navMeshHit.position);
+                            // 初期化処理
+                            if (summoned.TryGetComponent<SummonedBase>(out var summonedBase))
+                            {
+                                summonedBase.Initialize(i, _summonBasePositions[_color][i], this, navMeshHit.position);
+                            }
+                            return true;
                         }
-                        return true;
                     }
                 }
                 return false;

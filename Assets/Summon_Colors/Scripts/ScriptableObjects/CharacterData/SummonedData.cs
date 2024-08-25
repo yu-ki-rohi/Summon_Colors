@@ -7,4 +7,5 @@ public class SummonedData : CharacterData
 {
     public ColorElements.ColorType ColorType;
     public int Costs = 10;
+    public float StopDistance = 2.0f;
 }

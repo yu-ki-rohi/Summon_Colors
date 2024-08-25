@@ -7,6 +7,7 @@ public class EnemyBase : NPCBase
     [SerializeField] private EnemyData _enemyData;
     private CharacterBase _player;
 
+    public float StopDistance { get { return _enemyData.StopDistance; } }
     public override void Damaged(int attack, int hate = 0, CharacterBase attacker = null)
     {
         if(attacker == _player)
@@ -14,6 +15,10 @@ public class EnemyBase : NPCBase
             hate = (int)(hate * 1.0f);
         }
         base.Damaged(attack, hate, attacker);
+        if (Hp <= 0)
+        {
+            Die();
+        }
     }
 
     public override void RecognizeCharacter(Collider collider)
@@ -46,12 +51,7 @@ public class EnemyBase : NPCBase
     // Start is called before the first frame update
     protected override void Start()
     {
-        if (_enemyData == null)
-        {
-            Debug.LogError("Enemy Data is Null!!");
-            return;
-        }
-        _characterData = _enemyData;
+        
         base.Start();
     }
 
@@ -59,5 +59,21 @@ public class EnemyBase : NPCBase
     protected override void Update()
     {
         base.Update();
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+        Destroy(gameObject);
+    }
+
+    private void Awake()
+    {
+        if (_enemyData == null)
+        {
+            Debug.LogError("Enemy Data is Null!!");
+            return;
+        }
+        _characterData = _enemyData;
     }
 }

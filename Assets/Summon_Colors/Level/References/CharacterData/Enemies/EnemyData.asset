@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHp: 100
   Attack: 10
-  Vitality: 10
-  Agility: 5
-  CoolTime: 3
+  Vitality: 0
+  Agility: 3
+  CoolTime: 1
+  StopDistance: 4
   Money: 0

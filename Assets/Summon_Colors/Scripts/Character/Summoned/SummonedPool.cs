@@ -6,6 +6,7 @@ public class SummonedPool : ObjectPoolBase
 {
     [SerializeField] private HomeBase _homeBase;
     [SerializeField] private ColorElements.ColorType _colorType;
+    [SerializeField] private ObjectPoolBase _projectilePool;
     private SummonedBase _summonedBase;
 
     public ColorElements.ColorType ColorType { get { return _colorType; } }
@@ -27,6 +28,15 @@ public class SummonedPool : ObjectPoolBase
         {
             summonedBase.Home = _homeBase;
             summonedBase.SummonedPool = this;
+            if(_projectilePool != null)
+            {
+                YellowAction yellowAction = _prefab.GetComponent<YellowAction>();
+                if(yellowAction != null)
+                {
+                    Debug.Log("Set Projectile Pool");
+                    yellowAction.SetPool(_projectilePool);
+                }
+            }
         }
         return o;
     }

@@ -36,7 +36,10 @@ public class RedAction : SummonedAction
     protected override void Start()
     {
         base.Start();
-        _attackCollider.enabled = false;
+        if(_attackCollider != null )
+        {
+            _attackCollider.enabled = false;
+        }
     }
 
     protected override void Idle()
@@ -69,8 +72,7 @@ public class RedAction : SummonedAction
             _agent.velocity = Vector3.zero;
             if (_timer > _summonedBase.CoolTime)
             {
-                _animator.SetTrigger("Attack");
-                _state = State.Action;
+                Action();
                 _timer = 0.0f;
             }
             else
@@ -82,7 +84,8 @@ public class RedAction : SummonedAction
 
     protected override void Action()
     {
-        
+        _animator.SetTrigger("Attack");
+        _state = State.Action;
     }
 
 }

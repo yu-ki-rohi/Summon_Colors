@@ -6,7 +6,7 @@ public class RedAction : SummonedAction
 {
     [SerializeField] private Collider _attackCollider;
 
-    public void Attack(Collider collider)
+    public virtual void Attack(Collider collider)
     {
         if(collider.tag == "Enemy")
         {

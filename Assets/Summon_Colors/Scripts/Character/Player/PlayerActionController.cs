@@ -126,12 +126,14 @@ public class PlayerActionController : MonoBehaviour
                 _state = State.Idle;
                 Time.timeScale = 1.0f;
                 _cameraMove.ChangeTarget(transform, false);
+                Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
             }
             else
             {
                 _state = State.Direction;
                 Time.timeScale = _delayScale;
                 _cameraMove.ChangeTarget(_summon.GetHomeBase(_summon.Color).transform, true);
+                Camera.main.cullingMask |= (1 << LayerMask.NameToLayer("UI"));
             }
         }
         else if (context.canceled)

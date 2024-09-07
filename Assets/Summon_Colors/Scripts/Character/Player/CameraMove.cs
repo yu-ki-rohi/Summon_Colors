@@ -12,6 +12,7 @@ public class CameraMove : MonoBehaviour
     [SerializeField] private float _baseDistance = 4.0f;
     [SerializeField] private float _horizontalSpeed = 2.0f;
     [SerializeField] private float _verticalSpeed = 1.0f;
+    [SerializeField] private float _directingUp = 5.0f;
     [SerializeField, Range(0.5f,1.0f)] private float _baffa = 0.85f;
     [SerializeField] private bool _horizontalInvert = false;
     [SerializeField] private bool _verticalInvert = true;
@@ -54,7 +55,12 @@ public class CameraMove : MonoBehaviour
     
         if (_virtualCameraTransposer != null)
         {
-            _virtualCameraTransposer.m_FollowOffset = _cameraVec * SetDistance();
+            Vector3 up = Vector3.zero;
+            if(_isDirecting)
+            {
+                up = Vector3.up * _directingUp;
+            }
+            _virtualCameraTransposer.m_FollowOffset = _cameraVec * SetDistance() + up;
         }
     }
 

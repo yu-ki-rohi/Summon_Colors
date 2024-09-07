@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 085c2be4996552d419b162e5b606121d, type: 3}
   m_Name: SummonedVioletData
   m_EditorClassIdentifier: 
-  MaxHp: 100
+  MaxHp: 20
   Attack: 10
-  Vitality: 10
-  Agility: 5
-  CoolTime: 3
+  Vitality: 0
+  Agility: 3
+  CoolTime: 5
   ColorType: 5
-  Costs: 10
+  Costs: 5
+  StopDistance: 6

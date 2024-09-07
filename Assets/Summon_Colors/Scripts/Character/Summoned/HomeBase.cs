@@ -10,6 +10,7 @@ public class HomeBase : MonoBehaviour
     [SerializeField] private ColorElements.ColorType _color;
     [SerializeField] private int[] _ringNum;
     [SerializeField] private float _radiusBase = 0.12f;
+    private const float _up = 0.65f;
     private Vector3 _velocity = Vector3.zero;
     private float _timer = 0.0f;
     public ColorElements.ColorType Color { get { return _color; } }
@@ -38,8 +39,7 @@ public class HomeBase : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, distance, layerMask))
         {
-            transform.position = hit.point;
-            transform.up = hit.normal;
+            transform.position = hit.point + Vector3.up * _up;
         }
     }
 
@@ -67,8 +67,7 @@ public class HomeBase : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, distance, layerMask))
             {
-                transform.position = hit.point;
-                transform.up = hit.normal;
+                transform.position = hit.point + Vector3.up * _up;
             }
         }
     }

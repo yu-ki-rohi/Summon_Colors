@@ -134,7 +134,7 @@ public class EnemyAction : MonoBehaviour
     {
         if(_walkTimer < _walkTime)
         {
-            _walkTimer += Time.deltaTime;
+            //_walkTimer += Time.deltaTime;
         }
         else
         {

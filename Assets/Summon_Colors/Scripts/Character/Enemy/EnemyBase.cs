@@ -61,11 +61,6 @@ public class EnemyBase : NPCBase
         base.Update();
     }
 
-    protected override void Die()
-    {
-        base.Die();
-        Destroy(gameObject);
-    }
 
     private void Awake()
     {

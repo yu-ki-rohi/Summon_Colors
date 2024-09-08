@@ -45,7 +45,7 @@ public class EnemyAction : MonoBehaviour
         //_bodyCollider.enabled = false;
     }
 
-    public void FinishAttack()
+    public virtual void FinishAttack()
     {
         _attackCollider.enabled = false;
         //_bodyCollider.enabled = true;
@@ -87,25 +87,29 @@ public class EnemyAction : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (_enemyBase.TargetCharacter != null &&
-            _enemyBase.TargetCharacter.gameObject.activeSelf)
+        if (_state != State.Action)
         {
-            _state = State.Combat;
-        }
-        else
-        {
-            if (_enemyBase.SetTarget())
+            if (_enemyBase.TargetCharacter != null &&
+         _enemyBase.TargetCharacter.gameObject.activeSelf)
             {
                 _state = State.Combat;
             }
             else
             {
-                if(_state != State.Walk)
+                if (_enemyBase.SetTarget())
                 {
-                    _state = State.Idle;
+                    _state = State.Combat;
+                }
+                else
+                {
+                    if (_state != State.Walk)
+                    {
+                        _state = State.Idle;
+                    }
                 }
             }
         }
+         
 
         switch (_state)
         {
@@ -117,6 +121,9 @@ public class EnemyAction : MonoBehaviour
                 break;
             case State.Combat:
                 Combat();
+                break;
+            case State.Action:
+                Action();
                 break;
         }
 
@@ -134,12 +141,12 @@ public class EnemyAction : MonoBehaviour
     {
         if(_walkTimer < _walkTime)
         {
-            //_walkTimer += Time.deltaTime;
+            _walkTimer += Time.deltaTime;
         }
         else
         {
             _walkTimer = 0.0f;
-            _walkTime = Random.Range(2.0f, 5.0f);
+            _walkTime = Random.Range(4.0f, 8.0f);
             _walkVec = new Vector3(Random.Range(-1.0f, 1.0f), 0.0f, Random.Range(-1.0f, 1.0f));
             _state = State.Walk;
         }
@@ -176,13 +183,14 @@ public class EnemyAction : MonoBehaviour
     {
         if (_walkTimer < _walkTime)
         {
-            _agent.SetDestination(transform.position + _walkVec);
+            _agent.SetDestination(transform.position + _walkVec * 5.0f);
             _walkTimer += Time.deltaTime;
         }
         else
         {
+            _agent.SetDestination(transform.position);
             _walkTimer = 0.0f;
-            _walkTime = Random.Range(1.0f, 3.0f);
+            _walkTime = Random.Range(2.0f, 4.0f);
             _state = State.Idle;
         }
     }

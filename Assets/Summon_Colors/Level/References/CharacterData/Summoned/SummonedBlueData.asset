@@ -19,4 +19,4 @@ MonoBehaviour:
   CoolTime: 0.8
   ColorType: 0
   Costs: 5
-  StopDistance: 3
+  StopDistance: 4.5

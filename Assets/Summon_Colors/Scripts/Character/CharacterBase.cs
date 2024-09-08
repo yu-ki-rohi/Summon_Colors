@@ -6,6 +6,7 @@ public class CharacterBase : MonoBehaviour
 {
     [SerializeField] private Transform[] _partTransforms;
     protected CharacterData _characterData;
+    protected Animator _animator;
 
     private int _currentHp;
 
@@ -59,7 +60,10 @@ public class CharacterBase : MonoBehaviour
 
     protected virtual void Die()
     {
-
+        if(_animator != null)
+        {
+            _animator.SetTrigger("Die");
+        }
     }
 
     // Start is called before the first frame update
@@ -71,6 +75,7 @@ public class CharacterBase : MonoBehaviour
             return;
         }
         _currentHp = _characterData.MaxHp;
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4320371fe5fc5e409ed556d118b737e, type: 3}
   m_Name: DemonData
   m_EditorClassIdentifier: 
-  MaxHp: 100
-  Attack: 10
+  MaxHp: 5000
+  Attack: 15
   Vitality: 0
-  Agility: 30
-  CoolTime: 1
-  StopDistance: 4
+  Agility: 3
+  CoolTime: 2
+  StopDistance: 8
   Money: 0

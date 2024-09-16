@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: SummonedBlueData
   m_EditorClassIdentifier: 
   MaxHp: 15
-  Attack: 2
+  Attack: 1
   Vitality: 0
-  Agility: 6
+  Break: 1
+  Armor: 50
+  Agility: 7
   CoolTime: 0.8
   ColorType: 0
   Costs: 5
-  StopDistance: 4.5
+  StopDistance: 3.4

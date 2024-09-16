@@ -40,15 +40,15 @@ public class ColorPalette : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < _images.Length; i++)
-        {
-            _images[i].rectTransform.localPosition =
-                    new Vector3(
-                    Mathf.Sin(2.0f * Mathf.PI / _images.Length * i) * _radius,
-                    Mathf.Cos(2.0f * Mathf.PI / _images.Length * i) * _radius,
-                    0.0f
-                    );
-        }
+        //for (int i = 0; i < _images.Length; i++)
+        //{
+        //    _images[i].rectTransform.localPosition =
+        //            new Vector3(
+        //            Mathf.Sin(2.0f * Mathf.PI / _images.Length * i) * _radius,
+        //            Mathf.Cos(2.0f * Mathf.PI / _images.Length * i) * _radius,
+        //            0.0f
+        //            );
+        //}
 
         HideColorPalette();
     }

@@ -13,7 +13,7 @@ public class RedAction : SummonedAction
             CharacterBase character = collider.GetComponentInParent<CharacterBase>();
             if(character != null)
             {
-                character.Damaged(_summonedBase.Attack, _summonedBase.Attack, _summonedBase);
+                character.Damaged(_summonedBase.Attack, _summonedBase.Break, _summonedBase.Attack, _summonedBase);
             }
         }
     }
@@ -26,11 +26,6 @@ public class RedAction : SummonedAction
     public void FinishAttack()
     {
         _attackCollider.enabled = false;
-    }
-
-    public void FinishAction()
-    {
-        _state = State.Combat;
     }
 
     protected override void Start()
@@ -84,8 +79,9 @@ public class RedAction : SummonedAction
 
     protected override void Action()
     {
-        _animator.SetTrigger("Attack");
+        _animator.SetTrigger("Action");
         _state = State.Action;
+        _agent.SetDestination(transform.position);
     }
 
 }

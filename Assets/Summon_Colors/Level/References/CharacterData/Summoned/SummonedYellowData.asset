@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: SummonedYellowData
   m_EditorClassIdentifier: 
   MaxHp: 10
-  Attack: 3
+  Attack: 2
   Vitality: 0
-  Agility: 4
+  Break: 1
+  Armor: 50
+  Agility: 5
   CoolTime: 1.5
   ColorType: 2
   Costs: 5
-  StopDistance: 8
+  StopDistance: 12

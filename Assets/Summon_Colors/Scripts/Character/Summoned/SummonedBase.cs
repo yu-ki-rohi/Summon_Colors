@@ -22,9 +22,9 @@ public class SummonedBase : NPCBase
 
     public Transform StandByPosition { get { return _standByPosition; } }
 
-    public override void Damaged(int attack, int hate = 0, CharacterBase attacker = null)
+    public override void Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
-        base.Damaged(attack, hate, attacker);
+        base.Damaged(attack, shock, hate, attacker);
         if(Hp <= 0)
         {
             Die();
@@ -36,11 +36,12 @@ public class SummonedBase : NPCBase
         _standByPosition = standByPosition;
         _summon = summon;
         _characterData = _summonedData;
+        _isActive = true;
         _action = GetComponent<SummonedAction>();
         if( _action != null )
         {
-
             _action.Warp(summonedPosition);
+            _action.FinishAction();
         }
         _initialPos = summonedPosition;
         Heal(MaxHp);
@@ -70,14 +71,22 @@ public class SummonedBase : NPCBase
         _targetCharacter = null;
     }
 
+    public void Release()
+    {
+        _pool.Release(gameObject);
+    }
+
     protected override void Die()
     {
         if (_summon != null)
         {
             _summon.Release(ColorType, _id);
         }
+        if (_action != null)
+        {
+            _action.ChangeDown();
+        }
         base.Die();
-        _pool.Release(gameObject);
     }
 
     // Start is called before the first frame update

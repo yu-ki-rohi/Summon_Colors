@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: SummonedGreenData
   m_EditorClassIdentifier: 
   MaxHp: 100
-  Attack: 10
-  Vitality: 10
-  Agility: 5
+  Attack: 2
+  Vitality: 0
+  Break: 60
+  Armor: 50
+  Agility: 3
   CoolTime: 3
   ColorType: 4
   Costs: 10
+  StopDistance: 2

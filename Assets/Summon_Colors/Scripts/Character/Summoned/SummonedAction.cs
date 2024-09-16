@@ -12,7 +12,8 @@ public class SummonedAction : MonoBehaviour
         Idle,
         Combat,
         Return,
-        Action
+        Action,
+        Down
     }
     protected SummonedBase _summonedBase;
     protected NavMeshAgent _agent;
@@ -27,6 +28,22 @@ public class SummonedAction : MonoBehaviour
             _agent = GetComponent<NavMeshAgent>();
         }
         _agent.Warp(pos);
+
+        // 再起動時に呼ばれるので、ついでに実行
+        _agent.updatePosition = true;
+        _agent.updateRotation = true;
+    }
+
+    public void ChangeDown()
+    {
+        _state = State.Down;
+        _agent.updatePosition = false;
+        _agent.updateRotation = false;
+    }
+
+    public void FinishAction()
+    {
+        _state = State.Combat;
     }
 
     // Start is called before the first frame update
@@ -45,7 +62,8 @@ public class SummonedAction : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (_state != State.Return)
+        // ごちゃごちゃしているので、いずれ整理したい
+        if (_state != State.Return && _state != State.Action && _state != State.Down)
         {
             if (_summonedBase.TargetCharacter != null)
             {

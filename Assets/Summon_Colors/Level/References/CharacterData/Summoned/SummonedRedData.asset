@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: SummonedRedData
   m_EditorClassIdentifier: 
   MaxHp: 20
-  Attack: 4
+  Attack: 2
   Vitality: 0
+  Break: 5
+  Armor: 50
   Agility: 4
   CoolTime: 1
   ColorType: 1
   Costs: 5
-  StopDistance: 4.5
+  StopDistance: 3.7

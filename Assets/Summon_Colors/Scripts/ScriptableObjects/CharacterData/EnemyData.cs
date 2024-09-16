@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObject/CharacterData/Enemy", fileName = "EnemyData")]
 public class EnemyData : CharacterData
 {
+    public float[] PowerMagnification;
     public float StopDistance = 2.0f;
     public int Money;
 }

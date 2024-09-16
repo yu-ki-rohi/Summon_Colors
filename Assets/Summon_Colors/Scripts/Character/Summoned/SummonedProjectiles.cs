@@ -49,7 +49,7 @@ public class SummonedProjectiles : MonoBehaviour
             CharacterBase character = other.GetComponentInParent<CharacterBase>();
             if(character != null)
             {
-                character.Damaged(_characterBase.Attack, _characterBase.Attack, _characterBase);
+                character.Damaged(_characterBase.Attack, _characterBase.Break, _characterBase.Attack, _characterBase);
                 if (_pool != null)
                 {
                     _pool.Release(gameObject);

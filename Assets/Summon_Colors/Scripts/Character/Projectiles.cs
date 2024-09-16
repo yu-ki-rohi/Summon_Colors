@@ -9,11 +9,37 @@ public class Projectiles : MonoBehaviour
     [SerializeField] private float _speed = 10.0f;
     [SerializeField] private bool _useRigidBody = false;
 
+    private ObjectPoolBase _pool;
     private float _distance = 0.0f;
+    
+    public void RegisterPool(ObjectPoolBase pool)
+    { 
+        _pool = pool;
+    }
+
+    public void Initialize()
+    {
+        _distance = 0.0f;
+    }
+    public void Initialize(int power, float range, float speed, bool useRigidBody)
+    {
+        _power = power;
+        _range = range;
+        _speed = speed;
+        _useRigidBody = useRigidBody;
+        _distance = 0.0f;
+    }
 
     protected virtual void DisAppear()
     {
-        Destroy(gameObject);
+        if(_pool != null)
+        {
+            _pool.Release(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     protected virtual void BehaviorOnHitStage(Collider stage)
     {

@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: SummonedOrangeData
   m_EditorClassIdentifier: 
   MaxHp: 200
-  Attack: 60
+  Attack: 120
   Vitality: 0
-  Agility: 3
+  Break: 10
+  Armor: 50
+  Agility: 2
   CoolTime: 2
   ColorType: 3
   Costs: 5
-  StopDistance: 5
+  StopDistance: 10

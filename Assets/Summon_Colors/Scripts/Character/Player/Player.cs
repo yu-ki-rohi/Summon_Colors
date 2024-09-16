@@ -18,9 +18,9 @@ public class Player : CharacterBase
 
     public PlayerActionController ActionController { get { return _actionController; } }
 
-    public override void Damaged(int attack, int hate = 0, CharacterBase attacker = null)
+    public override void Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
-        base.Damaged(attack, hate, attacker);
+        base.Damaged(attack, shock, hate, attacker);
         ReflectHp();
     }
 

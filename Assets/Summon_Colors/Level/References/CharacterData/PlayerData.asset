@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHp: 100
   Attack: 10
-  Vitality: 5
+  Vitality: 0
+  Break: 10
+  Armor: 50
   Agility: 5
   CoolTime: 1
   ColorCapacity: 255

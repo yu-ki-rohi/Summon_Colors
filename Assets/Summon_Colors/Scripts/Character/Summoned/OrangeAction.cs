@@ -11,7 +11,7 @@ public class OrangeAction : RedAction
             CharacterBase character = collider.GetComponentInParent<CharacterBase>();
             if (character != null)
             {
-                character.Damaged(0, _summonedBase.Attack, _summonedBase);
+                character.Damaged(0,0, _summonedBase.Attack, _summonedBase);
             }
         }
     }

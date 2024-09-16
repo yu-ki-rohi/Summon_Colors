@@ -93,29 +93,24 @@ public class Summon : MonoBehaviour
         }
         ColorElements.ColorType[] colorTypes =
         {
-            ColorElements.ColorType.Blue,
-            ColorElements.ColorType.Red,
             ColorElements.ColorType.Yellow,
-            ColorElements.ColorType.Orange,
             ColorElements.ColorType.Green,
-            ColorElements.ColorType.Violet,
+            ColorElements.ColorType.Orange,
             ColorElements.ColorType.All,
+            ColorElements.ColorType.Violet,
+            ColorElements.ColorType.Red,
+            ColorElements.ColorType.Blue,
         };
         float theta = Mathf.Atan2(-stick.x, -stick.y);
         theta += Mathf.PI;
         float partition = 2.0f * Mathf.PI / colorTypes.Length;
         for(int i = 0; i < colorTypes.Length; i++)
         {
-            if(theta < partition / 2.0f + partition * i)
+            if (theta < partition * (i + 1))
             {
                 _color = colorTypes[i];
                 return;
             }
-        }
-
-        if (theta >= partition / 2.0f + partition * (colorTypes.Length - 1))
-        {
-            _color = colorTypes[0];
         }
     }
 

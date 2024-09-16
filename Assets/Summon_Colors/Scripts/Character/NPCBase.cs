@@ -5,15 +5,16 @@ using UnityEngine.TextCore.Text;
 
 public class NPCBase : CharacterBase
 {
+    [SerializeField] protected Transform _eyesTransform;
     protected CharacterBase _targetCharacter = null;
     protected Dictionary<CharacterBase,int> _hate = new Dictionary<CharacterBase,int>();
     private Vector3 _eyesPosition = Vector3.zero;
 
     public CharacterBase TargetCharacter { get { return _targetCharacter; } }
 
-    public override void Damaged(int attack, int hate = 0, CharacterBase attacker = null)
+    public override void Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
-        base.Damaged(attack, hate, attacker);
+        base.Damaged(attack, shock, hate, attacker);
         if (attacker != null)
         {
             if(IsCharacterRecognized(attacker))
@@ -52,7 +53,8 @@ public class NPCBase : CharacterBase
         CharacterBase character = collider.gameObject.GetComponentInParent<CharacterBase>();
         if (character != null)
         {
-            if (!IsCharacterRecognized(character) &&
+            if (character.IsActive &&
+                !IsCharacterRecognized(character) &&
                 IsInView(character))
             {
                 _hate.Add(character, 1);
@@ -98,17 +100,20 @@ public class NPCBase : CharacterBase
         CharacterBase character = null;
         foreach (CharacterBase chara in _hate.Keys)
         {
-            if(character == null)
+            if(chara.IsActive)
             {
-                character = chara;
-                hate = _hate[chara];
-            }
-            else
-            {
-                if (_hate[chara] > hate)
+                if (character == null)
                 {
                     character = chara;
                     hate = _hate[chara];
+                }
+                else
+                {
+                    if (_hate[chara] > hate)
+                    {
+                        character = chara;
+                        hate = _hate[chara];
+                    }
                 }
             }
         }
@@ -116,7 +121,14 @@ public class NPCBase : CharacterBase
     }
     protected override void Update()
     {
-        _eyesPosition = transform.position;
+        if(_eyesTransform != null)
+        {
+            _eyesPosition = _eyesTransform.position;
+        }
+        else
+        {
+            _eyesPosition = transform.position;
+        }
         RemoveNull();
         base.Update();
     }
@@ -137,13 +149,10 @@ public class NPCBase : CharacterBase
         Dictionary<CharacterBase, int> hate = new Dictionary<CharacterBase, int>(_hate);
         foreach (CharacterBase chara in hate.Keys)
         {
-            if(chara == null)
+            if(chara == null || !chara.IsActive || !chara.gameObject.activeSelf)
             {
                 _hate.Remove(chara);
-            }
-            else if(!chara.gameObject.activeSelf)
-            {
-                _hate.Remove(chara);
+                _targetCharacter = GetCharacterHaveMostHate();
             }
         }
     }

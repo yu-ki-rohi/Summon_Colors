@@ -15,7 +15,8 @@ public class EnemyAction : MonoBehaviour
         Idle,
         Walk,
         Combat,
-        Action
+        Action,
+        Down
     }
     protected EnemyBase _enemyBase;
     protected NavMeshAgent _agent;
@@ -34,7 +35,7 @@ public class EnemyAction : MonoBehaviour
             CharacterBase character = collider.GetComponentInParent<CharacterBase>();
             if (character != null)
             {
-                character.Damaged(_enemyBase.Attack, _enemyBase.Attack, _enemyBase);
+                character.Damaged(_enemyBase.Attack, _enemyBase.Break, _enemyBase.Attack, _enemyBase);
             }
         }
     }
@@ -54,6 +55,20 @@ public class EnemyAction : MonoBehaviour
     public void FinishAction()
     {
         _state = State.Combat;
+    }
+
+    public void ChangeDown()
+    {
+        _state = State.Down;
+        if(_agent != null)
+        {
+            _agent.SetDestination(transform.position);
+            if (!_enemyBase.IsActive)
+            {
+                _agent.updateRotation = false;
+                _agent.updatePosition = false;
+            }
+        }
     }
 
     // Start is called before the first frame update
@@ -87,7 +102,8 @@ public class EnemyAction : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (_state != State.Action)
+        // この辺はもうちょっと煩雑なので、後々直したい
+        if (_state != State.Action && _state != State.Down)
         {
             if (_enemyBase.TargetCharacter != null &&
          _enemyBase.TargetCharacter.gameObject.activeSelf)
@@ -127,13 +143,17 @@ public class EnemyAction : MonoBehaviour
                 break;
         }
 
-        if (_agent.velocity.sqrMagnitude > 0)
+        if(_agent != null)
         {
-            _animator.SetBool("IsWalking", true);
-        }
-        else
-        {
-            _animator.SetBool("IsWalking", false);
+            // 判定をfloatにしてもいいかも
+            if (_agent.velocity.sqrMagnitude > 0)
+            {
+                _animator.SetBool("IsWalking", true);
+            }
+            else
+            {
+                _animator.SetBool("IsWalking", false);
+            }
         }
     }
 

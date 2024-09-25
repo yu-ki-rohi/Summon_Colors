@@ -26,6 +26,7 @@ public class PlayerActionController : MonoBehaviour
     private Direction _direction;
     private State _state = State.Idle;
     private bool _isChangingColor = false;
+    private Animator _animator;
 
     public bool IsAbsorbing()
     {
@@ -40,6 +41,7 @@ public class PlayerActionController : MonoBehaviour
     public void ChangeToIdle()
     {
         _state = State.Idle;
+        _animator.SetBool("Summon", false);
     }
 
     public void OnMoveCamera(InputAction.CallbackContext context)
@@ -106,6 +108,7 @@ public class PlayerActionController : MonoBehaviour
             if (_state == State.Idle)
             {
                 _state = State.Summon;
+                _animator.SetBool("Summon", true);
             }
         }
         else if (context.canceled)
@@ -113,6 +116,7 @@ public class PlayerActionController : MonoBehaviour
             if (_state == State.Summon)
             {
                 _state = State.Idle;
+                _animator.SetBool("Summon", false);
             }
         }
     }
@@ -196,6 +200,7 @@ public class PlayerActionController : MonoBehaviour
         _absorb = GetComponent<Absorb>();
         _summon = GetComponent<Summon>();
         _direction = GetComponent<Direction>();
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame

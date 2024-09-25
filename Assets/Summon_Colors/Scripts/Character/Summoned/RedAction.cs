@@ -81,6 +81,7 @@ public class RedAction : SummonedAction
     {
         _animator.SetTrigger("Action");
         _state = State.Action;
+        _agent.updateRotation = false;
         _agent.SetDestination(transform.position);
     }
 

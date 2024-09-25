@@ -60,6 +60,7 @@ public class EnemyAction : MonoBehaviour
     public void ChangeDown()
     {
         _state = State.Down;
+        FinishAttack();
         if(_agent != null)
         {
             _agent.SetDestination(transform.position);

@@ -8,6 +8,7 @@ public class PlayerMove : MonoBehaviour
 {
     private Player _player;
     private Vector3 _velocity = Vector3.zero;
+    private Animator _animator;
 
     public void Move(Vector2 stick)
     {
@@ -25,7 +26,7 @@ public class PlayerMove : MonoBehaviour
         Vector3 horizontalCameraForward = Camera.main.transform.forward;
         horizontalCameraForward.y = 0f;
 
-        _velocity = (horizontalCameraForward.normalized * stick.y + Camera.main.transform.right * stick.x).normalized * _player.Agility;
+        _velocity = (horizontalCameraForward.normalized * stick.y * stick.y * stick.y + Camera.main.transform.right * stick.x * stick.x * stick.x).normalized * _player.Agility;
 #endif
     }
 
@@ -39,6 +40,7 @@ public class PlayerMove : MonoBehaviour
             Debug.LogError("Player is Null!!");
             return;
         }
+        _animator = GetComponent<Animator>();
     }
 
 
@@ -50,6 +52,11 @@ public class PlayerMove : MonoBehaviour
         {
             transform.forward = _velocity.normalized;
             transform.position += _velocity * Time.deltaTime;
+            _animator.SetFloat("Speed", _velocity.sqrMagnitude);
+        }
+        else
+        {
+            _animator.SetFloat("Speed", 0.0f);
         }
     }
 }

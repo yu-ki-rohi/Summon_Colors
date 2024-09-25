@@ -44,6 +44,7 @@ public class SummonedAction : MonoBehaviour
     public void FinishAction()
     {
         _state = State.Combat;
+        _agent.updateRotation = true;
     }
 
     // Start is called before the first frame update

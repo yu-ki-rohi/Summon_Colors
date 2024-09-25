@@ -15,7 +15,7 @@ MonoBehaviour:
   MaxHp: 20
   Attack: 10
   Vitality: 0
-  Break: 50
+  Break: 20
   Armor: 50
   Agility: 3
   CoolTime: 5

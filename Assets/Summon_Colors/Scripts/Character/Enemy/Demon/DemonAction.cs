@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering.Universal;
 
 public class DemonAction : EnemyAction
 {
+    [SerializeField] private UniversalRendererData _universalRendererData;
+
     [SerializeField] private Transform _breathPosition;
     [SerializeField] private Transform _firePosition;
     [SerializeField] private Collider[] _rushColliders;
@@ -14,19 +17,22 @@ public class DemonAction : EnemyAction
     [SerializeField] private GameObject _volcanicBomb;
     [SerializeField] private GameObject _earthQuake;
     [SerializeField] private GameObject _fireBall;
+    [SerializeField] private GameObject _tackleExplosion;
     [SerializeField] private ParticleSystem _flameStream;
     [SerializeField] private ParticleSystem _fireEmbers;
     [SerializeField] private ObjectPoolBase _breathPool;
 
+
     [SerializeField] private float _firePower = 10.0f;
     [SerializeField] private float _rushSpeed = 2.0f;
+    [SerializeField] private float _explosionTackleSpeed = 60.0f;
     [SerializeField] private float _breathCoolTime = 0.3f;
 
     private float _breathTimer = 0.0f;
     private Vector3 _rushVector = Vector3.zero;
     private bool _isRush = false;
     private bool _isBreath = false;
-
+    private RadialBlurFeature _radialBlurFeature;
 
     public void CreateVolcanicBomb()
     {
@@ -43,9 +49,27 @@ public class DemonAction : EnemyAction
         _handAttackCollider.enabled = true;
     }
 
+    public void CreateExplosion()
+    {
+        Instantiate(_tackleExplosion, _rushColliders[2].transform.position, Quaternion.identity);
+    }
+
     public void Bite()
     {
         _rushColliders[0].enabled = true;
+    }
+
+    public void Roar()
+    {
+        if(_radialBlurFeature != null)
+        {
+            // あとで右辺を変数化
+            _radialBlurFeature.Intensity = 0.6f;
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(_breathPosition.position);
+            screenPos.x /= Camera.main.pixelWidth;
+            screenPos.y /= Camera.main.pixelHeight;
+            _radialBlurFeature.RadialCenter = screenPos;
+        }
     }
 
     public void CreateFireBall()
@@ -71,13 +95,32 @@ public class DemonAction : EnemyAction
     public void StartRush()
     {
         _agent.speed = _enemyBase.Agility * _rushSpeed;
-        _agent.velocity = (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 0.5f;
+        _agent.velocity = (_rushVector - transform.position).normalized * 0.5f;
         _isRush = true;
         _agent.SetDestination(_rushVector);
         foreach(Collider col in _rushColliders)
         {
             col.enabled = true;
         }
+    }
+
+    public void StartExplosionTackle()
+    {
+        _agent.speed = _enemyBase.Agility * _explosionTackleSpeed;
+        _agent.velocity = (_rushVector - transform.position).normalized * 60.0f;
+
+        _agent.SetDestination(_rushVector);
+        foreach (Collider col in _rushColliders)
+        {
+            col.enabled = true;
+        }
+    }
+
+    public void FinishExplosionTackle()
+    {
+        _agent.speed = _enemyBase.Agility;
+        _agent.updateRotation = true;
+        _agent.SetDestination(transform.position);
     }
 
     private void FinishRush()
@@ -107,8 +150,34 @@ public class DemonAction : EnemyAction
     protected override void Start()
     {
         base.Start();
-        
+
+        foreach (var features in _universalRendererData.rendererFeatures)
+        {
+            if(features.name == "RadialBlurFeature")
+            {
+                _radialBlurFeature = (RadialBlurFeature)features;
+            }
+        }
+
+        if(_radialBlurFeature == null)
+        {
+            Debug.Log("RadialBlurFeature is not found");
+        }
         FinishAttack();
+    }
+
+
+    private void FixedUpdate()
+    {
+        if (_radialBlurFeature != null && _radialBlurFeature.Intensity > 0.0f)
+        {
+            // あとで右辺を変数化
+            _radialBlurFeature.Intensity *= 0.95f;
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(_breathPosition.position);
+            screenPos.x /= Camera.main.pixelWidth;
+            screenPos.y /= Camera.main.pixelHeight;
+            _radialBlurFeature.RadialCenter = screenPos;
+        }
     }
 
     protected override void Combat()
@@ -122,11 +191,13 @@ public class DemonAction : EnemyAction
         {
             if (_timer > _enemyBase.CoolTime)
             {
+                _agent.velocity = Vector3.zero;
                 _agent.SetDestination(transform.position);
                 _state = State.Action;
                 _timer = 0.0f;
-                int judge = Random.Range(0, 3);
-                switch(judge)
+                int judge = Random.Range(0, 4);
+                NavMeshHit navMeshHit;
+                switch (judge)
                 {
                     case 0:
                         _animator.SetTrigger("Ball");
@@ -135,13 +206,25 @@ public class DemonAction : EnemyAction
                         _animator.SetTrigger("Breath");
                         break;
                     case 2:
-                        NavMeshHit navMeshHit;
                         if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
                             (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 10.0f,
                             out navMeshHit, 10.0f, NavMesh.AllAreas))
                         {
                             _rushVector = navMeshHit.position;
                             _animator.SetTrigger("Rush");
+                        }
+                        else
+                        {
+                            _state = State.Combat;
+                        }
+                        break;
+                    case 3:
+                        if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
+                            out navMeshHit, 10.0f, NavMesh.AllAreas))
+                        {
+                            _rushVector = navMeshHit.position;
+                            _agent.updateRotation = false;
+                            _animator.SetTrigger("Explosion");
                         }
                         else
                         {
@@ -159,7 +242,9 @@ public class DemonAction : EnemyAction
                 _agent.SetDestination(transform.position);
                 _state = State.Action;
                 _timer = 0.0f;
-                int judge = Random.Range(0, 4);
+                int judge = Random.Range(0, 6);
+
+                NavMeshHit navMeshHit;
                 switch (judge)
                 {
                     case 0:
@@ -172,13 +257,28 @@ public class DemonAction : EnemyAction
                         _animator.SetTrigger("Tail");
                         break;
                     case 3:
-                        NavMeshHit navMeshHit;
                         if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
                             (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 15.0f,
                             out navMeshHit, 10.0f, NavMesh.AllAreas))
                         {
                             _rushVector = navMeshHit.position;
                             _animator.SetTrigger("Rush");
+                        }
+                        else
+                        {
+                            _state = State.Combat;
+                        }
+                        break;
+                    case 4:
+                        _animator.SetTrigger("Breath");
+                        break;
+                    case 5:
+                        if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
+                            out navMeshHit, 10.0f, NavMesh.AllAreas))
+                        {
+                            _rushVector = navMeshHit.position;
+                            _agent.updateRotation = false;
+                            _animator.SetTrigger("Explosion");
                         }
                         else
                         {

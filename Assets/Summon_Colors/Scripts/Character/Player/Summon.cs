@@ -71,6 +71,7 @@ public class Summon : MonoBehaviour
                             // 生成処理
                             GameObject summoned = summonedPools.Get(navMeshHit.position);
                             // 初期化処理
+                            summoned.transform.forward = transform.forward;
                             if (summoned.TryGetComponent<SummonedBase>(out var summonedBase))
                             {
                                 summonedBase.Initialize(i, _summonBasePositions[_color][i], this, navMeshHit.position);

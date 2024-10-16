@@ -37,6 +37,23 @@ public class ColorPalette : MonoBehaviour
                     );
     }
 
+    public void LightColor(int id)
+    {
+        if(id < 0 || id >= _images.Length)
+        {
+            return;
+        }
+        _images[id].enabled = true;
+    }
+
+    public void TurnOffLight()
+    {
+        for (int i = 0; i < _images.Length; i++)
+        {
+            _images[i].enabled = false;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {

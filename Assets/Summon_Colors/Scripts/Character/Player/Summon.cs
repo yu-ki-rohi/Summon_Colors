@@ -12,6 +12,7 @@ public class Summon : MonoBehaviour
     [SerializeField] private Transform _summonPosition;
     [SerializeField] private HomeBase[] _homeBases;
     [SerializeField] private SummonedPool[] _summonedPools;
+    [SerializeField] private ColorPalette _lightPalette;
     private Player _player;
     private Absorb _absorb;
     private PlayerActionController _actionController;
@@ -94,13 +95,13 @@ public class Summon : MonoBehaviour
         }
         ColorElements.ColorType[] colorTypes =
         {
+            ColorElements.ColorType.Blue,
+            ColorElements.ColorType.Red,
             ColorElements.ColorType.Yellow,
-            ColorElements.ColorType.Green,
-            ColorElements.ColorType.Orange,
             ColorElements.ColorType.All,
             ColorElements.ColorType.Violet,
-            ColorElements.ColorType.Red,
-            ColorElements.ColorType.Blue,
+            ColorElements.ColorType.Orange,
+            ColorElements.ColorType.Green,
         };
         float theta = Mathf.Atan2(-stick.x, -stick.y);
         theta += Mathf.PI;
@@ -110,6 +111,8 @@ public class Summon : MonoBehaviour
             if (theta < partition * (i + 1))
             {
                 _color = colorTypes[i];
+                _lightPalette.TurnOffLight();
+                _lightPalette.LightColor(i);
                 return;
             }
         }

@@ -19,6 +19,7 @@ public class PlayerActionController : MonoBehaviour
 
     [SerializeField] private CameraMove _cameraMove;
     [SerializeField] private ColorPalette _colorPalette;
+    [SerializeField] private ColorPalette _lightPalette;
     [SerializeField, Range(0.0f,1.0f)] private float _delayScale = 0.5f;
     private PlayerMove _playerMove;
     private Absorb _absorb;
@@ -51,7 +52,7 @@ public class PlayerActionController : MonoBehaviour
             (_state == State.Direction || _state == State.Idle))
         {
             _summon.ChangeColors(stick);
-            _colorPalette.ReflectStick(stick);
+            _lightPalette.ReflectStick(stick);
             _cameraMove.MoveCamera(Vector2.zero);
             _direction.Direct(Vector2.zero);
         }
@@ -174,6 +175,8 @@ public class PlayerActionController : MonoBehaviour
                 _isChangingColor = true;
                 Time.timeScale = _delayScale;
                 _colorPalette.DisplayColorPalette();
+                _lightPalette.DisplayColorPalette();
+                _lightPalette.TurnOffLight();
             }
             
         }
@@ -187,9 +190,11 @@ public class PlayerActionController : MonoBehaviour
             {
                 _cameraMove.ChangeTarget(_summon.GetHomeBase(_summon.Color).transform, true);
             }
-            _colorPalette.ReflectStick(Vector2.zero);
+            
+            _lightPalette.ReflectStick(Vector2.zero);
             _isChangingColor = false;
             _colorPalette.HideColorPalette();
+            _lightPalette.HideColorPalette();
         }
     }
 

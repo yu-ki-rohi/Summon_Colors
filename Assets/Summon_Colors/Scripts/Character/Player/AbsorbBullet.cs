@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AbsorbBullet : MonoBehaviour
+public class AbsorbBullet : Projectiles
 {
-    [SerializeField] private float _range = 5.0f;
-    [SerializeField] private float _speed = 3.0f;
-    private float _distance = 0.0f;
     private Absorb _absorb;
 
     public void Initialize(Absorb absorb, Vector3 forward)
@@ -15,29 +12,17 @@ public class AbsorbBullet : MonoBehaviour
         transform.forward = forward;
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void BehaviorOnHitStage(Collider stage)
     {
-        if(_distance > _range)
+        Elements element = stage.GetComponentInParent<Elements>();
+        if (element != null)
         {
-            Destroy(gameObject);
-        }
 
-        float delta = _speed * Time.deltaTime;
-        _distance += delta;
-        transform.position += transform.forward * delta;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "Element")
-        {
-            Elements element = other.GetComponentInParent<Elements>();
-            if (element != null)
-            {
-                element.RegisterAbsorb(_absorb, other.ClosestPointOnBounds(this.transform.position));
-                Destroy(gameObject);
-            }
+            element.RegisterAbsorb(_absorb, stage.ClosestPointOnBounds(this.transform.position));
+#if true
+            ColorElements.ColorType colorType = (ColorElements.ColorType)Random.Range(0, 3);
+            element.ExtractEnergy(colorType);
+#endif
         }
     }
 }

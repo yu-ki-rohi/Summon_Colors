@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 
 public class DemonAction : EnemyAction
 {
-    [SerializeField] private UniversalRendererData _universalRendererData;
+    [SerializeField] private ShaderManager _shaderManager;
 
     [SerializeField] private Transform _breathPosition;
     [SerializeField] private Transform _firePosition;
@@ -32,8 +32,7 @@ public class DemonAction : EnemyAction
     private Vector3 _rushVector = Vector3.zero;
     private bool _isRush = false;
     private bool _isBreath = false;
-    private RadialBlurFeature _radialBlurFeature;
-
+    private float _roarIntensity = 0.0f;
     public void CreateVolcanicBomb()
     {
         GameObject volcanicBomb = Instantiate(_volcanicBomb, _firePosition.position, Quaternion.identity);
@@ -59,18 +58,6 @@ public class DemonAction : EnemyAction
         _rushColliders[0].enabled = true;
     }
 
-    public void Roar()
-    {
-        if(_radialBlurFeature != null)
-        {
-            // あとで右辺を変数化
-            _radialBlurFeature.Intensity = 0.6f;
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(_breathPosition.position);
-            screenPos.x /= Camera.main.pixelWidth;
-            screenPos.y /= Camera.main.pixelHeight;
-            _radialBlurFeature.RadialCenter = screenPos;
-        }
-    }
 
     public void CreateFireBall()
     {
@@ -123,6 +110,11 @@ public class DemonAction : EnemyAction
         _agent.SetDestination(transform.position);
     }
 
+    public void Roar()
+    {
+        _roarIntensity = 0.6f;
+    }
+
     private void FinishRush()
     {
         _agent.speed = _enemyBase.Agility;
@@ -151,32 +143,15 @@ public class DemonAction : EnemyAction
     {
         base.Start();
 
-        foreach (var features in _universalRendererData.rendererFeatures)
-        {
-            if(features.name == "RadialBlurFeature")
-            {
-                _radialBlurFeature = (RadialBlurFeature)features;
-            }
-        }
-
-        if(_radialBlurFeature == null)
-        {
-            Debug.Log("RadialBlurFeature is not found");
-        }
         FinishAttack();
     }
 
-
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        if (_radialBlurFeature != null && _radialBlurFeature.Intensity > 0.0f)
+        if(_roarIntensity > 0)
         {
-            // あとで右辺を変数化
-            _radialBlurFeature.Intensity *= 0.95f;
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(_breathPosition.position);
-            screenPos.x /= Camera.main.pixelWidth;
-            screenPos.y /= Camera.main.pixelHeight;
-            _radialBlurFeature.RadialCenter = screenPos;
+            _shaderManager.SetIntensity(_firePosition.position, _roarIntensity);
+            _roarIntensity *= 0.95f;
         }
     }
 

@@ -153,7 +153,7 @@ public class Summon : MonoBehaviour
                 }
                 else
                 {
-                    _actionController.ChangeToIdle();
+                    _actionController.FinishSummon();
                 }
             }
         }

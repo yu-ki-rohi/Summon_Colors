@@ -27,6 +27,7 @@ public class PlayerActionController : MonoBehaviour
     private Direction _direction;
     private State _state = State.Idle;
     private bool _isChangingColor = false;
+    private bool _canMove = true;
     private Animator _animator;
 
     public bool IsAbsorbing()
@@ -39,10 +40,24 @@ public class PlayerActionController : MonoBehaviour
         return _state == State.Summon;
     }
 
+    public void FinishSummon()
+    {
+        _animator.SetBool("Summon", false);
+    }
+
     public void ChangeToIdle()
     {
         _state = State.Idle;
-        _animator.SetBool("Summon", false);
+        _canMove = true;
+    }
+    public void ChangeToSummon()
+    {
+        _state = State.Summon;
+    }
+
+    public void ChangeToAbsorb()
+    {
+        _state = State.Absorb;
     }
 
     public void OnMoveCamera(InputAction.CallbackContext context)
@@ -72,14 +87,13 @@ public class PlayerActionController : MonoBehaviour
     {
         var stick = context.ReadValue<Vector2>();
 
-        if(_state == State.Absorb ||
-            _state == State.Summon)
+        if(_canMove)
         {
-            _playerMove.Move(Vector2.zero);
+            _playerMove.Move(stick);
         }
         else
         {
-            _playerMove.Move(stick);
+            _playerMove.Move(Vector2.zero); 
         }
     }
 
@@ -89,16 +103,13 @@ public class PlayerActionController : MonoBehaviour
         {
             if(_state == State.Idle)
             {
-                _state = State.Absorb;
-                _absorb.Shoot();
+                _canMove = false;
+                _animator.SetBool("Absorb", true);
             }
         }
         else if (context.canceled)
         {
-            if (_state == State.Absorb)
-            {
-                _state = State.Idle;
-            }
+            _animator.SetBool("Absorb", false);
         }
     }
 
@@ -108,17 +119,13 @@ public class PlayerActionController : MonoBehaviour
         {
             if (_state == State.Idle)
             {
-                _state = State.Summon;
+                _canMove = false;
                 _animator.SetBool("Summon", true);
             }
         }
         else if (context.canceled)
         {
-            if (_state == State.Summon)
-            {
-                _state = State.Idle;
-                _animator.SetBool("Summon", false);
-            }
+            _animator.SetBool("Summon", false);
         }
     }
 

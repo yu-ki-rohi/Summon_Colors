@@ -45,11 +45,12 @@ public class Energy : MonoBehaviour
         _renderer.materials[0].color = _color;
 
         transform.LookAt(_player.position);
+#if false
         float up = Random.Range(-_varticalRange, _varticalRange);
         float right = Random.Range(-_horizontallyRange, _horizontallyRange);
         transform.forward = (transform.forward + transform.up * up + transform.right * right).normalized;
+#endif
         _timer = 0.0f;
-
         _movePattern = Random.Range(0, 2);
     }
 

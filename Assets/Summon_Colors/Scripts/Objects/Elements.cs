@@ -23,6 +23,12 @@ public class Elements : MonoBehaviour
         _generatePosition = generatePosition;
     }
 
+    public void ExtractEnergy(ColorElements.ColorType type)
+    {
+        GenerateEnergy(type);
+        ReflectColorRemaining();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +52,7 @@ public class Elements : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+#if false
         if(_absorb != null)
         {
             if (_absorb.IsAbsorbing())
@@ -69,13 +76,19 @@ public class Elements : MonoBehaviour
             }
         }
 
-        
+#endif
     }
 
     private void GenerateEnergy(ColorElements.ColorType colorType)
     {
+        if (_absorb == null)
+        {
+            Debug.LogAssertion("Absorb is Null !!");
+            return;
+        }
+
         int value;
-        switch(colorType)
+        switch (colorType)
         {
             case ColorElements.ColorType.Blue:
                 value = (int)(_absorb.GetPower() * _absorbMagnification * (float)_colorElements.Blue / _colorElements.GetColorSum());
@@ -103,6 +116,7 @@ public class Elements : MonoBehaviour
             }
         }
     }
+
 
     private void ReflectColorRemaining()
     {

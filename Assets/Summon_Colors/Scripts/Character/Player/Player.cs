@@ -12,6 +12,8 @@ public class Player : CharacterBase
     private PlayerActionController _actionController;
 
     // プロパティ
+    public float RateOfFire { get { return _playerData.RateOfFire; } }
+    public float Accuracy { get { return _playerData.Accuracy; } }
     public int ColorCapacity { get {  return _playerData.ColorCapacity; } }
     public int AbsorbPower { get { return _playerData.AbsorbPower; } }
     public int SummonMax { get {  return _playerData.SummonMax; } }

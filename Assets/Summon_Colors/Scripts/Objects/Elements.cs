@@ -26,7 +26,15 @@ public class Elements : MonoBehaviour
     public void ExtractEnergy(ColorElements.ColorType type)
     {
         GenerateEnergy(type);
-        ReflectColorRemaining();
+        if(_meshRenderer != null)
+        {
+            ReflectColorRemaining();
+        }
+    }
+
+    public bool IsColorRemaining()
+    {
+        return _colorElements.GetRemaining(ColorElements.ColorType.All) > 0.0f;
     }
 
     // Start is called before the first frame update

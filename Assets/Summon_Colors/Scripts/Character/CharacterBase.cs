@@ -8,9 +8,13 @@ public class CharacterBase : MonoBehaviour
     protected CharacterData _characterData;
     protected Animator _animator;
     protected bool _isActive = true;
+    protected float _inbincibleTime = 0.0f;
 
     private int _currentHp;
     private int _armor;
+
+    private bool _isInvincible = false;
+    private Timer _invincibleTimer;
 
     public int Hp { get {  return _currentHp; } }
     public int MaxHp { get {  return _characterData.MaxHp; } }
@@ -20,7 +24,8 @@ public class CharacterBase : MonoBehaviour
     public float Agility { get {  return _characterData.Agility; } }
     public float CoolTime { get { return _characterData.CoolTime; } }
 
-    public bool IsActive { get { return _isActive; } } 
+    public bool IsActive { get { return _isActive; } }
+    public bool IsInvincible { get {  return _isInvincible; } }
 
     public Transform GetNearestPart(Transform other)
     {
@@ -47,7 +52,7 @@ public class CharacterBase : MonoBehaviour
     }
     public virtual void Damaged(int attack, int shock = 0,int hate = 0, CharacterBase attacker = null)
     {
-        if(!_isActive)
+        if(!_isActive || _isInvincible)
         {
             return;
         }
@@ -63,6 +68,8 @@ public class CharacterBase : MonoBehaviour
             _armor = _characterData.Armor;
             Broken();
         }
+
+        _invincibleTimer = new Timer(FinishInvincible, _inbincibleTime);
     }
 
     public virtual void Heal(int heal)
@@ -72,6 +79,17 @@ public class CharacterBase : MonoBehaviour
         {
             _currentHp = MaxHp;
         }
+    }
+
+    public void StartInvincible()
+    {
+        _isInvincible = true;
+    }
+
+    public void FinishInvincible()
+    {
+        _isInvincible = false;
+        _invincibleTimer = null;
     }
 
     protected virtual void Broken()
@@ -111,7 +129,10 @@ public class CharacterBase : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-
+        if(_invincibleTimer != null)
+        {
+            _invincibleTimer.CountUp(Time.deltaTime);
+        }
     }
 
     private bool IsANearerThanB(Transform A,Transform B, Transform target)

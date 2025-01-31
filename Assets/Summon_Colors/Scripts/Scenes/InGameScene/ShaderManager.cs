@@ -12,7 +12,6 @@ public class ShaderManager : MonoBehaviour
     {
         if (_radialBlurFeature != null)
         {
-            // あとで右辺を変数化
             _radialBlurFeature.Intensity = intensity;
             Vector3 screenPos = Camera.main.WorldToScreenPoint(position);
             screenPos.x /= Camera.main.pixelWidth;

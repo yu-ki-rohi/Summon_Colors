@@ -14,13 +14,16 @@ public class PlayerActionController : MonoBehaviour
         Idle,
         Summon,
         Absorb,
-        Direction
+        Direction,
+        Avoid,
+        Throw
     }
 
     [SerializeField] private CameraMove _cameraMove;
     [SerializeField] private ColorPalette _colorPalette;
     [SerializeField] private ColorPalette _lightPalette;
-    [SerializeField, Range(0.0f,1.0f)] private float _delayScale = 0.5f;
+    [SerializeField, Range(0.0f,1.0f)] private float _directionDelayScale = 0.5f;
+    [SerializeField, Range(0.0f,1.0f)] private float _changeDelayScale = 0.5f;
     private PlayerMove _playerMove;
     private Absorb _absorb;
     private Summon _summon;
@@ -129,13 +132,32 @@ public class PlayerActionController : MonoBehaviour
         }
     }
 
+    public void OnAvoid(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+
+            if (_state == State.Avoid)
+            {
+                return;
+            }
+
+            _animator.SetTrigger("Avoid");
+            _canMove = false;
+            Time.timeScale = 1.0f;
+            _cameraMove.ChangeTarget(transform, false);
+            Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+        }
+    }
+
     public void OnDirect(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
             if (_state == State.Direction)
             {
-                _state = State.Idle;
+                _animator.SetBool("Order", false);
+                ChangeToIdle();
                 Time.timeScale = 1.0f;
                 _cameraMove.ChangeTarget(transform, false);
                 Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
@@ -143,7 +165,9 @@ public class PlayerActionController : MonoBehaviour
             else
             {
                 _state = State.Direction;
-                Time.timeScale = _delayScale;
+                _animator.SetBool("Order",true);
+                _canMove = false;
+                Time.timeScale = _directionDelayScale;
                 _cameraMove.ChangeTarget(_summon.GetHomeBase(_summon.Color).transform, true);
                 Camera.main.cullingMask |= (1 << LayerMask.NameToLayer("UI"));
             }
@@ -180,7 +204,7 @@ public class PlayerActionController : MonoBehaviour
             if (_state == State.Direction || _state == State.Idle)
             {
                 _isChangingColor = true;
-                Time.timeScale = _delayScale;
+                Time.timeScale = _changeDelayScale;
                 _colorPalette.DisplayColorPalette();
                 _lightPalette.DisplayColorPalette();
                 _lightPalette.TurnOffLight();

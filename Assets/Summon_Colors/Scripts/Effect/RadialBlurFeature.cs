@@ -11,7 +11,7 @@ using UnityEngine.Rendering.Universal;
 [Serializable]
 public class RadialBlurParams
 {
-    [Range(0, 1), Tooltip("ブラーの強さ")] public float intensity = 0.4f;
+    [Range(0, 1), Tooltip("ブラーの強さ")] public float intensity = 0.0f;
     [Min(1), Tooltip("サンプリング回数")] public int sampleCount = 3;
     [Tooltip("エフェクトの中心")] public Vector2 radialCenter = new Vector2(0.5f, 0.5f);
     [Tooltip("ディザリングを利用する")] public bool useDither = true;

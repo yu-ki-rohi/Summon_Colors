@@ -9,6 +9,7 @@ public class Player : CharacterBase
     // フィールド
     [SerializeField] private PlayerData _playerData;
     [SerializeField] private Image _hpBar;
+    [SerializeField] private UIManager _uiManager;
     private PlayerActionController _actionController;
 
     // プロパティ
@@ -23,13 +24,13 @@ public class Player : CharacterBase
     public override void Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
         base.Damaged(attack, shock, hate, attacker);
-        ReflectHp();
+        _uiManager.ReflectCurrentHp((float)Hp / MaxHp);
     }
 
     public override void Heal(int heal)
     {
         base.Heal(heal);
-        ReflectHp();
+        _uiManager.ReflectCurrentHpImmediately((float)Hp / MaxHp);
     }
 
     // Start is called before the first frame update

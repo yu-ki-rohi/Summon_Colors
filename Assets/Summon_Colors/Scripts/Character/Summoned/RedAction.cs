@@ -13,7 +13,7 @@ public class RedAction : SummonedAction
             CharacterBase character = collider.GetComponentInParent<CharacterBase>();
             if(character != null)
             {
-                character.Damaged(_summonedBase.Attack, _summonedBase.Break, _summonedBase.Attack, _summonedBase);
+                character.Damaged(_summonedBase.Attack, _summonedBase.Break, _summonedBase.Appearance, _summonedBase);
             }
         }
     }

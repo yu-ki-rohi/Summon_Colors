@@ -21,6 +21,13 @@ public class Projectiles : MonoBehaviour
     {
         _distance = 0.0f;
     }
+
+    public void Initialize(int power)
+    {
+        _power = power;
+        _distance = 0.0f;
+    }
+
     public void Initialize(int power, float range, float speed, bool useRigidBody)
     {
         _power = power;
@@ -29,6 +36,8 @@ public class Projectiles : MonoBehaviour
         _useRigidBody = useRigidBody;
         _distance = 0.0f;
     }
+
+
 
     protected virtual void DisAppear()
     {

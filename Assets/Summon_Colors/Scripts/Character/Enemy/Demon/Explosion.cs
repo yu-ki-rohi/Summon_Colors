@@ -8,25 +8,47 @@ public class Explosion : MonoBehaviour
     private Collider _collider;
     private float _timer = 0.0f;
     private float _activTime = 0.2f;
+    private Timer _activeTimer;
+    private Timer _explosionTimer;
+
+    public void Initialize(int power)
+    {
+        _power = power;
+        _activeTimer = new Timer(DisAppear, 2.0f);
+        _explosionTimer = new Timer(FinishExplosion, 0.2f);
+        _collider = GetComponent<Collider>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        _collider = GetComponent<Collider>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(_timer < _activTime)
+        if(_explosionTimer != null)
         {
-            _timer += Time.deltaTime;
+            _explosionTimer.CountUp(Time.deltaTime);
         }
-        else
+        else if(_activeTimer != null)
         {
-            _collider.enabled = false;
+            _activeTimer.CountUp(Time.deltaTime);
         }
     }
+
+    private void DisAppear()
+    {
+        Destroy(gameObject);
+    }
+
+    private void FinishExplosion()
+    {
+        _collider.enabled = false;
+        _explosionTimer = null;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player" || other.tag == "Summoned")

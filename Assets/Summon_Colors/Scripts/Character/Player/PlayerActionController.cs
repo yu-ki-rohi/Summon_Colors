@@ -107,6 +107,8 @@ public class PlayerActionController : MonoBehaviour
             if(_state == State.Idle)
             {
                 _canMove = false;
+                _playerMove.Move(Vector2.zero);
+                _animator.SetFloat("Speed", 0.0f);
                 _animator.SetBool("Absorb", true);
             }
         }
@@ -124,6 +126,8 @@ public class PlayerActionController : MonoBehaviour
             {
                 _canMove = false;
                 _animator.SetBool("Summon", true);
+                _playerMove.Move(Vector2.zero);
+                _animator.SetFloat("Speed", 0.0f);
             }
         }
         else if (context.canceled)
@@ -141,8 +145,13 @@ public class PlayerActionController : MonoBehaviour
             {
                 return;
             }
-
+            _state = State.Avoid;
+            _playerMove.Move(Vector2.zero);
+            _animator.SetFloat("Speed", 0.0f);
             _animator.SetTrigger("Avoid");
+            _animator.SetBool("Summon", false); 
+            _animator.SetBool("Absorb", false);
+            _animator.SetBool("Order", false);
             _canMove = false;
             Time.timeScale = 1.0f;
             _cameraMove.ChangeTarget(transform, false);

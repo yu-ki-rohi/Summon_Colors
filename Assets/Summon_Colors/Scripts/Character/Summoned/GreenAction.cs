@@ -11,7 +11,7 @@ public class GreenAction : SummonedAction
             CharacterBase character = collider.GetComponentInParent<CharacterBase>();
             if (character != null)
             {
-                character.Damaged(0, 0, _summonedBase.Break, _summonedBase);
+                character.Damaged(0, 0, _summonedBase.Appearance, _summonedBase);
             }
         }
     }

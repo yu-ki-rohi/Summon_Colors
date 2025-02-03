@@ -171,6 +171,8 @@ public class DemonAction : EnemyAction
                 _state = State.Action;
                 _timer = 0.0f;
                 int judge = Random.Range(0, 4);
+
+
                 NavMeshHit navMeshHit;
                 switch (judge)
                 {

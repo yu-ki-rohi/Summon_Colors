@@ -21,11 +21,24 @@ public class CharacterBase : MonoBehaviour
     public int Attack { get { return _characterData.Attack; } }
     public int Vitality { get { return _characterData.Vitality; } }
     public int Break { get { return _characterData.Break; } }
+    public int Appearance { get { return _characterData.Appearance; } }
     public float Agility { get {  return _characterData.Agility; } }
     public float CoolTime { get { return _characterData.CoolTime; } }
 
     public bool IsActive { get { return _isActive; } }
     public bool IsInvincible { get {  return _isInvincible; } }
+
+
+    public float GetPowerMagnification(int index)
+    {
+        if(index < 0 ||
+            index >= _characterData.PowerMagnifications.Length)
+        { 
+            return 1.0f;
+        }
+
+        return _characterData.PowerMagnifications[index];
+    }
 
     public Transform GetNearestPart(Transform other)
     {
@@ -56,7 +69,7 @@ public class CharacterBase : MonoBehaviour
         {
             return;
         }
-        int damage = attack - Vitality;
+        int damage = (int)(attack * (1.0f - Vitality * 0.01f));
         if (damage > 0)
         {
             _currentHp -= damage;

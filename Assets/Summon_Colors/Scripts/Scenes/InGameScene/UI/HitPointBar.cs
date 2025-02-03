@@ -7,8 +7,8 @@ using UnityEngine.UI;
 [Serializable]
 public class HitPointBar
 {
-    public Image _greenHpBar;
-    public Image _redHpBar;
+    public Image GreenHpBar;
+    public Image RedHpBar;
     public float StartReduceTime = 1.0f;
 
     private Timer _reduceTimer;
@@ -17,15 +17,15 @@ public class HitPointBar
 
     public void ReflectCurrentHp(float currentHp)
     {
-        _greenHpBar.fillAmount = currentHp;
+        GreenHpBar.fillAmount = currentHp;
         _reduceTimer = new Timer(StartReduceRed, StartReduceTime);
     }
 
     public void ReflectCurrentHpImmediately(float currentHp)
     {
         _redRemain = Mathf.Clamp01(currentHp);
-        _greenHpBar.fillAmount = _redRemain;
-        _redHpBar.fillAmount = _redRemain;
+        GreenHpBar.fillAmount = _redRemain;
+        RedHpBar.fillAmount = _redRemain;
     }
 
     public void CountTimer()
@@ -39,10 +39,10 @@ public class HitPointBar
         if(!_isReflecting) { return; } 
         _redRemain -= Time.deltaTime;
         _redRemain = Mathf.Clamp01(_redRemain);
-        _redHpBar.fillAmount = _redRemain;
-        if(_redHpBar.fillAmount <= _greenHpBar.fillAmount)
+        RedHpBar.fillAmount = _redRemain;
+        if(RedHpBar.fillAmount <= GreenHpBar.fillAmount)
         {
-            _redHpBar.fillAmount = _greenHpBar.fillAmount;
+            RedHpBar.fillAmount = GreenHpBar.fillAmount;
             _isReflecting = false;
         }
     }

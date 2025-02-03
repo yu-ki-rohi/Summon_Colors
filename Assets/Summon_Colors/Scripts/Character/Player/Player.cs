@@ -25,12 +25,21 @@ public class Player : CharacterBase
     {
         base.Damaged(attack, shock, hate, attacker);
         _uiManager.ReflectCurrentHp((float)Hp / MaxHp);
+        if (Hp < MaxHp * 0.4f)
+        {
+            _uiManager.ChangeToExhausted();
+        }
+        _uiManager.ChangeToDamaged(attack);
     }
 
     public override void Heal(int heal)
     {
         base.Heal(heal);
         _uiManager.ReflectCurrentHpImmediately((float)Hp / MaxHp);
+        if(Hp > MaxHp * 0.4f)
+        {
+            _uiManager.ChangeToNeutral();
+        }
     }
 
     // Start is called before the first frame update

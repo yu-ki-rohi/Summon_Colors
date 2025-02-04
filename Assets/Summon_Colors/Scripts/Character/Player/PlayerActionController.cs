@@ -110,6 +110,10 @@ public class PlayerActionController : MonoBehaviour
                 _playerMove.Move(Vector2.zero);
                 _animator.SetFloat("Speed", 0.0f);
                 _animator.SetBool("Absorb", true);
+                _absorb.SetShootDirection(Camera.main.transform.forward);
+                Vector3 forward = Camera.main.transform.forward;
+                forward.y = 0.0f;
+                gameObject.transform.forward = forward.normalized;
             }
         }
         else if (context.canceled)

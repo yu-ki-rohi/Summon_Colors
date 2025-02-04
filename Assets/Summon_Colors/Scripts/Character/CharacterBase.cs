@@ -63,11 +63,11 @@ public class CharacterBase : MonoBehaviour
         }
         return partTransform;
     }
-    public virtual void Damaged(int attack, int shock = 0,int hate = 0, CharacterBase attacker = null)
+    public virtual int Damaged(int attack, int shock = 0,int hate = 0, CharacterBase attacker = null)
     {
         if(!_isActive || _isInvincible)
         {
-            return;
+            return 0;
         }
         int damage = (int)(attack * (1.0f - Vitality * 0.01f));
         if (damage > 0)
@@ -83,6 +83,8 @@ public class CharacterBase : MonoBehaviour
         }
 
         _invincibleTimer = new Timer(FinishInvincible, _inbincibleTime);
+
+        return damage;
     }
 
     public virtual void Heal(int heal)
@@ -103,6 +105,12 @@ public class CharacterBase : MonoBehaviour
     {
         _isInvincible = false;
         _invincibleTimer = null;
+    }
+
+    protected void DamagedInvincible(float time)
+    {
+        _isInvincible = true;
+        _invincibleTimer = new Timer(FinishInvincible, time);
     }
 
     protected virtual void Broken()

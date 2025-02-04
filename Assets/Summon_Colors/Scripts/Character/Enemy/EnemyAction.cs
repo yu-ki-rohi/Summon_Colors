@@ -28,14 +28,14 @@ public class EnemyAction : MonoBehaviour
     protected Vector3 _walkVec = Vector3.zero;
 
 
-    public void Attack(Collider collider)
+    public virtual void Attack(Collider collider)
     {
         if (collider.tag == "Player" || collider.tag == "Summoned")
         {
             CharacterBase character = collider.GetComponentInParent<CharacterBase>();
             if (character != null)
             {
-                character.Damaged(_enemyBase.Attack, _enemyBase.Break, _enemyBase.Attack, _enemyBase);
+                character.Damaged(_enemyBase.Attack, _enemyBase.Break, _enemyBase.Appearance, _enemyBase);
             }
         }
     }

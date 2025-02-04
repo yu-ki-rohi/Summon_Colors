@@ -17,8 +17,22 @@ MonoBehaviour:
   Vitality: 0
   Break: 0
   Armor: 200
+  Appearance: 10
   Agility: 3
   CoolTime: 2
-  PowerMagnification: []
+  PowerMagnifications:
+  - 0.66
+  - 1
+  - 1
+  - 2
+  - 2
+  - 1.5
+  - 0.2
+  - 2
+  - 2
+  - 0.2
+  - 4
+  - 3
+  - 0.4
   StopDistance: 6
   Money: 0

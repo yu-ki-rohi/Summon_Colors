@@ -1,11 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering.Universal;
 
 public class DemonAction : EnemyAction
 {
+    private enum Skill
+    {
+        Bite,
+        Clap,
+        Tail,
+        Rush,
+        Fire_Head,
+        Fire_Body,
+        Fire_Remain,
+        Ball_Direct,
+        Ball_Explosion,
+        Ball_Remain,
+        Landing_Direct,
+        Landing_Explosion,
+        Landing_Remain
+    }
+
+
     [SerializeField] private ShaderManager _shaderManager;
 
     [SerializeField] private Transform _breathPosition;
@@ -33,12 +52,21 @@ public class DemonAction : EnemyAction
     private bool _isRush = false;
     private bool _isBreath = false;
     private float _roarIntensity = 0.0f;
+    private int _power = 0;
     public void CreateVolcanicBomb()
     {
         GameObject volcanicBomb = Instantiate(_volcanicBomb, _firePosition.position, Quaternion.identity);
         volcanicBomb.transform.forward = _firePosition.forward;
-        Rigidbody rigidbody = volcanicBomb.GetComponent<Rigidbody>();
-        rigidbody.AddForce(_firePosition.forward * _firePower, ForceMode.Impulse);
+        if(volcanicBomb.TryGetComponent<Rigidbody>(out var rigidbody))
+        {
+            rigidbody.AddForce(_firePosition.forward * _firePower, ForceMode.Impulse);
+        }
+        if (volcanicBomb.TryGetComponent<VolcanicBomb>(out var projectile))
+        {
+            projectile.Initialize(
+                (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Ball_Direct)),
+                (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Ball_Explosion)));
+        }
     }
 
     public void CreateEarthQuake()
@@ -46,16 +74,22 @@ public class DemonAction : EnemyAction
         GameObject earthQuake = Instantiate(_earthQuake, _handAttackCollider.transform.position + Vector3.down * 1.0f, Quaternion.identity);
         earthQuake.transform.forward = transform.forward;
         _handAttackCollider.enabled = true;
+        _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Clap));
     }
 
     public void CreateExplosion()
     {
-        Instantiate(_tackleExplosion, _rushColliders[2].transform.position, Quaternion.identity);
+        GameObject explosionObj = Instantiate(_tackleExplosion, _rushColliders[2].transform.position, Quaternion.identity);
+        if (explosionObj.TryGetComponent<Explosion>(out var explosion))
+        {
+            explosion.Initialize((int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Landing_Explosion)));
+        }
     }
 
     public void Bite()
     {
         _rushColliders[0].enabled = true;
+        _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Bite));
     }
 
 
@@ -63,6 +97,11 @@ public class DemonAction : EnemyAction
     {
         GameObject fireBall = Instantiate(_fireBall, _breathPosition.position, Quaternion.identity);
         fireBall.transform.forward = _breathPosition.forward;
+        if (fireBall.TryGetComponent<Projectiles>(out var projectile))
+        {
+            projectile.Initialize(
+                (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Head)));
+        }
     }
     public void StartBreath()
     {
@@ -77,6 +116,7 @@ public class DemonAction : EnemyAction
         {
             col.enabled = true;
         }
+        _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Tail));
     }
 
     public void StartRush()
@@ -89,6 +129,7 @@ public class DemonAction : EnemyAction
         {
             col.enabled = true;
         }
+        _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Rush));
     }
 
     public void StartExplosionTackle()
@@ -101,6 +142,7 @@ public class DemonAction : EnemyAction
         {
             col.enabled = true;
         }
+        _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Landing_Direct));
     }
 
     public void FinishExplosionTackle()
@@ -137,6 +179,19 @@ public class DemonAction : EnemyAction
         _flameStream.Stop();
         _fireEmbers.Stop();
         _isBreath = false;
+        _power = 0;
+    }
+
+    public override void Attack(Collider collider)
+    {
+        if (collider.tag == "Player" || collider.tag == "Summoned")
+        {
+            CharacterBase character = collider.GetComponentInParent<CharacterBase>();
+            if (character != null)
+            {
+                character.Damaged(_power, _enemyBase.Break, _enemyBase.Appearance, _enemyBase);
+            }
+        }
     }
 
     protected override void Start()
@@ -288,6 +343,11 @@ public class DemonAction : EnemyAction
                 _breathTimer = 0.0f;
                 GameObject breath = _breathPool.Get(_firePosition.position);
                 breath.transform.forward = _firePosition.forward;
+                if (breath.TryGetComponent<Projectiles>(out var projectile))
+                {
+                    projectile.Initialize(
+                        (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Body)));
+                }
             }
         }
     }

@@ -19,7 +19,11 @@ public class VolcanicBomb : Projectiles
     {
         if(_explosion != null)
         {
-            Instantiate(_explosion,transform.position,Quaternion.identity);
+            GameObject explosionObj = Instantiate(_explosion,transform.position,Quaternion.identity);
+            if (explosionObj.TryGetComponent<Explosion>(out var explosion))
+            {
+                explosion.Initialize(_explosionPower);
+            }
         }
         if(_flames != null)
         {

@@ -21,15 +21,19 @@ public class Player : CharacterBase
 
     public PlayerActionController ActionController { get { return _actionController; } }
 
-    public override void Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
+    public override int Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
-        base.Damaged(attack, shock, hate, attacker);
+        int damage = base.Damaged(attack, shock, hate, attacker);
+        if (damage <= 0) { return damage; }
         _uiManager.ReflectCurrentHp((float)Hp / MaxHp);
         if (Hp < MaxHp * 0.4f)
         {
             _uiManager.ChangeToExhausted();
         }
         _uiManager.ChangeToDamaged(attack);
+        DamagedInvincible(0.5f);
+        Debug.Log(damage);
+        return damage;
     }
 
     public override void Heal(int heal)

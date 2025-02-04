@@ -18,7 +18,7 @@ public class Absorb : MonoBehaviour
     private Timer _shootTimer;
     private Vector3 _shootDir = Vector3.zero;
 
-    private const float SHOOT_UP_LIM = 0.866f;
+    private const float SHOOT_UP_LIM = 0.7071f;
     private const float SHOOT_DOWN_LIM = -0.5f;
 
     public ObjectPoolBase Pool { get { return _pool; } }
@@ -136,10 +136,14 @@ public class Absorb : MonoBehaviour
     {
         if (Mathf.Abs(value.y) == 1.0f) { return value; }
 
-        float scalar = (1.0f - valueY) / (1.0f - value.y);
+        float scalar = Mathf.Sqrt((1.0f - valueY * valueY) / (1.0f - value.y * value.y));
         value.x *= scalar;
         value.y = valueY;
         value.z *= scalar;
+        if (value.sqrMagnitude != 1.0f)
+        {
+            value = value.normalized;
+        }
         return value;
     }
 }

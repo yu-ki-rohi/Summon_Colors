@@ -111,6 +111,7 @@ public class Summon : MonoBehaviour
             if (theta < partition * (i + 1))
             {
                 _color = colorTypes[i];
+                _player.UIManager.ChangeColor(_color);
                 _lightPalette.TurnOffLight();
                 _lightPalette.LightColor(i);
                 return;
@@ -132,7 +133,7 @@ public class Summon : MonoBehaviour
         _actionController = GetComponent<PlayerActionController>();
 
         _collider.enabled = false;
-
+        _player.UIManager.ChangeColor(_color);
         SetSummonPositions();
     }
 

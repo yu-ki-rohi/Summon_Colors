@@ -19,6 +19,7 @@ public class Player : CharacterBase
     public int AbsorbPower { get { return _playerData.AbsorbPower; } }
     public int SummonMax { get {  return _playerData.SummonMax; } }
 
+    public UIManager UIManager { get { return _uiManager; } }
     public PlayerActionController ActionController { get { return _actionController; } }
 
     public override int Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)

@@ -6,6 +6,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private HitPointBar _hitPointBar;
     [SerializeField] private PlayerIcon _playerIcon;
+    [SerializeField] private SelectedColorDisplay _selectedColorDisplay;
 
 
     #region--- Hit Point bar ---
@@ -36,6 +37,13 @@ public class UIManager : MonoBehaviour
         _playerIcon.ChangeToDamaged(damage);
     }
 
+    #endregion
+
+    #region--- Selected Color Display ---
+    public void ChangeColor(ColorElements.ColorType color)
+    {
+        _selectedColorDisplay.ChangeColor(color);
+    }
     #endregion
     // Start is called before the first frame update
     void Start()

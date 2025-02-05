@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 public class PlayerMove : MonoBehaviour
 {
     [SerializeField] private float _accelerationMagni;
+    [SerializeField] private GameObject _throwing;
+    [SerializeField] private Transform _handTransform;
     private Player _player;
     private Vector3 _stick = Vector3.zero;
     private Vector3 _velocity = Vector3.zero;
@@ -20,6 +22,7 @@ public class PlayerMove : MonoBehaviour
         if(stick == Vector2.zero)
         {
             _velocity = Vector3.zero;
+            _acceleration = 0.0f;
             return;
         }
 #if false
@@ -42,6 +45,21 @@ public class PlayerMove : MonoBehaviour
 #endif
     }
 
+    public void ThrowItem()
+    {
+        GameObject throwing = Instantiate(_throwing, _handTransform.position, Quaternion.identity);
+        if (throwing.TryGetComponent<ThrowingObject>(out var projectiles))
+        {
+            projectiles.Initialize(1, 1, _player.Appearance, _player);
+        }
+        if (throwing.TryGetComponent<Rigidbody>(out var rigidbody))
+        {
+            float up = 0.2f;
+            float throwPower = 12.0f;
+            Vector3 throwVec = gameObject.transform.forward + Vector3.up * up;
+            rigidbody.AddForce(throwVec * throwPower,ForceMode.Impulse);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -78,9 +96,6 @@ public class PlayerMove : MonoBehaviour
             _speed = 0f;
         }
 
-        if(_speed > 0.0f)
-        {
-            _animator.SetFloat("Speed", _acceleration);
-        }
+        _animator.SetFloat("Speed", _acceleration);
     }
 }

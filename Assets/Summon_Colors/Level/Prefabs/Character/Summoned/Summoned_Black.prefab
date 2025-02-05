@@ -444,9 +444,9 @@ GameObject:
   - component: {fileID: 1792578147791542832}
   - component: {fileID: 6880522956051235545}
   - component: {fileID: 1478321548185594535}
-  - component: {fileID: 3212995633682356672}
   - component: {fileID: 5105000499152809414}
   - component: {fileID: 642184969832480151}
+  - component: {fileID: 7227953802488913619}
   m_Layer: 0
   m_Name: Summoned_Black
   m_TagString: Untagged
@@ -517,21 +517,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &3212995633682356672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1875429384413550501}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfbb8470161a8df48912782e73f3cd2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _partTransforms: []
-  _eyesTransform: {fileID: 3792775046010429203}
-  _summonedData: {fileID: 11400000, guid: 1cbc44f89e4da0f49a3e5c423f273c14, type: 2}
 --- !u!114 &5105000499152809414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -572,6 +557,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &7227953802488913619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875429384413550501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b915f287f6e5b05418266ee02f6ee92b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _partTransforms: []
+  _eyesTransform: {fileID: 3792775046010429203}
+  _summonedData: {fileID: 11400000, guid: 1cbc44f89e4da0f49a3e5c423f273c14, type: 2}
+  _data: {fileID: 11400000, guid: 1cbc44f89e4da0f49a3e5c423f273c14, type: 2}
 --- !u!1 &1876421606083683784
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,7 +625,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 25
+  m_Radius: 40
   m_Center: {x: 0, y: 0, z: 5}
 --- !u!114 &6755810316048513532
 MonoBehaviour:
@@ -647,7 +648,7 @@ MonoBehaviour:
   onTriggerExit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3212995633682356672}
+      - m_Target: {fileID: 7227953802488913619}
         m_TargetAssemblyTypeName: SummonedBase, Assembly-CSharp
         m_MethodName: LostCharacter
         m_Mode: 0
@@ -1945,7 +1946,7 @@ MonoBehaviour:
   onTriggerStay:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3212995633682356672}
+      - m_Target: {fileID: 7227953802488913619}
         m_TargetAssemblyTypeName: SummonedBase, Assembly-CSharp
         m_MethodName: RecognizeCharacter
         m_Mode: 0

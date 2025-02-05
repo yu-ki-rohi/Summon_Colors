@@ -55,13 +55,28 @@ public class PlayerActionController : MonoBehaviour
     }
     public void ChangeToSummon()
     {
+        if (_state == State.Direction)
+        {
+            _animator.SetBool("Order", false);
+            Time.timeScale = 1.0f;
+            _cameraMove.ChangeTarget(transform, false);
+            Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+        }
         _state = State.Summon;
     }
 
     public void ChangeToAbsorb()
     {
+        if (_state == State.Direction)
+        {
+            _animator.SetBool("Order", false);
+            Time.timeScale = 1.0f;
+            _cameraMove.ChangeTarget(transform, false);
+            Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+        }
         _state = State.Absorb;
     }
+
 
     public void OnMoveCamera(InputAction.CallbackContext context)
     {
@@ -140,6 +155,28 @@ public class PlayerActionController : MonoBehaviour
         }
     }
 
+    public void OnThrow(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (_state == State.Idle)
+            {
+                _state = State.Throw;
+                _canMove = false;
+                _animator.SetTrigger("Throw");
+                _playerMove.Move(Vector2.zero);
+                _animator.SetFloat("Speed", 0.0f);
+                Vector3 forward = Camera.main.transform.forward;
+                forward.y = 0.0f;
+                gameObject.transform.forward = forward.normalized;
+            }
+        }
+        else if (context.canceled)
+        {
+            
+        }
+    }
+
     public void OnAvoid(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -175,7 +212,7 @@ public class PlayerActionController : MonoBehaviour
                 _cameraMove.ChangeTarget(transform, false);
                 Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
             }
-            else
+            else if (_state == State.Idle)
             {
                 _state = State.Direction;
                 _animator.SetBool("Order",true);
@@ -232,6 +269,7 @@ public class PlayerActionController : MonoBehaviour
             }
             else
             {
+                Time.timeScale = _directionDelayScale;
                 _cameraMove.ChangeTarget(_summon.GetHomeBase(_summon.Color).transform, true);
             }
             

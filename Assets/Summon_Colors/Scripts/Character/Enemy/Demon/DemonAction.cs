@@ -179,6 +179,7 @@ public class DemonAction : EnemyAction
         _flameStream.Stop();
         _fireEmbers.Stop();
         _isBreath = false;
+        _agent.updateRotation = true;
         _power = 0;
     }
 
@@ -213,113 +214,7 @@ public class DemonAction : EnemyAction
     protected override void Combat()
     {
         _agent.SetDestination(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position);
-        if (_enemyBase.GetDistance() < 0)
-        {
-
-        }
-        else if (_enemyBase.GetDistance() > _enemyBase.StopDistance * _enemyBase.StopDistance)
-        {
-            if (_timer > _enemyBase.CoolTime)
-            {
-                _agent.velocity = Vector3.zero;
-                _agent.SetDestination(transform.position);
-                _state = State.Action;
-                _timer = 0.0f;
-                int judge = Random.Range(0, 4);
-
-
-                NavMeshHit navMeshHit;
-                switch (judge)
-                {
-                    case 0:
-                        _animator.SetTrigger("Ball");
-                        break;
-                    case 1:
-                        _animator.SetTrigger("Breath");
-                        break;
-                    case 2:
-                        if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
-                            (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 10.0f,
-                            out navMeshHit, 10.0f, NavMesh.AllAreas))
-                        {
-                            _rushVector = navMeshHit.position;
-                            _animator.SetTrigger("Rush");
-                        }
-                        else
-                        {
-                            _state = State.Combat;
-                        }
-                        break;
-                    case 3:
-                        if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
-                            out navMeshHit, 10.0f, NavMesh.AllAreas))
-                        {
-                            _rushVector = navMeshHit.position;
-                            _agent.updateRotation = false;
-                            _animator.SetTrigger("Explosion");
-                        }
-                        else
-                        {
-                            _state = State.Combat;
-                        }
-                        break;
-                }
-            }
-        }
-        else
-        {
-            _agent.velocity = Vector3.zero;
-            if (_timer > _enemyBase.CoolTime)
-            {
-                _agent.SetDestination(transform.position);
-                _state = State.Action;
-                _timer = 0.0f;
-                int judge = Random.Range(0, 6);
-
-                NavMeshHit navMeshHit;
-                switch (judge)
-                {
-                    case 0:
-                        _animator.SetTrigger("Attack");
-                        break;
-                    case 1:
-                        _animator.SetTrigger("Bite");
-                        break;
-                    case 2:
-                        _animator.SetTrigger("Tail");
-                        break;
-                    case 3:
-                        if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
-                            (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 15.0f,
-                            out navMeshHit, 10.0f, NavMesh.AllAreas))
-                        {
-                            _rushVector = navMeshHit.position;
-                            _animator.SetTrigger("Rush");
-                        }
-                        else
-                        {
-                            _state = State.Combat;
-                        }
-                        break;
-                    case 4:
-                        _animator.SetTrigger("Breath");
-                        break;
-                    case 5:
-                        if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
-                            out navMeshHit, 10.0f, NavMesh.AllAreas))
-                        {
-                            _rushVector = navMeshHit.position;
-                            _agent.updateRotation = false;
-                            _animator.SetTrigger("Explosion");
-                        }
-                        else
-                        {
-                            _state = State.Combat;
-                        }
-                        break;
-                }
-            }
-        }
+        SelectAttack();
         _timer += Time.deltaTime;
     }
     protected override void Action()
@@ -349,6 +244,158 @@ public class DemonAction : EnemyAction
                         (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Body)));
                 }
             }
+        }
+    }
+
+    private void SelectAttack()
+    {
+        float dot = _enemyBase.GetDot();
+        if (dot < 0) { return; }
+
+        float buffar = 2.0f;
+        float borderDistance = _enemyBase.StopDistance + buffar;
+        borderDistance *= borderDistance;
+        if (_enemyBase.GetDistance() > borderDistance)
+        {
+            if (_timer > _enemyBase.CoolTime)
+            {
+                _timer = 0.0f;
+                SelectFarAttack(dot);
+            }
+        }
+        else
+        {
+            if (_enemyBase.GetDistance() < _enemyBase.StopDistance * _enemyBase.StopDistance)
+            { _agent.velocity = Vector3.zero; }
+                
+            if (_timer > _enemyBase.CoolTime)
+            {
+                _timer = 0.0f;
+                SelectNearAttack(dot);
+            }
+        }
+    }
+
+    private void SelectFarAttack(float dot)
+    {
+        if(dot < 0.866f) { return; }
+
+        _agent.velocity = Vector3.zero;
+        _agent.SetDestination(transform.position);
+        _state = State.Action;
+        int judge;
+        if (dot < 0.9659f)
+        {
+            judge = Random.Range(1, 4);
+        }
+        else
+        {
+            judge = Random.Range(0, 4);
+        }
+        NavMeshHit navMeshHit;
+        switch (judge)
+        {
+            case 0:
+                _animator.SetTrigger("Ball");
+                _agent.updateRotation = false;
+                break;
+            case 1:
+                _animator.SetTrigger("Breath");
+                _agent.updateRotation = false;
+                break;
+            case 2:
+                if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
+                    (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 10.0f,
+                    out navMeshHit, 10.0f, NavMesh.AllAreas))
+                {
+                    _rushVector = navMeshHit.position;
+                    _animator.SetTrigger("Rush");
+                }
+                else
+                {
+                    _state = State.Combat;
+                }
+                break;
+            case 3:
+                if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
+                    out navMeshHit, 10.0f, NavMesh.AllAreas))
+                {
+                    _rushVector = navMeshHit.position;
+                    _agent.updateRotation = false;
+                    _animator.SetTrigger("Explosion");
+                }
+                else
+                {
+                    _state = State.Combat;
+                }
+                break;
+        }
+    }
+
+    private void SelectNearAttack(float dot)
+    {
+        _agent.SetDestination(transform.position);
+        _state = State.Action;
+        int judge;
+        if (dot < 0.7071f)
+        {
+            judge = Random.Range(3, 6);
+        }
+        else if(dot < 0.9397f)
+        {
+            judge = Random.Range(1, 6);
+        }
+        else
+        {
+            judge = Random.Range(0, 6);
+        }
+        
+
+        NavMeshHit navMeshHit;
+        switch (judge)
+        {
+            case 0:
+                _animator.SetTrigger("Bite");
+                _agent.updateRotation = false;
+                break;
+            case 1:
+                _animator.SetTrigger("Attack");
+                _agent.updateRotation = false;
+                break;
+            case 2:
+                _animator.SetTrigger("Breath");
+                _agent.updateRotation = false;
+                break;
+            case 3:
+                _animator.SetTrigger("Tail");
+                _agent.updateRotation = false;
+                break;
+            case 4:
+                if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
+                    (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 12.0f,
+                    out navMeshHit, 10.0f, NavMesh.AllAreas))
+                {
+                    _rushVector = navMeshHit.position;
+                    _animator.SetTrigger("Rush");
+                }
+                else
+                {
+                    _state = State.Combat;
+                }
+                break;
+            case 5:
+                if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
+                    out navMeshHit, 10.0f, NavMesh.AllAreas))
+                {
+                    _rushVector = navMeshHit.position;
+                    _agent.updateRotation = false;
+                    _animator.SetTrigger("Explosion");
+                }
+                else
+                {
+                    _state = State.Combat;
+                }
+                break;
         }
     }
 }

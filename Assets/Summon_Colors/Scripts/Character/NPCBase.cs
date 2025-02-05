@@ -58,6 +58,16 @@ public class NPCBase : CharacterBase
         return (_targetCharacter.transform.position - transform.position).sqrMagnitude;
     }
 
+    public float GetDot()
+    {
+        if (_targetCharacter == null)
+        {
+            return 10.0f;
+        }
+        Vector3 dir = (_targetCharacter.transform.position - transform.position).normalized;
+        return Vector3.Dot(dir, transform.forward);
+    }
+
     public virtual void RecognizeCharacter(Collider collider)
     {
         CharacterBase character = collider.gameObject.GetComponentInParent<CharacterBase>();

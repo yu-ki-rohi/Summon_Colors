@@ -147,7 +147,8 @@ public class EnemyAction : MonoBehaviour
         if(_agent != null)
         {
             // 判定をfloatにしてもいいかも
-            if (_agent.velocity.sqrMagnitude > 0)
+            if (_agent.velocity.sqrMagnitude > 0 ||
+                _enemyBase.GetDot() < 0.9659f)
             {
                 _animator.SetBool("IsWalking", true);
             }

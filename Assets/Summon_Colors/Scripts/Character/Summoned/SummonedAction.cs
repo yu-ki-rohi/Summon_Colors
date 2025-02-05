@@ -21,6 +21,19 @@ public class SummonedAction : MonoBehaviour
     protected State _state = State.Idle;
     protected float _timer = 0.0f;
 
+    public void Initialize()
+    {
+        if (_summonedBase == null)
+        {
+            _summonedBase = GetComponent<SummonedBase>();
+        }
+        if (_agent == null)
+        {
+            _agent = GetComponent<NavMeshAgent>();
+        }
+        _agent.speed = _summonedBase.Agility;
+    }
+
     public void Warp(Vector3 pos)
     {
         if (_agent == null)
@@ -50,7 +63,10 @@ public class SummonedAction : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        _summonedBase = GetComponent<SummonedBase>(); 
+        if(_summonedBase == null)
+        {
+            _summonedBase = GetComponent<SummonedBase>();
+        }
         if (_agent == null)
         {
             _agent = GetComponent<NavMeshAgent>();

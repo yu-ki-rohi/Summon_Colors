@@ -6,7 +6,7 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class SummonedBase : NPCBase
 {
-    [SerializeField] private SummonedData _summonedData;
+    [SerializeField] protected SummonedData _summonedData;
     private int _id;
     private Transform _standByPosition;
     private Summon _summon;
@@ -21,6 +21,11 @@ public class SummonedBase : NPCBase
     public SummonedPool SummonedPool { get { return _pool; } set { _pool = value; } }
 
     public Transform StandByPosition { get { return _standByPosition; } }
+
+    public virtual int GetCosts(int rank)
+    {
+        return Costs;
+    }
 
     public override int Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {

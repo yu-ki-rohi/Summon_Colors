@@ -53,38 +53,63 @@ public class Summon : MonoBehaviour
 
     public bool SummonColor()
     {
-        for(int i = 0; i < _player.SummonMax;i++)
+        if(_color == ColorElements.ColorType.All)
         {
-            if (!_isSummoned[_color][i] && i < _summonBasePositions[_color].Length)
+            var summonedPool = _summonedPools[(int)ColorElements.ColorType.All];
+            if (summonedPool.GetActiveNum() >= 1||
+                _absorb.ReduceColor(_color, summonedPool.GetCosts()) == 0)
+            { return false; }
+            int rank = GetBlackRank(summonedPool, 1);
+            NavMeshHit navMeshHit;
+            if (NavMesh.SamplePosition(_summonPosition.position, out navMeshHit, 10.0f, NavMesh.AllAreas))
             {
-                foreach (var summonedPools in _summonedPools)
+                GameObject summoned = summonedPool.Get(navMeshHit.position);
+                // 初期化処理
+                summoned.transform.forward = transform.forward;
+                if (summoned.TryGetComponent<SummonedBlack>(out var summonedBlack))
                 {
-                    if (summonedPools.ColorType == _color)
+                    summonedBlack.Initialize(rank, 0, _summonBasePositions[_color][0], this, navMeshHit.position);
+                }
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            for (int i = 0; i < _player.SummonMax; i++)
+            {
+                if (!_isSummoned[_color][i] && i < _summonBasePositions[_color].Length)
+                {
+                    foreach (var summonedPools in _summonedPools)
                     {
-                        if (_absorb.ReduceColor(_color, summonedPools.GetCosts()) == 0)
+                        if (summonedPools.ColorType == _color)
                         {
-                            return false;
-                        }
-                        NavMeshHit navMeshHit;
-                        if(NavMesh.SamplePosition(_summonPosition.position, out navMeshHit,10.0f,NavMesh.AllAreas))
-                        {
-                            _isSummoned[_color][i] = true;
-                            // 生成処理
-                            GameObject summoned = summonedPools.Get(navMeshHit.position);
-                            // 初期化処理
-                            summoned.transform.forward = transform.forward;
-                            if (summoned.TryGetComponent<SummonedBase>(out var summonedBase))
+                            if (_absorb.ReduceColor(_color, summonedPools.GetCosts()) == 0 ||
+                                summonedPools.GetActiveNum() >= _player.SummonMax)
                             {
-                                summonedBase.Initialize(i, _summonBasePositions[_color][i], this, navMeshHit.position);
+                                return false;
                             }
-                            return true;
+                            NavMeshHit navMeshHit;
+                            if (NavMesh.SamplePosition(_summonPosition.position, out navMeshHit, 10.0f, NavMesh.AllAreas))
+                            {
+                                _isSummoned[_color][i] = true;
+                                // 生成処理
+                                GameObject summoned = summonedPools.Get(navMeshHit.position);
+                                // 初期化処理
+                                summoned.transform.forward = transform.forward;
+                                if (summoned.TryGetComponent<SummonedBase>(out var summonedBase))
+                                {
+                                    summonedBase.Initialize(i, _summonBasePositions[_color][i], this, navMeshHit.position);
+                                }
+                                return true;
+                            }
                         }
                     }
+                    return false;
                 }
-                return false;
             }
+            return false;
         }
-        return false;
     }
 
     public void ChangeColors(Vector2 stick)
@@ -175,6 +200,20 @@ public class Summon : MonoBehaviour
             {
                 _isSummoned[homeBase.Color][i] = false;
             }
+        }
+    }
+
+    private int GetBlackRank(SummonedPool pool, int rank)
+    {
+        int costs = pool.GetCosts(rank);
+        if (costs < 0) { return rank - 1; }
+        if(_absorb.ReduceColor(ColorElements.ColorType.All, costs, true) < costs)
+        {
+            return rank - 1;
+        }
+        else
+        {
+            return GetBlackRank(pool, ++rank);
         }
     }
 }

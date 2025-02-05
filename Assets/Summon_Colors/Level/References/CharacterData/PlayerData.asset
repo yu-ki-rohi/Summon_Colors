@@ -25,5 +25,5 @@ MonoBehaviour:
   Accuracy: 3
   ColorCapacity: 255
   AbsorbPower: 5
-  SummonMax: 15
+  SummonMax: 3
   Money: 0

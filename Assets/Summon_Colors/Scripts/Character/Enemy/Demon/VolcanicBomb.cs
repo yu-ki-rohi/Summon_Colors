@@ -7,11 +7,23 @@ public class VolcanicBomb : Projectiles
     [SerializeField] private GameObject _explosion;
     [SerializeField] private GameObject _flames;
 
+    private int _explosionPower;
+
+    public void Initialize(int power, int explosionPower)
+    {
+        _explosionPower = explosionPower;
+        Initialize(power);
+    }
+
     protected override void BehaviorOnHitStage(Collider stage)
     {
         if(_explosion != null)
         {
-            Instantiate(_explosion,transform.position,Quaternion.identity);
+            GameObject explosionObj = Instantiate(_explosion,transform.position,Quaternion.identity);
+            if (explosionObj.TryGetComponent<Explosion>(out var explosion))
+            {
+                explosion.Initialize(_explosionPower);
+            }
         }
         if(_flames != null)
         {

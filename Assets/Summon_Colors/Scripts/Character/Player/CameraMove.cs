@@ -21,7 +21,10 @@ public class CameraMove : MonoBehaviour
     private CinemachineTransposer _virtualCameraTransposer;
     private Vector2 _rightStick;
     private bool _isDirecting = false;
-    
+
+    private const float CAMERA_UP_LIM = 0.9397f;
+    private const float CAMERA_DOWN_LIM = -0.7071f;
+
     public void ChangeTarget(Transform target, bool isDirecting)
     {
         _target = target;
@@ -89,6 +92,8 @@ public class CameraMove : MonoBehaviour
             Quaternion rotation = Quaternion.AngleAxis(_rightStick.y * _verticalSpeed * sign * Time.deltaTime, axis);
             _cameraVec = rotation * _cameraVec;
         }
+
+        _cameraVec = ClampHeight(_cameraVec, CAMERA_DOWN_LIM, CAMERA_UP_LIM);
     }
 
     private float SetDistance()
@@ -106,5 +111,34 @@ public class CameraMove : MonoBehaviour
         {
             return _baseDistance;
         }
+    }
+
+    private Vector3 ClampHeight(Vector3 value, float min, float max)
+    {
+        if (value.y < min)
+        {
+            return AdjustY(value, min);
+        }
+        else if (value.y > max)
+        {
+            return AdjustY(value, max);
+        }
+        return value;
+    }
+
+
+    private Vector3 AdjustY(Vector3 value, float valueY)
+    {
+        if (Mathf.Abs(value.y) == 1.0f) { return value; }
+
+        float scalar = Mathf.Sqrt((1.0f - valueY * valueY) / (1.0f - value.y * value.y));
+        value.x *= scalar;
+        value.y = valueY;
+        value.z *= scalar;
+        if(value.sqrMagnitude != 1.0f)
+        {
+            value= value.normalized;
+        }
+        return value;
     }
 }

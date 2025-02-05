@@ -8,19 +8,37 @@ public class CharacterBase : MonoBehaviour
     protected CharacterData _characterData;
     protected Animator _animator;
     protected bool _isActive = true;
+    protected float _inbincibleTime = 0.0f;
 
     private int _currentHp;
     private int _armor;
+
+    private bool _isInvincible = false;
+    private Timer _invincibleTimer;
 
     public int Hp { get {  return _currentHp; } }
     public int MaxHp { get {  return _characterData.MaxHp; } }
     public int Attack { get { return _characterData.Attack; } }
     public int Vitality { get { return _characterData.Vitality; } }
     public int Break { get { return _characterData.Break; } }
+    public int Appearance { get { return _characterData.Appearance; } }
     public float Agility { get {  return _characterData.Agility; } }
     public float CoolTime { get { return _characterData.CoolTime; } }
 
-    public bool IsActive { get { return _isActive; } } 
+    public bool IsActive { get { return _isActive; } }
+    public bool IsInvincible { get {  return _isInvincible; } }
+
+
+    public float GetPowerMagnification(int index)
+    {
+        if(index < 0 ||
+            index >= _characterData.PowerMagnifications.Length)
+        { 
+            return 1.0f;
+        }
+
+        return _characterData.PowerMagnifications[index];
+    }
 
     public Transform GetNearestPart(Transform other)
     {
@@ -45,13 +63,13 @@ public class CharacterBase : MonoBehaviour
         }
         return partTransform;
     }
-    public virtual void Damaged(int attack, int shock = 0,int hate = 0, CharacterBase attacker = null)
+    public virtual int Damaged(int attack, int shock = 0,int hate = 0, CharacterBase attacker = null)
     {
-        if(!_isActive)
+        if(!_isActive || _isInvincible)
         {
-            return;
+            return 0;
         }
-        int damage = attack - Vitality;
+        int damage = (int)(attack * (1.0f - Vitality * 0.01f));
         if (damage > 0)
         {
             _currentHp -= damage;
@@ -63,6 +81,10 @@ public class CharacterBase : MonoBehaviour
             _armor = _characterData.Armor;
             Broken();
         }
+
+        _invincibleTimer = new Timer(FinishInvincible, _inbincibleTime);
+
+        return damage;
     }
 
     public virtual void Heal(int heal)
@@ -72,6 +94,23 @@ public class CharacterBase : MonoBehaviour
         {
             _currentHp = MaxHp;
         }
+    }
+
+    public void StartInvincible()
+    {
+        _isInvincible = true;
+    }
+
+    public void FinishInvincible()
+    {
+        _isInvincible = false;
+        _invincibleTimer = null;
+    }
+
+    protected void DamagedInvincible(float time)
+    {
+        _isInvincible = true;
+        _invincibleTimer = new Timer(FinishInvincible, time);
     }
 
     protected virtual void Broken()
@@ -111,7 +150,10 @@ public class CharacterBase : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-
+        if(_invincibleTimer != null)
+        {
+            _invincibleTimer.CountUp(Time.deltaTime);
+        }
     }
 
     private bool IsANearerThanB(Transform A,Transform B, Transform target)

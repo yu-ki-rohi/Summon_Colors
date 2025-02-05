@@ -14,13 +14,16 @@ public class PlayerActionController : MonoBehaviour
         Idle,
         Summon,
         Absorb,
-        Direction
+        Direction,
+        Avoid,
+        Throw
     }
 
     [SerializeField] private CameraMove _cameraMove;
     [SerializeField] private ColorPalette _colorPalette;
     [SerializeField] private ColorPalette _lightPalette;
-    [SerializeField, Range(0.0f,1.0f)] private float _delayScale = 0.5f;
+    [SerializeField, Range(0.0f,1.0f)] private float _directionDelayScale = 0.5f;
+    [SerializeField, Range(0.0f,1.0f)] private float _changeDelayScale = 0.5f;
     private PlayerMove _playerMove;
     private Absorb _absorb;
     private Summon _summon;
@@ -104,7 +107,13 @@ public class PlayerActionController : MonoBehaviour
             if(_state == State.Idle)
             {
                 _canMove = false;
+                _playerMove.Move(Vector2.zero);
+                _animator.SetFloat("Speed", 0.0f);
                 _animator.SetBool("Absorb", true);
+                _absorb.SetShootDirection(Camera.main.transform.forward);
+                Vector3 forward = Camera.main.transform.forward;
+                forward.y = 0.0f;
+                gameObject.transform.forward = forward.normalized;
             }
         }
         else if (context.canceled)
@@ -121,11 +130,36 @@ public class PlayerActionController : MonoBehaviour
             {
                 _canMove = false;
                 _animator.SetBool("Summon", true);
+                _playerMove.Move(Vector2.zero);
+                _animator.SetFloat("Speed", 0.0f);
             }
         }
         else if (context.canceled)
         {
             _animator.SetBool("Summon", false);
+        }
+    }
+
+    public void OnAvoid(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+
+            if (_state == State.Avoid)
+            {
+                return;
+            }
+            _state = State.Avoid;
+            _playerMove.Move(Vector2.zero);
+            _animator.SetFloat("Speed", 0.0f);
+            _animator.SetTrigger("Avoid");
+            _animator.SetBool("Summon", false); 
+            _animator.SetBool("Absorb", false);
+            _animator.SetBool("Order", false);
+            _canMove = false;
+            Time.timeScale = 1.0f;
+            _cameraMove.ChangeTarget(transform, false);
+            Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
         }
     }
 
@@ -135,7 +169,8 @@ public class PlayerActionController : MonoBehaviour
         {
             if (_state == State.Direction)
             {
-                _state = State.Idle;
+                _animator.SetBool("Order", false);
+                ChangeToIdle();
                 Time.timeScale = 1.0f;
                 _cameraMove.ChangeTarget(transform, false);
                 Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
@@ -143,7 +178,9 @@ public class PlayerActionController : MonoBehaviour
             else
             {
                 _state = State.Direction;
-                Time.timeScale = _delayScale;
+                _animator.SetBool("Order",true);
+                _canMove = false;
+                Time.timeScale = _directionDelayScale;
                 _cameraMove.ChangeTarget(_summon.GetHomeBase(_summon.Color).transform, true);
                 Camera.main.cullingMask |= (1 << LayerMask.NameToLayer("UI"));
             }
@@ -180,7 +217,7 @@ public class PlayerActionController : MonoBehaviour
             if (_state == State.Direction || _state == State.Idle)
             {
                 _isChangingColor = true;
-                Time.timeScale = _delayScale;
+                Time.timeScale = _changeDelayScale;
                 _colorPalette.DisplayColorPalette();
                 _lightPalette.DisplayColorPalette();
                 _lightPalette.TurnOffLight();

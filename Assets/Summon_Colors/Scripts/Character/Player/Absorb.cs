@@ -16,6 +16,10 @@ public class Absorb : MonoBehaviour
     private Player _player;
     private ColorElements _colorElements = new ColorElements();
     private Timer _shootTimer;
+    private Vector3 _shootDir = Vector3.zero;
+
+    private const float SHOOT_UP_LIM = 0.7071f;
+    private const float SHOOT_DOWN_LIM = -0.5f;
 
     public ObjectPoolBase Pool { get { return _pool; } }
     public PlayerActionController ActionController { get { return _player.ActionController;} }
@@ -59,8 +63,18 @@ public class Absorb : MonoBehaviour
                 right = Random.Range(-1.0f / _player.Accuracy, 1.0f / _player.Accuracy);
             }
 
-            absorbBullet.Initialize(this, transform.forward + Vector3.up * up + Vector3.right * right);
+            Vector3 cross = Vector3.Cross(_shootDir, Vector3.up);
+            absorbBullet.Initialize(this, _shootDir + Vector3.Cross(_shootDir, cross) * up + cross * right);
         }
+    }
+
+    public void SetShootDirection(Vector3 direction)
+    {
+        if(direction.sqrMagnitude > 1.0f)
+        {
+            direction = direction.normalized;
+        }
+        _shootDir = ClampHeight(direction, SHOOT_DOWN_LIM, SHOOT_UP_LIM);
     }
 
 
@@ -103,5 +117,33 @@ public class Absorb : MonoBehaviour
         {
             _GemIcon[i].fillAmount = _colorElements.GetRemaining((ColorType)i);
         }
+    }
+
+    private Vector3 ClampHeight(Vector3 value, float min, float max)
+    {
+        if (value.y < min)
+        {
+            return AdjustY(value, min);
+        }
+        else if (value.y > max)
+        {
+            return AdjustY(value, max);
+        }
+        return value;
+    }
+
+    private Vector3 AdjustY(Vector3 value, float valueY)
+    {
+        if (Mathf.Abs(value.y) == 1.0f) { return value; }
+
+        float scalar = Mathf.Sqrt((1.0f - valueY * valueY) / (1.0f - value.y * value.y));
+        value.x *= scalar;
+        value.y = valueY;
+        value.z *= scalar;
+        if (value.sqrMagnitude != 1.0f)
+        {
+            value = value.normalized;
+        }
+        return value;
     }
 }

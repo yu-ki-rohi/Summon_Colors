@@ -6,9 +6,14 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Player))]
 public class PlayerMove : MonoBehaviour
 {
+    [SerializeField] private float _accelerationMagni;
     private Player _player;
+    private Vector3 _stick = Vector3.zero;
     private Vector3 _velocity = Vector3.zero;
+    private Vector3 _dir = Vector3.zero;
     private Animator _animator;
+    private float _speed = 0.0f;
+    private float _acceleration;
 
     public void Move(Vector2 stick)
     {
@@ -26,7 +31,14 @@ public class PlayerMove : MonoBehaviour
         Vector3 horizontalCameraForward = Camera.main.transform.forward;
         horizontalCameraForward.y = 0f;
 
-        _velocity = (horizontalCameraForward.normalized * stick.y * stick.y * stick.y + Camera.main.transform.right * stick.x * stick.x * stick.x).normalized * _player.Agility;
+        _stick = (horizontalCameraForward.normalized * stick.y + Camera.main.transform.right * stick.x);
+        if(Vector3.Dot(_stick, _velocity) < 0f && _speed > _player.Agility * 0.7f)
+        {
+            _speed = -_speed * 0.3f;
+        }
+        _velocity = _stick;
+        _acceleration = _velocity.magnitude;
+        _dir = _velocity.normalized;
 #endif
     }
 
@@ -50,13 +62,25 @@ public class PlayerMove : MonoBehaviour
     {
         if(_velocity != Vector3.zero)
         {
-            transform.forward = _velocity.normalized;
-            transform.position += _velocity * Time.deltaTime;
-            _animator.SetFloat("Speed", _velocity.sqrMagnitude);
+            if(_speed < _player.Agility)
+            {
+                _speed += _acceleration * _accelerationMagni *Time.deltaTime;
+            }
+            else
+            {
+                _speed = _player.Agility;
+            }
+            transform.forward = _dir;
+            transform.position += _velocity * _speed * Time.deltaTime;
         }
         else
         {
-            _animator.SetFloat("Speed", 0.0f);
+            _speed = 0f;
+        }
+
+        if(_speed > 0.0f)
+        {
+            _animator.SetFloat("Speed", _acceleration);
         }
     }
 }

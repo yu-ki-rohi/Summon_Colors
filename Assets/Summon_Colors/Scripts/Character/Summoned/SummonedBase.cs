@@ -22,13 +22,16 @@ public class SummonedBase : NPCBase
 
     public Transform StandByPosition { get { return _standByPosition; } }
 
-    public override void Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
+    public override int Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
-        base.Damaged(attack, shock, hate, attacker);
+        int damage = base.Damaged(attack, shock, hate, attacker);
+        if (damage <= 0) { return 0; }
+        DamagedInvincible(0.5f);
         if(Hp <= 0)
         {
             Die();
         }
+        return damage;
     }
     public void Initialize(int id, Transform standByPosition, Summon summon, Vector3 summonedPosition)
     {

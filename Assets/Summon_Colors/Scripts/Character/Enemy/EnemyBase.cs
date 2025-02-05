@@ -8,7 +8,7 @@ public class EnemyBase : NPCBase
     private CharacterBase _player;
 
     public float StopDistance { get { return _enemyData.StopDistance; } }
-    public override void Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
+    public override int Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
         // プレイヤーに個別の処理を入れる場合
         if (attacker == _player)
@@ -16,12 +16,13 @@ public class EnemyBase : NPCBase
             hate += (int)(hate * 1.0f);
         }
 
-        base.Damaged(attack, shock, hate, attacker);
+        int damage = base.Damaged(attack, shock, hate, attacker);
         Debug.Log(Hp);
         if (Hp <= 0)
         {
             Die();
         }
+        return damage;
     }
 
     public override void RecognizeCharacter(Collider collider)

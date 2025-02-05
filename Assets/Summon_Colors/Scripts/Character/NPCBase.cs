@@ -12,9 +12,9 @@ public class NPCBase : CharacterBase
 
     public CharacterBase TargetCharacter { get { return _targetCharacter; } }
 
-    public override void Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
+    public override int Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
-        base.Damaged(attack, shock, hate, attacker);
+        int damage = base.Damaged(attack, shock, hate, attacker);
         if (attacker != null)
         {
             if(IsCharacterRecognized(attacker))
@@ -32,6 +32,7 @@ public class NPCBase : CharacterBase
                 }
             }
         }
+        return damage;
     }
 
     public bool SetTarget()

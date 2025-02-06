@@ -37,10 +37,13 @@ public class DemonAction : EnemyAction
     [SerializeField] private GameObject _earthQuake;
     [SerializeField] private GameObject _fireBall;
     [SerializeField] private GameObject _tackleExplosion;
+    [SerializeField] private GameObject _tackleFire;
     [SerializeField] private ParticleSystem _flameStream;
     [SerializeField] private ParticleSystem _fireEmbers;
     [SerializeField] private ObjectPoolBase _breathPool;
-
+    [SerializeField] private ObjectPoolBase _fireBallPool;
+    [SerializeField] private ObjectPoolBase[] _embersPools;
+    [SerializeField]private Renderer _renderer;
 
     [SerializeField] private float _firePower = 10.0f;
     [SerializeField] private float _rushSpeed = 2.0f;
@@ -65,7 +68,8 @@ public class DemonAction : EnemyAction
         {
             projectile.Initialize(
                 (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Ball_Direct)),
-                (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Ball_Explosion)));
+                (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Ball_Explosion)),
+                (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Ball_Remain)));
         }
     }
 
@@ -83,6 +87,11 @@ public class DemonAction : EnemyAction
         if (explosionObj.TryGetComponent<Explosion>(out var explosion))
         {
             explosion.Initialize((int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Landing_Explosion)));
+        } 
+        GameObject fireObj = Instantiate(_tackleFire, _rushColliders[2].transform.position, Quaternion.identity);
+        if (fireObj.TryGetComponent<Embers>(out var embers))
+        {
+            embers.Initialize((int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Landing_Remain)));
         }
     }
 
@@ -95,12 +104,27 @@ public class DemonAction : EnemyAction
 
     public void CreateFireBall()
     {
-        GameObject fireBall = Instantiate(_fireBall, _breathPosition.position, Quaternion.identity);
-        fireBall.transform.forward = _breathPosition.forward;
-        if (fireBall.TryGetComponent<Projectiles>(out var projectile))
+        if(_fireBallPool == null)
         {
-            projectile.Initialize(
-                (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Head)));
+            GameObject fireBall = Instantiate(_fireBall, _breathPosition.position, Quaternion.identity);
+            fireBall.transform.forward = _breathPosition.forward;
+            if (fireBall.TryGetComponent<Projectiles>(out var projectile))
+            {
+                projectile.Initialize(
+                    (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Head)));
+            }
+        }
+        else
+        {
+            GameObject breath = _fireBallPool.Get(_breathPosition.position);
+            breath.transform.forward = _breathPosition.forward;
+            if (breath.TryGetComponent<FireBall>(out var projectile))
+            {
+                projectile.Initialize(
+                    (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Head)),
+                    (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Remain)),
+                    _embersPools[1]);
+            }
         }
     }
     public void StartBreath()
@@ -154,7 +178,10 @@ public class DemonAction : EnemyAction
 
     public void Roar()
     {
-        _roarIntensity = 0.6f;
+        if(_renderer.isVisible)
+        {
+            _roarIntensity = 0.8f;
+        }
     }
 
     private void FinishRush()
@@ -190,7 +217,15 @@ public class DemonAction : EnemyAction
             CharacterBase character = collider.GetComponentInParent<CharacterBase>();
             if (character != null)
             {
-                character.Damaged(_power, _enemyBase.Break, _enemyBase.Appearance, _enemyBase);
+                int damage = character.Damaged(_power, _enemyBase.Break, _enemyBase.Appearance, _enemyBase);
+                if (damage > 0)
+                {
+                    float time = 0.15f;
+                    float forcePower = 25.0f;
+                    float powerMagni = Mathf.Clamp01(damage / 100.0f);
+                    Vector3 forceVec = (collider.transform.position - transform.position);
+                    character.KnockBack(forceVec, forcePower * powerMagni, time);
+                }
             }
         }
     }
@@ -198,7 +233,6 @@ public class DemonAction : EnemyAction
     protected override void Start()
     {
         base.Start();
-
         FinishAttack();
     }
 
@@ -238,10 +272,12 @@ public class DemonAction : EnemyAction
                 _breathTimer = 0.0f;
                 GameObject breath = _breathPool.Get(_firePosition.position);
                 breath.transform.forward = _firePosition.forward;
-                if (breath.TryGetComponent<Projectiles>(out var projectile))
+                if (breath.TryGetComponent<FireBall>(out var projectile))
                 {
                     projectile.Initialize(
-                        (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Body)));
+                        (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Body)),
+                        (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Remain)),
+                        _embersPools[0]);
                 }
             }
         }

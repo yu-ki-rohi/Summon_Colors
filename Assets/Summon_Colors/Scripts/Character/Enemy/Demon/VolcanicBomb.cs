@@ -6,12 +6,13 @@ public class VolcanicBomb : Projectiles
 {
     [SerializeField] private GameObject _explosion;
     [SerializeField] private GameObject _flames;
-
+    private int _embersPower = 3;
     private int _explosionPower;
 
-    public void Initialize(int power, int explosionPower)
+    public void Initialize(int power, int explosionPower, int embersPower)
     {
         _explosionPower = explosionPower;
+        _embersPower = embersPower;
         Initialize(power);
     }
 
@@ -27,7 +28,11 @@ public class VolcanicBomb : Projectiles
         }
         if(_flames != null)
         {
-            Instantiate(_flames, stage.ClosestPointOnBounds(this.transform.position), Quaternion.identity);
+            GameObject embersObj = Instantiate(_flames, stage.ClosestPointOnBounds(this.transform.position), Quaternion.identity);
+            if (embersObj.TryGetComponent<Embers>(out var embers))
+            {
+                embers.Initialize(_embersPower);
+            }
         }
     }
 

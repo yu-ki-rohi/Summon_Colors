@@ -38,6 +38,12 @@ public class SummonedBase : NPCBase
         }
         return damage;
     }
+
+    public override void KnockBack(Vector3 dir, float strength, float time)
+    {
+        _action.KnockBack(dir, strength, time);
+    }
+
     public void Initialize(int id, Transform standByPosition, Summon summon, Vector3 summonedPosition)
     {
         _id = id;

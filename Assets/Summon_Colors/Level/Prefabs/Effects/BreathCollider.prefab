@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _power: 3
-  _range: 20
+  _range: 15
   _speed: 25
   _useRigidBody: 0
   _flames: {fileID: 1640943796078817888, guid: 85c7f270636730d4e902a118997864cb, type: 3}

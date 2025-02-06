@@ -16,6 +16,15 @@ public class PlayerMove : MonoBehaviour
     private Animator _animator;
     private float _speed = 0.0f;
     private float _acceleration;
+    private float _cameraY;
+
+    public void SetCameraY() 
+    {
+        _cameraY = Camera.main.transform.forward.y;
+        Vector3 forward = Camera.main.transform.forward;
+        forward.y = 0.0f;
+        gameObject.transform.forward = forward.normalized;
+    }
 
     public void Move(Vector2 stick)
     {
@@ -54,9 +63,11 @@ public class PlayerMove : MonoBehaviour
         }
         if (throwing.TryGetComponent<Rigidbody>(out var rigidbody))
         {
+            SetCameraY();
             float up = 0.2f;
-            float throwPower = 12.0f;
-            Vector3 throwVec = gameObject.transform.forward + Vector3.up * up;
+            float cameraMalti = 0.6f;
+            float throwPower = 36.0f;
+            Vector3 throwVec = gameObject.transform.forward + Vector3.up * (_cameraY * cameraMalti + up);
             rigidbody.AddForce(throwVec * throwPower,ForceMode.Impulse);
         }
     }

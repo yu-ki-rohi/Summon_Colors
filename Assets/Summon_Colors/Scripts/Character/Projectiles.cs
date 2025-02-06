@@ -54,6 +54,10 @@ public class Projectiles : MonoBehaviour
     {
 
     }
+    protected virtual void BehaviorOnHitSubStage(Collider stage)
+    {
+
+    }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
@@ -61,6 +65,10 @@ public class Projectiles : MonoBehaviour
         {
             BehaviorOnHitStage(other);
             DisAppear();
+        }
+        if (other.tag == "SubElement")
+        {
+            BehaviorOnHitSubStage(other);
         }
     }
 

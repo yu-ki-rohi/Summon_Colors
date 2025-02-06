@@ -61,15 +61,28 @@ public class Explosion : MonoBehaviour
             RaycastHit hit;
             int layerNum = LayerMask.NameToLayer("Stage");
             int layerMask = 1 << layerNum;
+            float distance = (EndPos - StartPos).magnitude;
 
-            if (Physics.Raycast(ray, out hit, (EndPos - StartPos).magnitude, layerMask))
+            if (Physics.Raycast(ray, out hit, distance, layerMask))
             {
                 return;
             }
             CharacterBase characterBase = other.GetComponentInParent<CharacterBase>();
             if (characterBase != null)
             {
-                characterBase.Damaged(_power);
+                int damage = characterBase.Damaged(_power);
+                if (damage > 0)
+                {
+                    if(distance == 0) { return; }
+                    StartPos.y = 0.0f;
+                    EndPos.y = 0.0f;
+
+                    float time = 0.3f;
+                    float forcePower = 25.0f;
+                    float powerMagni = Mathf.Clamp01(damage / 100.0f);
+                    Vector3 forceVec = (EndPos - StartPos) / distance;
+                    characterBase.KnockBack(forceVec, forcePower * powerMagni, time);
+                }
             }
         }
     }

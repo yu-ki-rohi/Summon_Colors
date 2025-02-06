@@ -17,7 +17,7 @@ MonoBehaviour:
   Vitality: 0
   Break: 10
   Armor: 50
-  Appearance: 10
+  Appearance: 60
   Agility: 5
   CoolTime: 1
   PowerMagnifications: []

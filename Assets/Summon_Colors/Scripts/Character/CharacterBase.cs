@@ -96,6 +96,11 @@ public class CharacterBase : MonoBehaviour
         }
     }
 
+    public virtual void KnockBack(Vector3 dir, float strength, float time)
+    {
+
+    }
+
     public void StartInvincible()
     {
         _isInvincible = true;

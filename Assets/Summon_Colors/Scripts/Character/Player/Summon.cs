@@ -114,7 +114,7 @@ public class Summon : MonoBehaviour
 
     public void ChangeColors(Vector2 stick)
     {
-        if(stick == Vector2.zero)
+        if(stick.sqrMagnitude < 0.49f)
         {
             return;
         }

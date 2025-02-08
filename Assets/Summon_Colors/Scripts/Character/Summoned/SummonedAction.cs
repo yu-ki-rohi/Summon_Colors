@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(SummonedBase))]
-[RequireComponent(typeof(NavMeshAgent))]
 public class SummonedAction : MonoBehaviour
 {
     protected enum State
@@ -15,9 +14,10 @@ public class SummonedAction : MonoBehaviour
         Action,
         Down
     }
+    [SerializeField] protected NavMeshAgent _agent;
+    [SerializeField] protected Animator _animator;
+
     protected SummonedBase _summonedBase;
-    protected NavMeshAgent _agent;
-    protected Animator _animator;
     protected State _state = State.Idle;
     protected float _timer = 0.0f;
     private Rigidbody _rigidbody;
@@ -89,7 +89,10 @@ public class SummonedAction : MonoBehaviour
             _agent = GetComponent<NavMeshAgent>();
         }
         _state = State.Idle;
-        _animator = GetComponent<Animator>();
+        if(_animator == null)
+        {
+            _animator = GetComponent<Animator>();
+        }
         _agent.speed = _summonedBase.Agility;
         _rigidbody = GetComponent<Rigidbody>();
     }

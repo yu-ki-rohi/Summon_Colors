@@ -23,7 +23,7 @@ MonoBehaviour:
   PowerMagnifications: []
   ColorType: 6
   Costs: 10
-  StopDistance: 4.5
+  StopDistance: 3.2
   RankCosts: 050000000f0000001e0000005000000014000000
   RankMaxHp: 0a0000001e0000004b000000c3000000e1000000
   RankAttack: 05000000080000000a0000000f00000014000000

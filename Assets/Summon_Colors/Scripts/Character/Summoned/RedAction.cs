@@ -53,18 +53,27 @@ public class RedAction : SummonedAction
     protected override void Combat()
     {
         base.Combat();
-        if(_summonedBase.GetDistance() < 0)
-        {
-
-        }
-        else if (_summonedBase.GetDistance() > _summonedBase.StopDistance * _summonedBase.StopDistance)
+        float dot = _summonedBase.GetDot();
+        if (dot < 0) { return; }
+        float distance = _summonedBase.GetDistance();
+        float buffar = 2.0f;
+        float borderDistance = _summonedBase.StopDistance + buffar;
+        borderDistance *= borderDistance;
+        if (distance > borderDistance || dot < 0.7071)
         {
             _animator.SetBool("IsWalking", true);
         }
         else
         {
-            _animator.SetBool("IsWalking", false);
-            _agent.velocity = Vector3.zero;
+            if(distance < _summonedBase.StopDistance * _summonedBase.StopDistance)
+            {
+                _agent.velocity = Vector3.zero;
+                _animator.SetBool("IsWalking", false);
+            }
+            else
+            {
+                _animator.SetBool("IsWalking", true);
+            }
             if (_timer > _summonedBase.CoolTime)
             {
                 Action();
@@ -81,6 +90,7 @@ public class RedAction : SummonedAction
     {
         _animator.SetTrigger("Action");
         _state = State.Action;
+        _agent.velocity = Vector3.zero;
         _agent.updateRotation = false;
         _agent.SetDestination(transform.position);
     }

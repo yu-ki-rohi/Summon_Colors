@@ -8,6 +8,19 @@ public class EnemyBase : NPCBase
     private CharacterBase _player;
 
     public float StopDistance { get { return _enemyData.StopDistance; } }
+
+    public void Initialize()
+    {
+        if (_animator == null)
+        {
+            _animator = GetComponent<Animator>();
+        }
+        if (_animator != null)
+        {
+            _animator.SetBool("Die", false);
+        }
+    }
+
     public override int Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
         // プレイヤーに個別の処理を入れる場合

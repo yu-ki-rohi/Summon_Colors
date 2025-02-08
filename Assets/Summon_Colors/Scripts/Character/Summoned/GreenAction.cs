@@ -37,7 +37,10 @@ public class GreenAction : SummonedAction
         else
         {
             _animator.SetBool("IsWalking", false);
-            if(_timer < _summonedBase.CoolTime)
+        }
+        if((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude < _summonedBase.StopDistance * _summonedBase.StopDistance)
+        {
+            if (_timer < _summonedBase.CoolTime)
             {
                 _timer += Time.deltaTime;
             }

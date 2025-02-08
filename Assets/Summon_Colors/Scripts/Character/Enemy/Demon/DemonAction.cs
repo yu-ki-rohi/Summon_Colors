@@ -146,7 +146,7 @@ public class DemonAction : EnemyAction
     public void StartRush()
     {
         _agent.speed = _enemyBase.Agility * _rushSpeed;
-        _agent.velocity = (_rushVector - transform.position).normalized * 0.5f;
+        _agent.velocity = transform.forward * _agent.speed * 0.05f;
         _isRush = true;
         _agent.SetDestination(_rushVector);
         foreach(Collider col in _rushColliders)
@@ -159,7 +159,7 @@ public class DemonAction : EnemyAction
     public void StartExplosionTackle()
     {
         _agent.speed = _enemyBase.Agility * _explosionTackleSpeed;
-        _agent.velocity = (_rushVector - transform.position).normalized * 60.0f;
+        _agent.velocity = (_rushVector- transform.position).normalized * _agent.speed * 0.5f;
 
         _agent.SetDestination(_rushVector);
         foreach (Collider col in _rushColliders)

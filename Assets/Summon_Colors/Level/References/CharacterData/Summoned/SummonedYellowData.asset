@@ -17,8 +17,10 @@ MonoBehaviour:
   Vitality: 0
   Break: 1
   Armor: 50
+  Appearance: 10
   Agility: 5
   CoolTime: 1.5
+  PowerMagnifications: []
   ColorType: 2
   Costs: 5
-  StopDistance: 12
+  StopDistance: 10.5

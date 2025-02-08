@@ -18,7 +18,7 @@ MonoBehaviour:
   Break: 0
   Armor: 200
   Appearance: 10
-  Agility: 5
+  Agility: 2.6
   CoolTime: 2
   PowerMagnifications:
   - 3

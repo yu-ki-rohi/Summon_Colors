@@ -25,7 +25,7 @@ public class Timer
         _timer = Time;
     }
 
-    public void CountUp(float deltaTime)
+    public float CountUp(float deltaTime)
     {
         if(_timer > Time)
         {
@@ -36,9 +36,10 @@ public class Timer
         {
             _timer += deltaTime;
         }
+        return _timer;
     }
 
-    public void CountDown(float deltaTime)
+    public float CountDown(float deltaTime)
     {
         if (_timer < 0.0f)
         {
@@ -49,5 +50,6 @@ public class Timer
         {
             _timer -= deltaTime;
         }
+        return _timer;
     }
 }

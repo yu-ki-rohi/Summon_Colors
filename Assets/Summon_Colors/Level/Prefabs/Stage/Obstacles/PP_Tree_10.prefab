@@ -14,7 +14,7 @@ GameObject:
   m_Name: Collider (1)
   m_TagString: Element
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 1
+  m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &5099744686907887368
@@ -70,7 +70,7 @@ GameObject:
   m_Name: PP_Tree_10
   m_TagString: Element
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 1
+  m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &6327879012464823088
@@ -167,7 +167,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 122
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!114 &1122408745511341150
 MonoBehaviour:
@@ -202,7 +202,7 @@ GameObject:
   m_Name: Collider
   m_TagString: Element
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 1
+  m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &2997535934332524125

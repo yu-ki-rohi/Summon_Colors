@@ -5,8 +5,8 @@ using UnityEngine;
 public class CharacterBase : MonoBehaviour
 {
     [SerializeField] private Transform[] _partTransforms;
-    protected CharacterData _characterData;
     protected Animator _animator;
+    protected CharacterData _characterData;
     protected bool _isActive = true;
     protected float _inbincibleTime = 0.0f;
 
@@ -96,6 +96,11 @@ public class CharacterBase : MonoBehaviour
         }
     }
 
+    public virtual void KnockBack(Vector3 dir, float strength, float time)
+    {
+
+    }
+
     public void StartInvincible()
     {
         _isInvincible = true;
@@ -140,7 +145,10 @@ public class CharacterBase : MonoBehaviour
         }
         _currentHp = _characterData.MaxHp;
         _armor = _characterData.Armor;
-        _animator = GetComponent<Animator>();
+        if (_animator == null)
+        {
+            _animator = GetComponent<Animator>();
+        }
         if( _animator != null )
         {
             _animator.SetBool("Die", false);

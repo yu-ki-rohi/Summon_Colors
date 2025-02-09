@@ -32,7 +32,7 @@ public class Player : CharacterBase
             _uiManager.ChangeToExhausted();
         }
         _uiManager.ChangeToDamaged(attack);
-        DamagedInvincible(0.5f);
+        DamagedInvincible(0.8f);
         Debug.Log(damage);
         return damage;
     }
@@ -45,6 +45,11 @@ public class Player : CharacterBase
         {
             _uiManager.ChangeToNeutral();
         }
+    }
+
+    public override void KnockBack(Vector3 dir, float strength, float time)
+    {
+        _actionController.KnockBack(dir, strength, time);
     }
 
     // Start is called before the first frame update

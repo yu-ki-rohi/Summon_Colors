@@ -9,16 +9,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 085c2be4996552d419b162e5b606121d, type: 3}
+  m_Script: {fileID: 11500000, guid: 84ca6a3d42c865c45ac498efb00c2c5f, type: 3}
   m_Name: SummonedBlackData
   m_EditorClassIdentifier: 
-  MaxHp: 100
+  MaxHp: 75
   Attack: 10
   Vitality: 0
   Break: 10
   Armor: 50
-  Agility: 2
+  Appearance: 10
+  Agility: 2.6
   CoolTime: 3
+  PowerMagnifications: []
   ColorType: 6
   Costs: 10
-  StopDistance: 6
+  StopDistance: 3.2
+  RankCosts: 050000000f0000001e0000005000000014000000
+  RankMaxHp: 0a0000001e0000004b000000c3000000e1000000
+  RankAttack: 05000000080000000a0000000f00000014000000
+  RankVitality: 0000000000000000000000000000000000000000
+  RankBreak: 05000000080000000a0000000f00000014000000
+  RankAppearnce: 05000000080000000a0000000f00000014000000
+  RankAgility:
+  - 2.6
+  - 2.6
+  - 2.6
+  - 2.6
+  - 3.4
+  RankCoolTime:
+  - 3
+  - 3
+  - 3
+  - 3
+  - 1

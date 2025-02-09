@@ -4937,7 +4937,7 @@ MonoBehaviour:
   _useRigidBody: 1
   _explosion: {fileID: 4125137501235286302, guid: 66d1e7503fb4a5d4b838e35c73f0ec51,
     type: 3}
-  _flames: {fileID: 6348772970086080241, guid: c323feef2c6f2d9438752063fe21782b, type: 3}
+  _flames: {fileID: 2962520266310712806, guid: e2c01da4caf7c9f4c822d324d71eb356, type: 3}
 --- !u!1 &7746178907813536785
 GameObject:
   m_ObjectHideFlags: 0

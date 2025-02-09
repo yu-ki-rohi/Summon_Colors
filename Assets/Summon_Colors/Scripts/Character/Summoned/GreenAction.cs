@@ -30,14 +30,17 @@ public class GreenAction : SummonedAction
     protected override void Idle()
     {
         base.Idle();
-        if (_agent.velocity.sqrMagnitude > 0)
+        if ((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude > 1.0f)
         {
             _animator.SetBool("IsWalking", true);
         }
         else
         {
             _animator.SetBool("IsWalking", false);
-            if(_timer < _summonedBase.CoolTime)
+        }
+        if((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude < _summonedBase.StopDistance * _summonedBase.StopDistance)
+        {
+            if (_timer < _summonedBase.CoolTime)
             {
                 _timer += Time.deltaTime;
             }

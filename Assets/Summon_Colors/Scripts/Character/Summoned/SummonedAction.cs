@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(SummonedBase))]
-[RequireComponent(typeof(NavMeshAgent))]
 public class SummonedAction : MonoBehaviour
 {
     protected enum State
@@ -15,11 +14,27 @@ public class SummonedAction : MonoBehaviour
         Action,
         Down
     }
+    [SerializeField] protected NavMeshAgent _agent;
+    [SerializeField] protected Animator _animator;
+
     protected SummonedBase _summonedBase;
-    protected NavMeshAgent _agent;
-    protected Animator _animator;
     protected State _state = State.Idle;
     protected float _timer = 0.0f;
+    private Rigidbody _rigidbody;
+    private Timer _knockBackTimer;
+
+    public void Initialize()
+    {
+        if (_summonedBase == null)
+        {
+            _summonedBase = GetComponent<SummonedBase>();
+        }
+        if (_agent == null)
+        {
+            _agent = GetComponent<NavMeshAgent>();
+        }
+        _agent.speed = _summonedBase.Agility;
+    }
 
     public void Warp(Vector3 pos)
     {
@@ -47,17 +62,39 @@ public class SummonedAction : MonoBehaviour
         _agent.updateRotation = true;
     }
 
+    public void KnockBack(Vector3 dir, float strength, float time)
+    {
+        _agent.velocity = Vector3.zero;
+        _agent.updatePosition = false;
+        _agent.updateRotation = false;
+
+        _knockBackTimer = new Timer(FinishKnockBack, time + 0.5f);
+        dir.y = 0;
+        if (dir.sqrMagnitude != 1.0f)
+        {
+            dir = dir.normalized;
+        }
+        _rigidbody.AddForce(dir * strength, ForceMode.Impulse);
+    }
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        _summonedBase = GetComponent<SummonedBase>(); 
+        if(_summonedBase == null)
+        {
+            _summonedBase = GetComponent<SummonedBase>();
+        }
         if (_agent == null)
         {
             _agent = GetComponent<NavMeshAgent>();
         }
         _state = State.Idle;
-        _animator = GetComponent<Animator>();
+        if(_animator == null)
+        {
+            _animator = GetComponent<Animator>();
+        }
         _agent.speed = _summonedBase.Agility;
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -87,19 +124,25 @@ public class SummonedAction : MonoBehaviour
                 _state = State.Return;
             }
         }
-
-        switch(_state)
+        if(_knockBackTimer != null)
         {
-            case State.Idle:
-                Idle();
-                break;
-            case State.Combat:
-                Combat();
-                break;
-            case State.Return:
-                Return();
-                break;
-
+            _knockBackTimer.CountUp(Time.deltaTime);
+        }
+        else
+        {
+            switch (_state)
+            {
+                case State.Idle:
+                    Idle();
+                    break;
+                case State.Combat:
+                    Combat();
+                    break;
+                case State.Return:
+                    Return();
+                    break;
+            }
+            _rigidbody.velocity = Vector3.zero;
         }
     }
 
@@ -126,5 +169,11 @@ public class SummonedAction : MonoBehaviour
     protected virtual void Action()
     {
 
+    }
+
+    private void FinishKnockBack()
+    {
+        _knockBackTimer = null;
+        Warp(transform.position);
     }
 }

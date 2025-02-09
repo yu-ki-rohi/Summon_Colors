@@ -10,7 +10,7 @@ public class ObjectPoolBase : MonoBehaviour
     [SerializeField] private int _maxNum = 100;
     private ObjectPool<GameObject> _pool;
 
-    public GameObject Get(Vector3 position)
+    public virtual GameObject Get(Vector3 position)
     {
         GameObject obj = _pool.Get();
         if (obj != null)
@@ -20,7 +20,7 @@ public class ObjectPoolBase : MonoBehaviour
         return obj;
     }
 
-    public void Release(GameObject obj)
+    public virtual void Release(GameObject obj)
     {
         _pool.Release(obj);
     }

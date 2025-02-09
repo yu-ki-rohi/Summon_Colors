@@ -25,4 +25,10 @@ public class AbsorbBullet : Projectiles
 #endif
         }
     }
+
+    protected override void BehaviorOnHitSubStage(Collider stage)
+    {
+        BehaviorOnHitStage(stage);
+        DisAppear();
+    }
 }

@@ -37,6 +37,11 @@ public class Elements : MonoBehaviour
         return _colorElements.GetRemaining(ColorElements.ColorType.All) > 0.0f;
     }
 
+    public void Initialize()
+    {
+        _colorElements.Initialize();
+    }
+
     // Start is called before the first frame update
     void Start()
     {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Explosion : MonoBehaviour
 {
@@ -52,10 +53,39 @@ public class Explosion : MonoBehaviour
     {
         if (other.tag == "Player" || other.tag == "Summoned")
         {
+            Vector3 StartPos = gameObject.transform.position;
+            StartPos.y += 1.0f;
+            Vector3 EndPos = other.gameObject.transform.position;
+            EndPos.y += 1.0f;
+            Ray ray = new Ray(StartPos, EndPos - StartPos);
+            RaycastHit hit;
+            int layerNum = LayerMask.NameToLayer("Stage");
+            int layerMask = 1 << layerNum;
+            layerNum = LayerMask.NameToLayer("Ground");
+            layerMask |= 1 << layerNum;
+
+            float distance = (EndPos - StartPos).magnitude;
+
+            if (Physics.Raycast(ray, out hit, distance, layerMask))
+            {
+                return;
+            }
             CharacterBase characterBase = other.GetComponentInParent<CharacterBase>();
             if (characterBase != null)
             {
-                characterBase.Damaged(_power);
+                int damage = characterBase.Damaged(_power);
+                if (damage > 0)
+                {
+                    if(distance == 0) { return; }
+                    StartPos.y = 0.0f;
+                    EndPos.y = 0.0f;
+
+                    float time = 0.3f;
+                    float forcePower = 25.0f;
+                    float powerMagni = Mathf.Clamp01(damage / 100.0f);
+                    Vector3 forceVec = (EndPos - StartPos) / distance;
+                    characterBase.KnockBack(forceVec, forcePower * powerMagni, time);
+                }
             }
         }
     }

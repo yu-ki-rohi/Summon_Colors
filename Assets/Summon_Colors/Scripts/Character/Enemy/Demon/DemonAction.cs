@@ -37,10 +37,13 @@ public class DemonAction : EnemyAction
     [SerializeField] private GameObject _earthQuake;
     [SerializeField] private GameObject _fireBall;
     [SerializeField] private GameObject _tackleExplosion;
+    [SerializeField] private GameObject _tackleFire;
     [SerializeField] private ParticleSystem _flameStream;
     [SerializeField] private ParticleSystem _fireEmbers;
     [SerializeField] private ObjectPoolBase _breathPool;
-
+    [SerializeField] private ObjectPoolBase _fireBallPool;
+    [SerializeField] private ObjectPoolBase[] _embersPools;
+    [SerializeField]private Renderer _renderer;
 
     [SerializeField] private float _firePower = 10.0f;
     [SerializeField] private float _rushSpeed = 2.0f;
@@ -65,7 +68,8 @@ public class DemonAction : EnemyAction
         {
             projectile.Initialize(
                 (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Ball_Direct)),
-                (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Ball_Explosion)));
+                (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Ball_Explosion)),
+                (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Ball_Remain)));
         }
     }
 
@@ -83,6 +87,11 @@ public class DemonAction : EnemyAction
         if (explosionObj.TryGetComponent<Explosion>(out var explosion))
         {
             explosion.Initialize((int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Landing_Explosion)));
+        } 
+        GameObject fireObj = Instantiate(_tackleFire, _rushColliders[2].transform.position, Quaternion.identity);
+        if (fireObj.TryGetComponent<Embers>(out var embers))
+        {
+            embers.Initialize((int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Landing_Remain)));
         }
     }
 
@@ -95,12 +104,27 @@ public class DemonAction : EnemyAction
 
     public void CreateFireBall()
     {
-        GameObject fireBall = Instantiate(_fireBall, _breathPosition.position, Quaternion.identity);
-        fireBall.transform.forward = _breathPosition.forward;
-        if (fireBall.TryGetComponent<Projectiles>(out var projectile))
+        if(_fireBallPool == null)
         {
-            projectile.Initialize(
-                (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Head)));
+            GameObject fireBall = Instantiate(_fireBall, _breathPosition.position, Quaternion.identity);
+            fireBall.transform.forward = _breathPosition.forward;
+            if (fireBall.TryGetComponent<Projectiles>(out var projectile))
+            {
+                projectile.Initialize(
+                    (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Head)));
+            }
+        }
+        else
+        {
+            GameObject breath = _fireBallPool.Get(_breathPosition.position);
+            breath.transform.forward = _breathPosition.forward;
+            if (breath.TryGetComponent<FireBall>(out var projectile))
+            {
+                projectile.Initialize(
+                    (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Head)),
+                    (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Remain)),
+                    _embersPools[1]);
+            }
         }
     }
     public void StartBreath()
@@ -122,7 +146,7 @@ public class DemonAction : EnemyAction
     public void StartRush()
     {
         _agent.speed = _enemyBase.Agility * _rushSpeed;
-        _agent.velocity = (_rushVector - transform.position).normalized * 0.5f;
+        _agent.velocity = transform.forward * _agent.speed * 0.05f;
         _isRush = true;
         _agent.SetDestination(_rushVector);
         foreach(Collider col in _rushColliders)
@@ -135,7 +159,7 @@ public class DemonAction : EnemyAction
     public void StartExplosionTackle()
     {
         _agent.speed = _enemyBase.Agility * _explosionTackleSpeed;
-        _agent.velocity = (_rushVector - transform.position).normalized * 60.0f;
+        _agent.velocity = (_rushVector- transform.position).normalized * _agent.speed * 0.5f;
 
         _agent.SetDestination(_rushVector);
         foreach (Collider col in _rushColliders)
@@ -154,7 +178,10 @@ public class DemonAction : EnemyAction
 
     public void Roar()
     {
-        _roarIntensity = 0.6f;
+        if(_renderer.isVisible)
+        {
+            _roarIntensity = 0.8f;
+        }
     }
 
     private void FinishRush()
@@ -179,6 +206,7 @@ public class DemonAction : EnemyAction
         _flameStream.Stop();
         _fireEmbers.Stop();
         _isBreath = false;
+        _agent.updateRotation = true;
         _power = 0;
     }
 
@@ -189,7 +217,15 @@ public class DemonAction : EnemyAction
             CharacterBase character = collider.GetComponentInParent<CharacterBase>();
             if (character != null)
             {
-                character.Damaged(_power, _enemyBase.Break, _enemyBase.Appearance, _enemyBase);
+                int damage = character.Damaged(_power, _enemyBase.Break, _enemyBase.Appearance, _enemyBase);
+                if (damage > 0)
+                {
+                    float time = 0.15f;
+                    float forcePower = 25.0f;
+                    float powerMagni = Mathf.Clamp01(damage / 100.0f);
+                    Vector3 forceVec = (collider.transform.position - transform.position);
+                    character.KnockBack(forceVec, forcePower * powerMagni, time);
+                }
             }
         }
     }
@@ -197,7 +233,6 @@ public class DemonAction : EnemyAction
     protected override void Start()
     {
         base.Start();
-
         FinishAttack();
     }
 
@@ -213,113 +248,7 @@ public class DemonAction : EnemyAction
     protected override void Combat()
     {
         _agent.SetDestination(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position);
-        if (_enemyBase.GetDistance() < 0)
-        {
-
-        }
-        else if (_enemyBase.GetDistance() > _enemyBase.StopDistance * _enemyBase.StopDistance)
-        {
-            if (_timer > _enemyBase.CoolTime)
-            {
-                _agent.velocity = Vector3.zero;
-                _agent.SetDestination(transform.position);
-                _state = State.Action;
-                _timer = 0.0f;
-                int judge = Random.Range(0, 4);
-
-
-                NavMeshHit navMeshHit;
-                switch (judge)
-                {
-                    case 0:
-                        _animator.SetTrigger("Ball");
-                        break;
-                    case 1:
-                        _animator.SetTrigger("Breath");
-                        break;
-                    case 2:
-                        if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
-                            (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 10.0f,
-                            out navMeshHit, 10.0f, NavMesh.AllAreas))
-                        {
-                            _rushVector = navMeshHit.position;
-                            _animator.SetTrigger("Rush");
-                        }
-                        else
-                        {
-                            _state = State.Combat;
-                        }
-                        break;
-                    case 3:
-                        if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
-                            out navMeshHit, 10.0f, NavMesh.AllAreas))
-                        {
-                            _rushVector = navMeshHit.position;
-                            _agent.updateRotation = false;
-                            _animator.SetTrigger("Explosion");
-                        }
-                        else
-                        {
-                            _state = State.Combat;
-                        }
-                        break;
-                }
-            }
-        }
-        else
-        {
-            _agent.velocity = Vector3.zero;
-            if (_timer > _enemyBase.CoolTime)
-            {
-                _agent.SetDestination(transform.position);
-                _state = State.Action;
-                _timer = 0.0f;
-                int judge = Random.Range(0, 6);
-
-                NavMeshHit navMeshHit;
-                switch (judge)
-                {
-                    case 0:
-                        _animator.SetTrigger("Attack");
-                        break;
-                    case 1:
-                        _animator.SetTrigger("Bite");
-                        break;
-                    case 2:
-                        _animator.SetTrigger("Tail");
-                        break;
-                    case 3:
-                        if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
-                            (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 15.0f,
-                            out navMeshHit, 10.0f, NavMesh.AllAreas))
-                        {
-                            _rushVector = navMeshHit.position;
-                            _animator.SetTrigger("Rush");
-                        }
-                        else
-                        {
-                            _state = State.Combat;
-                        }
-                        break;
-                    case 4:
-                        _animator.SetTrigger("Breath");
-                        break;
-                    case 5:
-                        if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
-                            out navMeshHit, 10.0f, NavMesh.AllAreas))
-                        {
-                            _rushVector = navMeshHit.position;
-                            _agent.updateRotation = false;
-                            _animator.SetTrigger("Explosion");
-                        }
-                        else
-                        {
-                            _state = State.Combat;
-                        }
-                        break;
-                }
-            }
-        }
+        SelectAttack();
         _timer += Time.deltaTime;
     }
     protected override void Action()
@@ -343,12 +272,166 @@ public class DemonAction : EnemyAction
                 _breathTimer = 0.0f;
                 GameObject breath = _breathPool.Get(_firePosition.position);
                 breath.transform.forward = _firePosition.forward;
-                if (breath.TryGetComponent<Projectiles>(out var projectile))
+                if (breath.TryGetComponent<FireBall>(out var projectile))
                 {
                     projectile.Initialize(
-                        (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Body)));
+                        (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Body)),
+                        (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Fire_Remain)),
+                        _embersPools[0]);
                 }
             }
+        }
+    }
+
+    private void SelectAttack()
+    {
+        float dot = _enemyBase.GetDot();
+        if (dot < 0) { return; }
+
+        float buffar = 2.0f;
+        float borderDistance = _enemyBase.StopDistance + buffar;
+        borderDistance *= borderDistance;
+        if (_enemyBase.GetDistance() > borderDistance)
+        {
+            if (_timer > _enemyBase.CoolTime)
+            {
+                _timer = 0.0f;
+                SelectFarAttack(dot);
+            }
+        }
+        else
+        {
+            if (_enemyBase.GetDistance() < _enemyBase.StopDistance * _enemyBase.StopDistance)
+            { _agent.velocity = Vector3.zero; }
+                
+            if (_timer > _enemyBase.CoolTime)
+            {
+                _timer = 0.0f;
+                SelectNearAttack(dot);
+            }
+        }
+    }
+
+    private void SelectFarAttack(float dot)
+    {
+        if(dot < 0.866f) { return; }
+
+        _agent.velocity = Vector3.zero;
+        _agent.SetDestination(transform.position);
+        _state = State.Action;
+        int judge;
+        if (dot < 0.9659f)
+        {
+            judge = Random.Range(1, 4);
+        }
+        else
+        {
+            judge = Random.Range(0, 4);
+        }
+        NavMeshHit navMeshHit;
+        switch (judge)
+        {
+            case 0:
+                _animator.SetTrigger("Ball");
+                _agent.updateRotation = false;
+                break;
+            case 1:
+                _animator.SetTrigger("Breath");
+                _agent.updateRotation = false;
+                break;
+            case 2:
+                if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
+                    (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 10.0f,
+                    out navMeshHit, 10.0f, NavMesh.AllAreas))
+                {
+                    _rushVector = navMeshHit.position;
+                    _animator.SetTrigger("Rush");
+                }
+                else
+                {
+                    _state = State.Combat;
+                }
+                break;
+            case 3:
+                if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
+                    out navMeshHit, 10.0f, NavMesh.AllAreas))
+                {
+                    _rushVector = navMeshHit.position;
+                    _agent.updateRotation = false;
+                    _animator.SetTrigger("Explosion");
+                }
+                else
+                {
+                    _state = State.Combat;
+                }
+                break;
+        }
+    }
+
+    private void SelectNearAttack(float dot)
+    {
+        _agent.SetDestination(transform.position);
+        _state = State.Action;
+        int judge;
+        if (dot < 0.7071f)
+        {
+            judge = Random.Range(3, 6);
+        }
+        else if(dot < 0.9397f)
+        {
+            judge = Random.Range(1, 6);
+        }
+        else
+        {
+            judge = Random.Range(0, 6);
+        }
+        
+
+        NavMeshHit navMeshHit;
+        switch (judge)
+        {
+            case 0:
+                _animator.SetTrigger("Bite");
+                _agent.updateRotation = false;
+                break;
+            case 1:
+                _animator.SetTrigger("Attack");
+                _agent.updateRotation = false;
+                break;
+            case 2:
+                _animator.SetTrigger("Breath");
+                _agent.updateRotation = false;
+                break;
+            case 3:
+                _animator.SetTrigger("Tail");
+                _agent.updateRotation = false;
+                break;
+            case 4:
+                if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
+                    (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 12.0f,
+                    out navMeshHit, 10.0f, NavMesh.AllAreas))
+                {
+                    _rushVector = navMeshHit.position;
+                    _animator.SetTrigger("Rush");
+                }
+                else
+                {
+                    _state = State.Combat;
+                }
+                break;
+            case 5:
+                if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
+                    out navMeshHit, 10.0f, NavMesh.AllAreas))
+                {
+                    _rushVector = navMeshHit.position;
+                    _agent.updateRotation = false;
+                    _animator.SetTrigger("Explosion");
+                }
+                else
+                {
+                    _state = State.Combat;
+                }
+                break;
         }
     }
 }

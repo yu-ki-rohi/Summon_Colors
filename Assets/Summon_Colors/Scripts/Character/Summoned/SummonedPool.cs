@@ -9,16 +9,40 @@ public class SummonedPool : ObjectPoolBase
     [SerializeField] private ObjectPoolBase _projectilePool;
     private SummonedBase _summonedBase;
 
+    private int _summonedNum = 0;
+    private int _deadNum = 0;
+
+    public int SummonedNum { get { return _summonedNum; } }
+    public int DeadNum { get { return _deadNum; } }
+
+
     public ColorElements.ColorType ColorType { get { return _colorType; } }
 
-    public int GetCosts()
+    public int GetActiveNum()
+    {
+        return _summonedNum - _deadNum;
+    }
+
+    public int GetCosts(int rank = 0)
     {
         if(_summonedBase != null)
         {
-            return _summonedBase.Costs;
+            return _summonedBase.GetCosts(rank);
         }
         Debug.Log("Summoned Base is not found");
         return 10000;
+    }
+
+    public override GameObject Get(Vector3 position)
+    {
+        _summonedNum++;
+        return base.Get(position);
+    }
+
+    public override void Release(GameObject obj)
+    {
+        _deadNum++;
+        base.Release(obj);
     }
 
     protected override GameObject OnCreatePoolObject()

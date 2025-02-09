@@ -62,7 +62,7 @@ public class HomeBase : MonoBehaviour
 
             Ray ray = new Ray(newPos, Vector3.down);
             RaycastHit hit;
-            int layerNum = LayerMask.NameToLayer("Stage");
+            int layerNum = LayerMask.NameToLayer("Ground");
             int layerMask = 1 << layerNum;
 
             if (Physics.Raycast(ray, out hit, distance, layerMask))

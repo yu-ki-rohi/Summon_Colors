@@ -4,12 +4,13 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(EnemyBase))]
-[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyAction : MonoBehaviour
 {
     [SerializeField] private Collider _attackCollider;
     [SerializeField] private Collider _bodyCollider;
-
+    [SerializeField] protected NavMeshAgent _agent;
+    [SerializeField] protected bool _isForwardInverse = false;
+    protected Animator _animator;
     protected enum State
     {
         Idle,
@@ -19,14 +20,12 @@ public class EnemyAction : MonoBehaviour
         Down
     }
     protected EnemyBase _enemyBase;
-    protected NavMeshAgent _agent;
-    protected Animator _animator;
     protected State _state = State.Idle;
     protected float _timer = 0.0f;
     protected float _walkTimer = 0.0f;
     protected float _walkTime = 3.0f;
     protected Vector3 _walkVec = Vector3.zero;
-
+    protected Timer _actionTimer = null;
 
     public virtual void Attack(Collider collider)
     {
@@ -42,19 +41,26 @@ public class EnemyAction : MonoBehaviour
 
     public void StartAttack()
     {
-        _attackCollider.enabled = true;
+        if (_attackCollider != null)
+        {
+            _attackCollider.enabled = true;
+        }
         //_bodyCollider.enabled = false;
     }
 
     public virtual void FinishAttack()
     {
-        _attackCollider.enabled = false;
+        if( _attackCollider != null )
+        {
+            _attackCollider.enabled = false;
+        }
         //_bodyCollider.enabled = true;
     }
 
     public void FinishAction()
     {
         _state = State.Combat;
+        _agent.updateRotation = true;
     }
 
     public void ChangeDown()
@@ -76,18 +82,20 @@ public class EnemyAction : MonoBehaviour
     protected virtual void Start()
     {
         _enemyBase = GetComponent<EnemyBase>();
-        if (_agent == null)
-        {
-            _agent = GetComponent<NavMeshAgent>();
-        }
         _state = State.Idle;
-        _animator = GetComponent<Animator>();
+        if(_animator == null)
+        {
+            _animator = GetComponent<Animator>();
+        }
 
         if (_enemyBase == null)
         {
             Debug.Log("Enemy Base is Null!!");
         }
-
+        if (_agent == null)
+        {
+            _agent = GetComponent<NavMeshAgent>();
+        }
         if (_agent == null)
         {
             Debug.Log("Agent is Null!!");
@@ -98,12 +106,50 @@ public class EnemyAction : MonoBehaviour
         {
             _attackCollider.enabled = false;
         }
+        _actionTimer = new Timer(StartAction, _enemyBase.CoolTime);
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        // この辺はもうちょっと煩雑なので、後々直したい
+        SetState();
+
+        switch (_state)
+        {
+            case State.Idle:
+                Idle();
+                break;
+            case State.Walk:
+                Walk();
+                break;
+            case State.Combat:
+                Combat();
+                break;
+            case State.Action:
+                Action();
+                break;
+        }
+
+        if(_agent != null)
+        {
+            float dot = _enemyBase.GetDot();
+            if(_isForwardInverse && dot <= 1.0f) { dot *= -1; }
+            // 判定をfloatにしてもいいかも
+            if (_agent.velocity.sqrMagnitude > 0.01f ||
+                dot < 0.7071f)
+            {
+                _animator.SetBool("IsWalking", true);
+            }
+            else
+            {
+                _animator.SetBool("IsWalking", false);
+            }
+        }
+    }
+
+    protected virtual void SetState()
+    {
+        // この辺はちょっと煩雑なので、後々直したい
         if (_state != State.Action && _state != State.Down)
         {
             if (_enemyBase.TargetCharacter != null &&
@@ -126,36 +172,8 @@ public class EnemyAction : MonoBehaviour
                 }
             }
         }
-         
 
-        switch (_state)
-        {
-            case State.Idle:
-                Idle();
-                break;
-            case State.Walk:
-                Walk();
-                break;
-            case State.Combat:
-                Combat();
-                break;
-            case State.Action:
-                Action();
-                break;
-        }
 
-        if(_agent != null)
-        {
-            // 判定をfloatにしてもいいかも
-            if (_agent.velocity.sqrMagnitude > 0)
-            {
-                _animator.SetBool("IsWalking", true);
-            }
-            else
-            {
-                _animator.SetBool("IsWalking", false);
-            }
-        }
     }
 
     protected virtual void Idle()
@@ -175,27 +193,38 @@ public class EnemyAction : MonoBehaviour
 
     protected virtual void Combat()
     {
-        _agent.SetDestination(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position);
-        if (_enemyBase.GetDistance() < 0)
+        
+        float buffar = 2.0f;
+        float borderDistance = _enemyBase.StopDistance + buffar;
+        borderDistance *= borderDistance;
+        if (_enemyBase.GetDistance() > borderDistance)
         {
-
-        }
-        else if (_enemyBase.GetDistance() > _enemyBase.StopDistance * _enemyBase.StopDistance)
-        {
-
+            _agent.SetDestination(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position);
         }
         else
         {
-            _agent.velocity = Vector3.zero;
-            if (_timer > _enemyBase.CoolTime)
-            {
-                _animator.SetTrigger("Attack");
-                _state = State.Action;
-                _timer = 0.0f;
+            float dot = _enemyBase.GetDot();
+            if (_isForwardInverse) { dot *= -1.0f; }
+            if (_enemyBase.GetDistance() > _enemyBase.StopDistance * _enemyBase.StopDistance) 
+            { 
+                _agent.SetDestination(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position);
             }
-            else
+            else 
             {
-                _timer += Time.deltaTime;
+                if(dot > 0.7071f)
+                {
+                    _agent.velocity = Vector3.zero;
+                }
+                else
+                {
+                    _agent.SetDestination(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position);
+                }
+            }
+            if (dot < 0) { return; }
+
+            if (_actionTimer != null)
+            {
+                _actionTimer.CountUp(Time.deltaTime);
             }
         }
     }
@@ -218,6 +247,14 @@ public class EnemyAction : MonoBehaviour
 
     protected virtual void Action()
     {
+        
+    }
 
+    protected virtual void StartAction()
+    {
+        _agent.velocity = Vector3.zero;
+        _animator.SetTrigger("Attack");
+        _state = State.Action;
+        _agent.updateRotation = false;
     }
 }

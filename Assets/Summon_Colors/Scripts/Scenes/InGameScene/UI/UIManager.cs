@@ -52,14 +52,10 @@ public class UIManager : MonoBehaviour
     public void ReflectTime(float totalTime)
     {
         if(_timerText == null) { return; }
+        if(totalTime > 0) { totalTime += 1; }
         int minute = (int)(totalTime / 60.0f);
         float seconds = totalTime - minute * 60.0f;
-        int intSeconds = (int)(seconds);
-        if(seconds - intSeconds > 0)
-        {
-            intSeconds += 1;
-        }
-        _timerText.text = minute.ToString("00") + ":" + intSeconds.ToString("00");
+        _timerText.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
     }
     #endregion
     // Start is called before the first frame update

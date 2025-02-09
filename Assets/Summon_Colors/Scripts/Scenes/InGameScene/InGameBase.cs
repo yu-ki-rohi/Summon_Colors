@@ -33,7 +33,8 @@ public class InGameBase
     
     public virtual void OnTimeUp()
     {
-
+        GameTimer = null;
+        UIManager.ReflectTime(0);
     }
 
     public virtual void Start()
@@ -47,8 +48,8 @@ public class InGameBase
     {
         if( GameTimer != null )
         {
-            GameTimer.CountDown(elapsedTime);
             UIManager.ReflectTime(GameTimer.CurrentTime);
+            GameTimer.CountDown(elapsedTime);
         }
     }
 }

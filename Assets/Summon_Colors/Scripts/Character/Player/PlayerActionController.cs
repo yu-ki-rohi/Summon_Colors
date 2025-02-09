@@ -24,6 +24,7 @@ public class PlayerActionController : MonoBehaviour
     [SerializeField] private ColorPalette _lightPalette;
     [SerializeField, Range(0.0f,1.0f)] private float _directionDelayScale = 0.5f;
     [SerializeField, Range(0.0f,1.0f)] private float _changeDelayScale = 0.5f;
+    [SerializeField] private Transform _initTransform;
     private PlayerMove _playerMove;
     private Absorb _absorb;
     private Summon _summon;
@@ -340,6 +341,14 @@ public class PlayerActionController : MonoBehaviour
             Vector3 forward = Camera.main.transform.forward;
             forward.y = 0.0f;
             gameObject.transform.forward = forward.normalized;
+        }
+        if (transform.position.y < -50.0f)
+        {
+            if(_initTransform != null)
+            {
+                transform.position =_initTransform.position;
+            }
+            _rigidbody.velocity = Vector3.zero;
         }
     }
 

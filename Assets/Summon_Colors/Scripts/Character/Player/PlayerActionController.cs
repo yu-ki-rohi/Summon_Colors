@@ -16,7 +16,8 @@ public class PlayerActionController : MonoBehaviour
         Absorb,
         Direction,
         Avoid,
-        Throw
+        Throw,
+        Prepare
     }
 
     [SerializeField] private CameraMove _cameraMove;
@@ -67,6 +68,7 @@ public class PlayerActionController : MonoBehaviour
             Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
         }
         _state = State.Summon;
+        AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Summon01, 2, transform);
     }
 
     public void ChangeToThrow()
@@ -332,7 +334,8 @@ public class PlayerActionController : MonoBehaviour
         {
             _knockBackTimer.CountUp(Time.deltaTime);
         }
-        if(_state == State.Idle)
+        // Changed
+        if(_state != State.Throw)
         {
             _isLookAtCameraTarget = false;
         }

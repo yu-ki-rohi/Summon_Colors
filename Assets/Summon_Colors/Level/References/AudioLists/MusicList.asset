@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f92b999480b2e9f47af35189bb69d1e9, type: 3}
   m_Name: MusicList
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Music
   AudioClips: []

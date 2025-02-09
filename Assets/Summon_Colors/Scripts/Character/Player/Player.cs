@@ -32,6 +32,10 @@ public class Player : CharacterBase
             _uiManager.ChangeToExhausted();
         }
         _uiManager.ChangeToDamaged(attack);
+        if(_actionController.IsBoolAnimation())
+        {
+            _actionController.ChangeToIdle();
+        }
         DamagedInvincible(0.8f);
         Debug.Log(damage);
         return damage;

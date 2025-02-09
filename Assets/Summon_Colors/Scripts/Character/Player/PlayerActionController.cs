@@ -53,10 +53,24 @@ public class PlayerActionController : MonoBehaviour
         _animator.SetBool("Summon", false);
     }
 
+    public bool IsBoolAnimation()
+    {
+        if (_state == State.Avoid || 
+            _state == State.Throw)
+        {
+            return false;
+        }
+        return true;
+    }
+
     public void ChangeToIdle()
     {
         _state = State.Idle;
         _canMove = true;
+        _isLookAtCameraTarget = false;
+        _animator.SetBool("Summon", false);
+        _animator.SetBool("Absorb", false);
+        _animator.SetBool("Order", false);
     }
     public void ChangeToSummon()
     {

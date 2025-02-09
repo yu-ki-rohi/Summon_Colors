@@ -102,6 +102,8 @@ public class CameraMove : MonoBehaviour
         RaycastHit hit;
         int layerNum = LayerMask.NameToLayer("Stage");
         int layerMask = 1 << layerNum;
+        layerNum = LayerMask.NameToLayer("Ground");
+        layerMask |= 1 << layerNum;
 
         if (Physics.Raycast(ray, out hit, _baseDistance, layerMask))
         {

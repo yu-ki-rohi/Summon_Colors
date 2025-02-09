@@ -41,13 +41,19 @@ public class EnemyAction : MonoBehaviour
 
     public void StartAttack()
     {
-        _attackCollider.enabled = true;
+        if (_attackCollider != null)
+        {
+            _attackCollider.enabled = true;
+        }
         //_bodyCollider.enabled = false;
     }
 
     public virtual void FinishAttack()
     {
-        _attackCollider.enabled = false;
+        if( _attackCollider != null )
+        {
+            _attackCollider.enabled = false;
+        }
         //_bodyCollider.enabled = true;
     }
 
@@ -197,16 +203,23 @@ public class EnemyAction : MonoBehaviour
         }
         else
         {
+            float dot = _enemyBase.GetDot();
+            if (_isForwardInverse) { dot *= -1.0f; }
             if (_enemyBase.GetDistance() > _enemyBase.StopDistance * _enemyBase.StopDistance) 
             { 
                 _agent.SetDestination(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position);
             }
             else 
             {
-                _agent.velocity = Vector3.zero;
+                if(dot > 0.7071f)
+                {
+                    _agent.velocity = Vector3.zero;
+                }
+                else
+                {
+                    _agent.SetDestination(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position);
+                }
             }
-            float dot = _enemyBase.GetDot();
-            if(_isForwardInverse) { dot *= -1.0f; }
             if (dot < 0) { return; }
 
             if (_actionTimer != null)

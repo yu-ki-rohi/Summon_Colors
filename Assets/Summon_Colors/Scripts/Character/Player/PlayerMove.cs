@@ -59,7 +59,7 @@ public class PlayerMove : MonoBehaviour
         GameObject throwing = Instantiate(_throwing, _handTransform.position, Quaternion.identity);
         if (throwing.TryGetComponent<ThrowingObject>(out var projectiles))
         {
-            projectiles.Initialize(1, 1, _player.Appearance, _player);
+            projectiles.Initialize(_player.Attack, _player.Break, _player.Appearance, _player);
         }
         if (throwing.TryGetComponent<Rigidbody>(out var rigidbody))
         {
@@ -100,7 +100,22 @@ public class PlayerMove : MonoBehaviour
                 _speed = _player.Agility;
             }
             transform.forward = _dir;
-            transform.position += _velocity * _speed * Time.deltaTime;
+
+            Vector3 newPos = transform.position + _velocity * _speed * Time.deltaTime; ;
+            newPos.y += 1.5f;
+            Ray ray = new Ray(newPos, Vector3.down);
+            RaycastHit hit;
+            int layerNum = LayerMask.NameToLayer("Ground");
+            int layerMask = 1 << layerNum;
+
+            if (Physics.Raycast(ray, out hit, 5.0f, layerMask))
+            {
+                newPos = hit.point;
+                newPos.y += 1.08f;
+                transform.position = newPos;
+            }
+
+            //transform.position += _velocity * _speed * Time.deltaTime;
         }
         else
         {

@@ -61,6 +61,9 @@ public class Explosion : MonoBehaviour
             RaycastHit hit;
             int layerNum = LayerMask.NameToLayer("Stage");
             int layerMask = 1 << layerNum;
+            layerNum = LayerMask.NameToLayer("Ground");
+            layerMask |= 1 << layerNum;
+
             float distance = (EndPos - StartPos).magnitude;
 
             if (Physics.Raycast(ray, out hit, distance, layerMask))

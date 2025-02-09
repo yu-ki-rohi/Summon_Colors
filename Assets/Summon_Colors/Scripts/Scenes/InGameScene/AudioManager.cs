@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -45,6 +46,27 @@ public class AudioManager : MonoBehaviour
         }
     }
     #endregion
+
+    public enum PlayerSound
+    { 
+        Vacuum,
+        Summon,
+        Step,
+        Throw
+    }
+
+    public enum DemonSound
+    {
+        Bite = 4,
+        Attack,
+        TailAttack,
+        Walk01,
+        Walk02,
+        Breath,
+        FireBall,
+        Rush,
+        Roar
+    }
 
     public enum Voice
     {
@@ -91,8 +113,8 @@ public class AudioManager : MonoBehaviour
     {
         
     }
-
-    public void PlayMusic(int index)
+    #region--- Music ---
+    public void PlayMusic(int index, float volume = 0.5f)
     {
         if (_musicSource == null)
         {
@@ -102,18 +124,68 @@ public class AudioManager : MonoBehaviour
         AudioClip clip = _musicList.Get(index);
         if (clip == null) { return; }
         _musicSource.clip = clip;
+        _musicSource.volume = volume;
         _musicSource.Play();
     }
+    #endregion
 
-    public void PlayRandomVoice(int firstIndex, int range, Transform transform)
+    #region--- Sound ---
+    public AudioSource PlaySoundOneShot(int index, Transform transform, float volume = 0.5f, bool isLoop = false)
+    {
+        AudioSource audioSource = GetSoundSource();
+
+        AudioClip clip = _soundList.Get(index);
+        if (clip == null) { return null; }
+        audioSource.gameObject.transform.position = transform.position;
+        volume = Mathf.Clamp01(volume);
+        audioSource.loop = isLoop;
+        audioSource.PlayOneShot(clip, volume);
+        return audioSource;
+    }
+
+    public AudioSource PlaySound(int index, Transform transform, float volume = 0.5f, bool isLoop = false)
+    {
+        AudioSource audioSource = GetSoundSource();
+        AudioClip clip = _soundList.Get(index);
+        if (clip == null) { return null; }
+        audioSource.gameObject.transform.position = transform.position;
+        audioSource.clip = clip;
+        volume = Mathf.Clamp01(volume);
+        audioSource.volume = volume;
+
+        audioSource.loop = isLoop;
+        audioSource.Play();
+        return audioSource;
+    }
+
+    private AudioSource GetSoundSource()
+    {
+        foreach (AudioSource source in _soundSources)
+        {
+            if (source.isPlaying == false)
+            {
+                return source;
+            }
+        }
+
+        GameObject obj = Instantiate(_soundObject, _soundParent);
+        var audioSource = obj.GetComponent<AudioSource>();
+        _soundSources.Add(audioSource);
+        return audioSource;
+    }
+
+    #endregion
+
+    #region--- Voice ---
+    public void PlayRandomVoice(int firstIndex, int range, Transform transform, float volume = 0.5f)
     {
         if(firstIndex < 0 || firstIndex + range - 1 > (int)Voice.GameOver02) { return; }
         int judge = UnityEngine.Random.Range(0, range);
         int index = firstIndex + judge;
-        PlayVoice(index, transform);
+        PlayVoice(index, transform, volume);
     }
 
-    public void PlayVoice(int index, Transform transform)
+    public void PlayVoice(int index, Transform transform, float volume = 0.5f)
     {
         if (_voiceSource == null)
         {
@@ -123,9 +195,13 @@ public class AudioManager : MonoBehaviour
         AudioClip clip = _voiceList.Get(index);
         if (clip == null) { return; }
         _voiceSource.gameObject.transform.position = transform.position;
-        _voiceSource.PlayOneShot(clip);
+        volume = Mathf.Clamp01(volume);
+        _voiceSource.volume = volume;
+        _voiceSource.clip = clip;
+        _voiceSource.Play();
     }
 
+    #endregion
     private void SetUpInAwake()
     {
         if (_musicParent == null)
@@ -140,5 +216,6 @@ public class AudioManager : MonoBehaviour
         {
             _voiceParent = transform;
         }
+        _soundSources = new List<AudioSource>();
     }
 }

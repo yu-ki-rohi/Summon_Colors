@@ -13,4 +13,17 @@ MonoBehaviour:
   m_Name: SoundList
   m_EditorClassIdentifier: 
   Name: Sound
-  AudioClips: []
+  AudioClips:
+  - {fileID: 8300000, guid: 6b892a44e49c76e4d8e4d4139c1055cb, type: 3}
+  - {fileID: 8300000, guid: a4e321826bbf45a4cbaa871701f9e4e2, type: 3}
+  - {fileID: 8300000, guid: c20b6bde10e243544bbc7761d673a9df, type: 3}
+  - {fileID: 8300000, guid: 3f5fb43cf03fea64d893261ffd9c4f49, type: 3}
+  - {fileID: 8300000, guid: 5ec7b9f5f3e62684f8ffa648c1412f32, type: 3}
+  - {fileID: 8300000, guid: 0bed8c6c78ab1e64fba7fdeeaf04a877, type: 3}
+  - {fileID: 8300000, guid: 8352c9659251dc34f95600594414d138, type: 3}
+  - {fileID: 8300000, guid: 6a5b1a270244f194097ecfd93933d039, type: 3}
+  - {fileID: 8300000, guid: 9b379728b98715c4bae5053a22450fad, type: 3}
+  - {fileID: 8300000, guid: d90a269a5e916574abd732e1e41678e8, type: 3}
+  - {fileID: 8300000, guid: 22710bf2263fe114e9d1646a87f58b38, type: 3}
+  - {fileID: 8300000, guid: 0185f8e6e25fbbc4c91e51f5a88ba8ec, type: 3}
+  - {fileID: 8300000, guid: 162f2798c9d764d4ab461724988d8dac, type: 3}

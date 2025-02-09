@@ -37,6 +37,7 @@ public class PlayerActionController : MonoBehaviour
     private Rigidbody _rigidbody;
     private Timer _knockBackTimer;
     private bool _isLookAtCameraTarget = false;
+    private AudioSource _audioSource;
 
     public bool IsAbsorbing()
     {
@@ -71,6 +72,7 @@ public class PlayerActionController : MonoBehaviour
         _animator.SetBool("Summon", false);
         _animator.SetBool("Absorb", false);
         _animator.SetBool("Order", false);
+        StopSound();
     }
     public void ChangeToSummon()
     {
@@ -82,7 +84,8 @@ public class PlayerActionController : MonoBehaviour
             Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
         }
         _state = State.Summon;
-        AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Summon01, 2, transform);
+        StopSound();
+        _audioSource = AudioManager.Instance.PlaySound((int)AudioManager.PlayerSound.Summon, transform, 0.5f, true);
     }
 
     public void ChangeToThrow()
@@ -114,6 +117,7 @@ public class PlayerActionController : MonoBehaviour
     {
         _playerMove.ThrowItem();
         _isLookAtCameraTarget = false;
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.PlayerSound.Throw, transform, 0.5f);
     }
 
     public void KnockBack(Vector3 dir, float strength, float time)
@@ -174,9 +178,17 @@ public class PlayerActionController : MonoBehaviour
             {
                 _canMove = false;
                 _playerMove.Move(Vector2.zero);
+
                 _animator.SetFloat("Speed", 0.0f);
                 _animator.SetBool("Absorb", true);
+
                 _absorb.SetShootDirection(Camera.main.transform.forward);
+
+                StopSound();
+                _audioSource = AudioManager.Instance.PlaySound((int)AudioManager.PlayerSound.Vacuum, transform, 0.5f, true);
+
+                _state = State.Prepare;
+
                 Vector3 forward = Camera.main.transform.forward;
                 forward.y = 0.0f;
                 gameObject.transform.forward = forward.normalized;
@@ -185,6 +197,7 @@ public class PlayerActionController : MonoBehaviour
         else if (context.canceled)
         {
             _animator.SetBool("Absorb", false);
+            StopSound();
         }
     }
 
@@ -198,11 +211,15 @@ public class PlayerActionController : MonoBehaviour
                 _animator.SetBool("Summon", true);
                 _playerMove.Move(Vector2.zero);
                 _animator.SetFloat("Speed", 0.0f);
+                _state = State.Prepare;
+                AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Summon01, 2, transform);
+
             }
         }
         else if (context.canceled)
         {
             _animator.SetBool("Summon", false);
+            StopSound();
         }
     }
 
@@ -376,5 +393,14 @@ public class PlayerActionController : MonoBehaviour
             _canMove = true;
         }
         _knockBackTimer = null;
+    }
+
+    private void StopSound()
+    {
+        if (_audioSource != null)
+        {
+            _audioSource.Stop();
+            _audioSource = null;
+        }
     }
 }

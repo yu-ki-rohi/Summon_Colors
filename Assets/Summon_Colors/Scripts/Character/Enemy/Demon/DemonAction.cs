@@ -56,6 +56,7 @@ public class DemonAction : EnemyAction
     private bool _isBreath = false;
     private float _roarIntensity = 0.0f;
     private int _power = 0;
+    private AudioSource _audioSource;
     public void CreateVolcanicBomb()
     {
         GameObject volcanicBomb = Instantiate(_volcanicBomb, _firePosition.position, Quaternion.identity);
@@ -79,6 +80,7 @@ public class DemonAction : EnemyAction
         earthQuake.transform.forward = transform.forward;
         _handAttackCollider.enabled = true;
         _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Clap));
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Attack, transform);
     }
 
     public void CreateExplosion()
@@ -93,12 +95,14 @@ public class DemonAction : EnemyAction
         {
             embers.Initialize((int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Landing_Remain)));
         }
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Rush, transform);
     }
 
     public void Bite()
     {
         _rushColliders[0].enabled = true;
         _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Bite));
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Bite, transform);
     }
 
 
@@ -132,6 +136,8 @@ public class DemonAction : EnemyAction
         _flameStream.Play();
         _fireEmbers.Play();
         _isBreath = true;
+        StopSound();
+        _audioSource = AudioManager.Instance.PlaySound((int)AudioManager.DemonSound.Breath, transform, 0.5f, true);
     }
 
     public void StartTailAttack()
@@ -141,6 +147,7 @@ public class DemonAction : EnemyAction
             col.enabled = true;
         }
         _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Tail));
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.TailAttack, transform);
     }
 
     public void StartRush()
@@ -182,6 +189,7 @@ public class DemonAction : EnemyAction
         {
             _roarIntensity = 0.8f;
         }
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Roar, transform);
     }
 
     private void FinishRush()
@@ -206,6 +214,7 @@ public class DemonAction : EnemyAction
         _flameStream.Stop();
         _fireEmbers.Stop();
         _isBreath = false;
+        StopSound();
         _agent.updateRotation = true;
         _power = 0;
     }
@@ -432,6 +441,15 @@ public class DemonAction : EnemyAction
                     _state = State.Combat;
                 }
                 break;
+        }
+    }
+
+    private void StopSound()
+    {
+        if (_audioSource != null)
+        {
+            _audioSource.Stop();
+            _audioSource = null;
         }
     }
 }

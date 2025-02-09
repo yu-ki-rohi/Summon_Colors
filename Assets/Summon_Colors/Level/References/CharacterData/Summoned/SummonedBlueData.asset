@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 085c2be4996552d419b162e5b606121d, type: 3}
   m_Name: SummonedBlueData
   m_EditorClassIdentifier: 
-  MaxHp: 15
+  MaxHp: 120
   Attack: 1
   Vitality: 0
   Break: 1

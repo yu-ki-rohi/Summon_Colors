@@ -21,6 +21,10 @@ public class Absorb : MonoBehaviour
     private const float SHOOT_UP_LIM = 0.7071f;
     private const float SHOOT_DOWN_LIM = -0.5f;
 
+#if UNITY_EDITOR
+    [Space(30),SerializeField] private int _initialColor = 0;
+#endif
+
     public ObjectPoolBase Pool { get { return _pool; } }
     public PlayerActionController ActionController { get { return _player.ActionController;} }
     public bool IsAbsorbing()
@@ -100,6 +104,10 @@ public class Absorb : MonoBehaviour
         {
             _shootTimer = new Timer(Shoot, 1.0f / _player.RateOfFire);
         }
+#if UNITY_EDITOR
+        _colorElements.Add(ColorType.All, _initialColor);
+        ReflectGemIcon();
+#endif
     }
 
     // Update is called once per frame

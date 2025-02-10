@@ -94,8 +94,8 @@ public class AudioManager : MonoBehaviour
 
 
     [SerializeField] private AudioList _musicList;
-    [SerializeField] private AudioList _soundList;
-    [SerializeField] private AudioList _voiceList;
+    [SerializeField] private AudioSettingLists _soundSettingList;
+    [SerializeField] private AudioSettingList _voiceSettingList;
     [Space(20)]
     [SerializeField] private GameObject _musicObject;
     [SerializeField] private GameObject _soundObject;
@@ -104,6 +104,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private Transform _musicParent;
     [SerializeField] private Transform _soundParent;
     [SerializeField] private Transform _voiceParent;
+    [Space(30)]
+    [SerializeField, Range(0.0f, 1.0f)] private float _soundVolume = 1.0f;
+    [SerializeField, Range(0.0f, 1.0f)] private float _voiceVolume = 1.0f;
 
     private AudioSource _musicSource;
     private List<AudioSource> _soundSources;
@@ -130,32 +133,30 @@ public class AudioManager : MonoBehaviour
     #endregion
 
     #region--- Sound ---
-    public AudioSource PlaySoundOneShot(int index, Transform transform, float volume = 0.5f, bool isLoop = false, float minDistance = 10.0f, float maxDistance = 100.0f)
+    public AudioSource PlaySoundOneShot(int index, Transform transform)
     {
         AudioSource audioSource = GetSoundSource();
-
-        AudioClip clip = _soundList.Get(index);
-        if (clip == null) { return null; }
+        AudioSetting audioSetting = _soundSettingList.Get(index);
+        if (audioSetting == null) { return null; }
         audioSource.gameObject.transform.position = transform.position;
-        volume = Mathf.Clamp01(volume);
-        audioSource.loop = isLoop;
-        audioSource.minDistance = minDistance;
-        audioSource.maxDistance = maxDistance;
-        audioSource.PlayOneShot(clip, volume);
+        audioSource.loop = audioSetting.IsLoop;
+        audioSource.minDistance = audioSetting.MinDistance;
+        audioSource.maxDistance = audioSetting.MaxDistance;
+        audioSource.PlayOneShot(audioSetting.Clip, audioSetting.Volume * _soundVolume);
         return audioSource;
     }
 
-    public AudioSource PlaySound(int index, Transform transform, float volume = 0.5f, bool isLoop = false)
+    public AudioSource PlaySound(int index, Transform transform)
     {
         AudioSource audioSource = GetSoundSource();
-        AudioClip clip = _soundList.Get(index);
-        if (clip == null) { return null; }
+        AudioSetting audioSetting = _soundSettingList.Get(index);
+        if (audioSetting == null) { return null; }
         audioSource.gameObject.transform.position = transform.position;
-        audioSource.clip = clip;
-        volume = Mathf.Clamp01(volume);
-        audioSource.volume = volume;
-
-        audioSource.loop = isLoop;
+        audioSource.clip = audioSetting.Clip;
+        audioSource.volume = audioSetting.Volume * _soundVolume;
+        audioSource.loop = audioSetting.IsLoop;
+        audioSource.minDistance = audioSetting.MinDistance;
+        audioSource.maxDistance = audioSetting.MaxDistance;
         audioSource.Play();
         return audioSource;
     }
@@ -194,12 +195,14 @@ public class AudioManager : MonoBehaviour
             GameObject obj = Instantiate(_voiceObject, _voiceParent);
             _voiceSource = obj.GetComponent<AudioSource>();
         }
-        AudioClip clip = _voiceList.Get(index);
-        if (clip == null) { return; }
+        AudioSetting audioSetting = _voiceSettingList.Get(index);
+        if (audioSetting == null) { return; }
         _voiceSource.gameObject.transform.position = transform.position;
-        volume = Mathf.Clamp01(volume);
-        _voiceSource.volume = volume;
-        _voiceSource.clip = clip;
+        _voiceSource.clip = audioSetting.Clip;
+        _voiceSource.volume = audioSetting.Volume * _voiceVolume;
+        _voiceSource.loop = audioSetting.IsLoop;
+        _voiceSource.minDistance = audioSetting.MinDistance;
+        _voiceSource.maxDistance = audioSetting.MaxDistance;
         _voiceSource.Play();
     }
 

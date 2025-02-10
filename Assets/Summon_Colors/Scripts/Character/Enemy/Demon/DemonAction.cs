@@ -95,16 +95,16 @@ public class DemonAction : EnemyAction
         {
             embers.Initialize((int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Landing_Remain)));
         }
-        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Rush, transform,1.0f);
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Rush, transform);
     }
 
     public void PlayFootStep01()
     {
-        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Walk01, transform, 0.5f, false, 5.0f, 20.0f);
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Walk01, transform);
     }
     public void PlayFootStep02()
     {
-        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Walk02, transform, 0.5f, false, 5.0f, 20.0f);
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Walk02, transform);
     }
 
     public void Bite()
@@ -146,7 +146,7 @@ public class DemonAction : EnemyAction
         _fireEmbers.Play();
         _isBreath = true;
         StopSound();
-        _audioSource = AudioManager.Instance.PlaySound((int)AudioManager.DemonSound.Breath, transform, 0.5f, true);
+        _audioSource = AudioManager.Instance.PlaySound((int)AudioManager.DemonSound.Breath, transform);
     }
 
     public void StartTailAttack()

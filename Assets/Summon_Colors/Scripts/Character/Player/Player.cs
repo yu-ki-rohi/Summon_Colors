@@ -32,12 +32,20 @@ public class Player : CharacterBase
             _uiManager.ChangeToExhausted();
         }
         _uiManager.ChangeToDamaged(attack);
-        if(_actionController.IsBoolAnimation())
+        DamagedInvincible(0.8f);
+        if (damage <= _characterData.Armor)
+        {
+            AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Damage01, 2, transform);
+            return damage; 
+        }
+        else
+        {
+            AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.BigDamage01, 2, transform);
+        }
+        if (_actionController.IsBoolAnimation())
         {
             _actionController.ChangeToIdle();
         }
-        DamagedInvincible(0.8f);
-        Debug.Log(damage);
         return damage;
     }
 

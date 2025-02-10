@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f94ebbb906d857a4a8cacbbf31fa6ae5, type: 3}
+  m_Name: SoundSettingLists
+  m_EditorClassIdentifier: 
+  Settinglists:
+  - Name: Player
+    Settinglist:
+    - Name: Vacuum
+      Clip: {fileID: 8300000, guid: 6b892a44e49c76e4d8e4d4139c1055cb, type: 3}
+      IsLoop: 1
+      Volume: 0.3
+      MinDistance: 1
+      MaxDistance: 100
+    - Name: Summon
+      Clip: {fileID: 8300000, guid: a4e321826bbf45a4cbaa871701f9e4e2, type: 3}
+      IsLoop: 1
+      Volume: 0.3
+      MinDistance: 1
+      MaxDistance: 100
+    - Name: Step
+      Clip: {fileID: 8300000, guid: c20b6bde10e243544bbc7761d673a9df, type: 3}
+      IsLoop: 0
+      Volume: 0.7
+      MinDistance: 1
+      MaxDistance: 100
+    - Name: Throw
+      Clip: {fileID: 8300000, guid: 3f5fb43cf03fea64d893261ffd9c4f49, type: 3}
+      IsLoop: 0
+      Volume: 0.3
+      MinDistance: 1
+      MaxDistance: 100
+  - Name: Demon
+    Settinglist:
+    - Name: Bite
+      Clip: {fileID: 8300000, guid: 5ec7b9f5f3e62684f8ffa648c1412f32, type: 3}
+      IsLoop: 0
+      Volume: 0.7
+      MinDistance: 10
+      MaxDistance: 40
+    - Name: Attack
+      Clip: {fileID: 8300000, guid: 0bed8c6c78ab1e64fba7fdeeaf04a877, type: 3}
+      IsLoop: 0
+      Volume: 0.7
+      MinDistance: 10
+      MaxDistance: 50
+    - Name: Tail Attack
+      Clip: {fileID: 8300000, guid: 8352c9659251dc34f95600594414d138, type: 3}
+      IsLoop: 0
+      Volume: 0.7
+      MinDistance: 10
+      MaxDistance: 50
+    - Name: Walk01
+      Clip: {fileID: 8300000, guid: 6a5b1a270244f194097ecfd93933d039, type: 3}
+      IsLoop: 0
+      Volume: 0.4
+      MinDistance: 5
+      MaxDistance: 40
+    - Name: Walk02
+      Clip: {fileID: 8300000, guid: 9b379728b98715c4bae5053a22450fad, type: 3}
+      IsLoop: 0
+      Volume: 0.7
+      MinDistance: 5
+      MaxDistance: 50
+    - Name: Breath
+      Clip: {fileID: 8300000, guid: d90a269a5e916574abd732e1e41678e8, type: 3}
+      IsLoop: 1
+      Volume: 0.7
+      MinDistance: 5
+      MaxDistance: 50
+    - Name: Fire Ball
+      Clip: {fileID: 8300000, guid: 22710bf2263fe114e9d1646a87f58b38, type: 3}
+      IsLoop: 0
+      Volume: 0.8
+      MinDistance: 20
+      MaxDistance: 80
+    - Name: Rush
+      Clip: {fileID: 8300000, guid: 0185f8e6e25fbbc4c91e51f5a88ba8ec, type: 3}
+      IsLoop: 0
+      Volume: 1
+      MinDistance: 20
+      MaxDistance: 100
+    - Name: Voice
+      Clip: {fileID: 8300000, guid: 162f2798c9d764d4ab461724988d8dac, type: 3}
+      IsLoop: 0
+      Volume: 0.85
+      MinDistance: 20
+      MaxDistance: 80

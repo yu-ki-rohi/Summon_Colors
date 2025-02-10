@@ -85,7 +85,7 @@ public class PlayerActionController : MonoBehaviour
         }
         _state = State.Summon;
         StopSound();
-        _audioSource = AudioManager.Instance.PlaySound((int)AudioManager.PlayerSound.Summon, transform, 0.5f, true);
+        _audioSource = AudioManager.Instance.PlaySound((int)AudioManager.PlayerSound.Summon, transform);
     }
 
     public void ChangeToThrow()
@@ -117,7 +117,7 @@ public class PlayerActionController : MonoBehaviour
     {
         _playerMove.ThrowItem();
         _isLookAtCameraTarget = false;
-        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.PlayerSound.Throw, transform, 0.5f);
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.PlayerSound.Throw, transform);
     }
 
     public void KnockBack(Vector3 dir, float strength, float time)
@@ -185,7 +185,7 @@ public class PlayerActionController : MonoBehaviour
                 _absorb.SetShootDirection(Camera.main.transform.forward);
 
                 StopSound();
-                _audioSource = AudioManager.Instance.PlaySound((int)AudioManager.PlayerSound.Vacuum, transform, 0.5f, true);
+                _audioSource = AudioManager.Instance.PlaySound((int)AudioManager.PlayerSound.Vacuum, transform);
 
                 _state = State.Prepare;
 
@@ -213,7 +213,6 @@ public class PlayerActionController : MonoBehaviour
                 _animator.SetFloat("Speed", 0.0f);
                 _state = State.Prepare;
                 AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Summon01, 2, transform);
-
             }
         }
         else if (context.canceled)
@@ -236,6 +235,7 @@ public class PlayerActionController : MonoBehaviour
                 Vector3 forward = Camera.main.transform.forward;
                 forward.y = 0.0f;
                 gameObject.transform.forward = forward.normalized;
+                AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Attack01, 2, transform);
             }
         }
         else if (context.canceled)
@@ -264,6 +264,7 @@ public class PlayerActionController : MonoBehaviour
             Time.timeScale = 1.0f;
             _cameraMove.ChangeTarget(transform, false);
             Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+            AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Evasion01, 2, transform);
         }
     }
 

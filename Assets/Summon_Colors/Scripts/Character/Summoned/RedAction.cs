@@ -41,7 +41,7 @@ public class RedAction : SummonedAction
     {
         base.Idle();
         
-        if((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude > 1.0f)
+        if((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude > 0.49f)
         {
             _animator.SetBool("IsWalking", true);
         }

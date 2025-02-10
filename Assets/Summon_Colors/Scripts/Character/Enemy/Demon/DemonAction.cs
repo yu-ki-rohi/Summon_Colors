@@ -95,7 +95,16 @@ public class DemonAction : EnemyAction
         {
             embers.Initialize((int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Landing_Remain)));
         }
-        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Rush, transform);
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Rush, transform,1.0f);
+    }
+
+    public void PlayFootStep01()
+    {
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Walk01, transform, 0.5f, false, 5.0f, 20.0f);
+    }
+    public void PlayFootStep02()
+    {
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Walk02, transform, 0.5f, false, 5.0f, 20.0f);
     }
 
     public void Bite()

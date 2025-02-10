@@ -130,7 +130,7 @@ public class AudioManager : MonoBehaviour
     #endregion
 
     #region--- Sound ---
-    public AudioSource PlaySoundOneShot(int index, Transform transform, float volume = 0.5f, bool isLoop = false)
+    public AudioSource PlaySoundOneShot(int index, Transform transform, float volume = 0.5f, bool isLoop = false, float minDistance = 10.0f, float maxDistance = 100.0f)
     {
         AudioSource audioSource = GetSoundSource();
 
@@ -139,6 +139,8 @@ public class AudioManager : MonoBehaviour
         audioSource.gameObject.transform.position = transform.position;
         volume = Mathf.Clamp01(volume);
         audioSource.loop = isLoop;
+        audioSource.minDistance = minDistance;
+        audioSource.maxDistance = maxDistance;
         audioSource.PlayOneShot(clip, volume);
         return audioSource;
     }

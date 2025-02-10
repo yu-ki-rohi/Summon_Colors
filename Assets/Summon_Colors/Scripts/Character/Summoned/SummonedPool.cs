@@ -54,7 +54,7 @@ public class SummonedPool : ObjectPoolBase
             summonedBase.SummonedPool = this;
             if(_projectilePool != null)
             {
-                YellowAction yellowAction = _prefab.GetComponent<YellowAction>();
+                YellowAction yellowAction = o.GetComponent<YellowAction>();
                 if(yellowAction != null)
                 {
                     Debug.Log("Set Projectile Pool");

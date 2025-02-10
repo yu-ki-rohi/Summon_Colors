@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
@@ -9,6 +10,8 @@ public class Explosion : MonoBehaviour
     private Collider _collider;
     private Timer _activeTimer;
     private Timer _explosionTimer;
+    private ObjectPoolBase _pool;
+    private CharacterBase _attacker;
 
     public void Initialize(int power)
     {
@@ -17,6 +20,17 @@ public class Explosion : MonoBehaviour
         _explosionTimer = new Timer(FinishExplosion, 0.05f);
         _collider = GetComponent<Collider>();
         _collider.enabled = true;
+    }
+
+    public void Initialize(int power, CharacterBase attacker)
+    {
+        Initialize(power);
+        _attacker = attacker;
+    }
+
+    public void RegisterPool(ObjectPoolBase pool)
+    {
+        _pool = pool;
     }
 
     // Start is called before the first frame update
@@ -40,7 +54,14 @@ public class Explosion : MonoBehaviour
 
     private void DisAppear()
     {
-        Destroy(gameObject);
+        if(_pool != null)
+        {
+            _pool.Release(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void FinishExplosion()
@@ -51,41 +72,64 @@ public class Explosion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" || other.tag == "Summoned")
+        if(gameObject.tag == "Enemy")
         {
-            Vector3 StartPos = gameObject.transform.position;
-            StartPos.y += 1.0f;
-            Vector3 EndPos = other.gameObject.transform.position;
-            EndPos.y += 1.0f;
-            Ray ray = new Ray(StartPos, EndPos - StartPos);
-            RaycastHit hit;
-            int layerNum = LayerMask.NameToLayer("Stage");
-            int layerMask = 1 << layerNum;
-            layerNum = LayerMask.NameToLayer("Ground");
-            layerMask |= 1 << layerNum;
-
-            float distance = (EndPos - StartPos).magnitude;
-
-            if (Physics.Raycast(ray, out hit, distance, layerMask))
+            if (other.tag == "Player" || other.tag == "Summoned")
             {
-                return;
+               HitOther(other);
             }
-            CharacterBase characterBase = other.GetComponentInParent<CharacterBase>();
-            if (characterBase != null)
+        }
+        else if (gameObject.tag == "Player" || gameObject.tag == "Summoned")
+        {
+            if((other.tag == "Enemy"))
             {
-                int damage = characterBase.Damaged(_power);
-                if (damage > 0)
-                {
-                    if(distance == 0) { return; }
-                    StartPos.y = 0.0f;
-                    EndPos.y = 0.0f;
+                HitOther(other);
+            }
+        }
+    }
+    private void HitOther(Collider other)
+    {
+        Vector3 StartPos = gameObject.transform.position;
+        StartPos.y += 1.0f;
+        Vector3 EndPos = other.gameObject.transform.position;
+        EndPos.y += 1.0f;
+        Ray ray = new Ray(StartPos, EndPos - StartPos);
+        RaycastHit hit;
+        int layerNum = LayerMask.NameToLayer("Stage");
+        int layerMask = 1 << layerNum;
+        layerNum = LayerMask.NameToLayer("Ground");
+        layerMask |= 1 << layerNum;
 
-                    float time = 0.3f;
-                    float forcePower = 25.0f;
-                    float powerMagni = Mathf.Clamp01(damage / 100.0f);
-                    Vector3 forceVec = (EndPos - StartPos) / distance;
-                    characterBase.KnockBack(forceVec, forcePower * powerMagni, time);
-                }
+        float distance = (EndPos - StartPos).magnitude;
+
+        if (Physics.Raycast(ray, out hit, distance, layerMask))
+        {
+            return;
+        }
+        CharacterBase characterBase = other.GetComponentInParent<CharacterBase>();
+        if (characterBase != null)
+        {
+            int damage;
+            if(_attacker == null)
+            {
+                damage = characterBase.Damaged(_power);
+            }
+            else
+            {
+                damage = characterBase.Damaged(_power, _attacker.Break, _attacker.Appearance, _attacker);
+            }
+
+            if (damage > 0)
+            {
+                if (distance == 0) { return; }
+                StartPos.y = 0.0f;
+                EndPos.y = 0.0f;
+
+                float time = 0.3f;
+                float forcePower = 25.0f;
+                float powerMagni = Mathf.Clamp01(damage / 100.0f);
+                Vector3 forceVec = (EndPos - StartPos) / distance;
+                characterBase.KnockBack(forceVec, forcePower * powerMagni, time);
             }
         }
     }

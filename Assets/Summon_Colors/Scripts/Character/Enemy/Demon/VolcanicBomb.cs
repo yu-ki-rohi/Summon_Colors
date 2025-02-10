@@ -25,7 +25,7 @@ public class VolcanicBomb : Projectiles
             {
                 explosion.Initialize(_explosionPower);
             }
-            AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.FireBall, transform);
+            AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.FireBall, transform, 0.8f);
         }
         if(_flames != null)
         {

@@ -56,7 +56,7 @@ public class SummonedAction : MonoBehaviour
         _agent.updateRotation = false;
     }
 
-    public void FinishAction()
+    public virtual void FinishAction()
     {
         _state = State.Combat;
         _agent.updateRotation = true;

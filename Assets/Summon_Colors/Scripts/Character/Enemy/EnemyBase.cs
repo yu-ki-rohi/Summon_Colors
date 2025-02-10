@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyBase : NPCBase
 {
     [SerializeField] private EnemyData _enemyData;
+    [SerializeField] private UIManager _uiMmanager;
     private CharacterBase _player;
 
     public float StopDistance { get { return _enemyData.StopDistance; } }
@@ -30,7 +31,10 @@ public class EnemyBase : NPCBase
         }
 
         int damage = base.Damaged(attack, shock, hate, attacker);
-        Debug.Log(Hp);
+        if(_uiMmanager != null)
+        {
+            _uiMmanager.ReflectEnemyHp((float)Hp / MaxHp);
+        }
         if (Hp <= 0)
         {
             Die();

@@ -6,6 +6,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private HitPointBar _hitPointBar;
+    [SerializeField] private HitPointBar _enemyHitPointBar;
     [SerializeField] private PlayerIcon _playerIcon;
     [SerializeField] private SelectedColorDisplay _selectedColorDisplay;
     [SerializeField] private TextMeshProUGUI _timerText;
@@ -20,6 +21,18 @@ public class UIManager : MonoBehaviour
     public void ReflectCurrentHpImmediately(float currentHp)
     {
         _hitPointBar?.ReflectCurrentHpImmediately(currentHp);
+    }
+    #endregion
+
+    #region--- Enemy Hit Point bar ---
+    public void ReflectEnemyHp(float currentHp)
+    {
+        _enemyHitPointBar?.ReflectCurrentHp(currentHp);
+    }
+
+    public void ReflectEnemyHpImmediately(float currentHp)
+    {
+        _enemyHitPointBar?.ReflectCurrentHpImmediately(currentHp);
     }
     #endregion
 
@@ -69,6 +82,9 @@ public class UIManager : MonoBehaviour
     {
         _hitPointBar.CountTimer();
         _hitPointBar.ReduceRed();
+        _enemyHitPointBar.CountTimer();
+        _enemyHitPointBar.ReduceRed();
+
         _playerIcon.Update();
     }
 }

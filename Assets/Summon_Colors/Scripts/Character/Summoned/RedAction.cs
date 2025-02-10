@@ -5,7 +5,7 @@ using UnityEngine;
 public class RedAction : SummonedAction
 {
     [SerializeField] private Collider _attackCollider;
-
+    private List<CharacterBase> _characters = new List<CharacterBase>();
     public virtual void Attack(Collider collider)
     {
         if(collider.tag == "Enemy")
@@ -13,7 +13,11 @@ public class RedAction : SummonedAction
             CharacterBase character = collider.GetComponentInParent<CharacterBase>();
             if(character != null)
             {
-                character.Damaged(_summonedBase.Attack, _summonedBase.Break, _summonedBase.Appearance, _summonedBase);
+                if(!HasAttacked(character))
+                {
+                    character.Damaged(_summonedBase.Attack, _summonedBase.Break, _summonedBase.Appearance, _summonedBase);
+                    _characters.Add(character);
+                }
             }
         }
     }
@@ -26,6 +30,12 @@ public class RedAction : SummonedAction
     public void FinishAttack()
     {
         _attackCollider.enabled = false;
+    }
+
+    public override void FinishAction()
+    {
+        _characters.Clear();
+        base.FinishAction();
     }
 
     protected override void Start()
@@ -96,4 +106,15 @@ public class RedAction : SummonedAction
         _agent.SetDestination(transform.position);
     }
 
+    protected bool HasAttacked(CharacterBase characterBase)
+    {
+        foreach(var character in _characters)
+        {
+            if(character == characterBase)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

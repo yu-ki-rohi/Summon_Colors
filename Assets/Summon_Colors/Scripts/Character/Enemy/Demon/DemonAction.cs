@@ -107,11 +107,35 @@ public class DemonAction : EnemyAction
         AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Walk02, transform);
     }
 
+    public void PlaySmallBite()
+    {
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Bite_Small, transform);
+    }
+    
+    public void PlayBite()
+    {
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Bite, transform);
+    }
+
+    public void PlayVolcanicPrepare()
+    {
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.FireBall_Prepare, transform);
+    }
+
+    public void PlayTacklePrepare01()
+    {
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Tackle_Prepare01, transform);
+    }
+
+    public void PlayTacklePrepare02()
+    {
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Tackle_Prepare02, transform);
+    }
+
     public void Bite()
     {
         _rushColliders[0].enabled = true;
         _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Bite));
-        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Bite, transform);
     }
 
 

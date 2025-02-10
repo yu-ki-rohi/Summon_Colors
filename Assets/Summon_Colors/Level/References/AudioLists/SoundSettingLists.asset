@@ -18,13 +18,13 @@ MonoBehaviour:
     - Name: Vacuum
       Clip: {fileID: 8300000, guid: 6b892a44e49c76e4d8e4d4139c1055cb, type: 3}
       IsLoop: 1
-      Volume: 0.3
+      Volume: 0.5
       MinDistance: 1
       MaxDistance: 100
     - Name: Summon
       Clip: {fileID: 8300000, guid: a4e321826bbf45a4cbaa871701f9e4e2, type: 3}
       IsLoop: 1
-      Volume: 0.3
+      Volume: 0.5
       MinDistance: 1
       MaxDistance: 100
     - Name: Step
@@ -36,7 +36,7 @@ MonoBehaviour:
     - Name: Throw
       Clip: {fileID: 8300000, guid: 3f5fb43cf03fea64d893261ffd9c4f49, type: 3}
       IsLoop: 0
-      Volume: 0.3
+      Volume: 0.5
       MinDistance: 1
       MaxDistance: 100
   - Name: Demon
@@ -45,6 +45,12 @@ MonoBehaviour:
       Clip: {fileID: 8300000, guid: 5ec7b9f5f3e62684f8ffa648c1412f32, type: 3}
       IsLoop: 0
       Volume: 0.7
+      MinDistance: 10
+      MaxDistance: 40
+    - Name: Small Bite
+      Clip: {fileID: 8300000, guid: 5ec7b9f5f3e62684f8ffa648c1412f32, type: 3}
+      IsLoop: 0
+      Volume: 0.35
       MinDistance: 10
       MaxDistance: 40
     - Name: Attack
@@ -77,17 +83,35 @@ MonoBehaviour:
       Volume: 0.7
       MinDistance: 5
       MaxDistance: 50
+    - Name: Fire Ball Prepare
+      Clip: {fileID: 8300000, guid: 1a157e80ff9a2eb4cb727c5639440afe, type: 3}
+      IsLoop: 0
+      Volume: 0.5
+      MinDistance: 15
+      MaxDistance: 60
     - Name: Fire Ball
       Clip: {fileID: 8300000, guid: 22710bf2263fe114e9d1646a87f58b38, type: 3}
       IsLoop: 0
       Volume: 0.8
       MinDistance: 20
       MaxDistance: 80
+    - Name: Tackle Prepare01
+      Clip: {fileID: 8300000, guid: 8cd854d788981164d9cbf007c6274627, type: 3}
+      IsLoop: 0
+      Volume: 0.65
+      MinDistance: 15
+      MaxDistance: 60
+    - Name: Tackle Prepare02
+      Clip: {fileID: 8300000, guid: 6dc930d25296960478ddfff3151cf11d, type: 3}
+      IsLoop: 0
+      Volume: 1
+      MinDistance: 100
+      MaxDistance: 500
     - Name: Rush
       Clip: {fileID: 8300000, guid: 0185f8e6e25fbbc4c91e51f5a88ba8ec, type: 3}
       IsLoop: 0
       Volume: 1
-      MinDistance: 20
+      MinDistance: 30
       MaxDistance: 100
     - Name: Voice
       Clip: {fileID: 8300000, guid: 162f2798c9d764d4ab461724988d8dac, type: 3}

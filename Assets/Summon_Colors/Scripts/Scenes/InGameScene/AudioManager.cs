@@ -58,12 +58,16 @@ public class AudioManager : MonoBehaviour
     public enum DemonSound
     {
         Bite = 4,
+        Bite_Small,
         Attack,
         TailAttack,
         Walk01,
         Walk02,
         Breath,
+        FireBall_Prepare,
         FireBall,
+        Tackle_Prepare01,
+        Tackle_Prepare02,
         Rush,
         Roar
     }
@@ -93,7 +97,7 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    [SerializeField] private AudioList _musicList;
+    [SerializeField] private AudioSettingList _musicSettingList;
     [SerializeField] private AudioSettingLists _soundSettingList;
     [SerializeField] private AudioSettingList _voiceSettingList;
     [Space(20)]
@@ -105,6 +109,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private Transform _soundParent;
     [SerializeField] private Transform _voiceParent;
     [Space(30)]
+    [SerializeField, Range(0.0f, 1.0f)] private float _musicVolume = 1.0f;
     [SerializeField, Range(0.0f, 1.0f)] private float _soundVolume = 1.0f;
     [SerializeField, Range(0.0f, 1.0f)] private float _voiceVolume = 1.0f;
 
@@ -117,18 +122,27 @@ public class AudioManager : MonoBehaviour
         
     }
     #region--- Music ---
-    public void PlayMusic(int index, float volume = 0.5f)
+    public void PlayMusic(int index)
     {
         if (_musicSource == null)
         {
             GameObject obj = Instantiate(_musicObject, _musicParent);
             _musicSource = obj.GetComponent<AudioSource>();
         }
-        AudioClip clip = _musicList.Get(index);
-        if (clip == null) { return; }
-        _musicSource.clip = clip;
-        _musicSource.volume = volume;
+        AudioSetting audioSetting = _musicSettingList.Get(index);
+        if (audioSetting == null) { return; }
+        _musicSource.gameObject.transform.position = transform.position;
+        _musicSource.clip = audioSetting.Clip;
+        _musicSource.volume = audioSetting.Volume * _musicVolume;
+        _musicSource.loop = audioSetting.IsLoop;
+        _musicSource.minDistance = audioSetting.MinDistance;
+        _musicSource.maxDistance = audioSetting.MaxDistance;
         _musicSource.Play();
+    }
+
+    public void StopMusic()
+    {
+        _musicSource.Stop();
     }
     #endregion
 

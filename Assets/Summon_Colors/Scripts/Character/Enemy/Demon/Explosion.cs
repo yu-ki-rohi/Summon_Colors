@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Explosion : MonoBehaviour
@@ -12,6 +13,7 @@ public class Explosion : MonoBehaviour
     private Timer _explosionTimer;
     private ObjectPoolBase _pool;
     private CharacterBase _attacker;
+    private List<CharacterBase> _characters = new List<CharacterBase>();
 
     public void Initialize(int power)
     {
@@ -54,6 +56,7 @@ public class Explosion : MonoBehaviour
 
     private void DisAppear()
     {
+        _characters.Clear();
         if(_pool != null)
         {
             _pool.Release(gameObject);
@@ -109,6 +112,11 @@ public class Explosion : MonoBehaviour
         CharacterBase characterBase = other.GetComponentInParent<CharacterBase>();
         if (characterBase != null)
         {
+            if (HasAttacked(characterBase))
+            {
+                return;
+            }
+            _characters.Add(characterBase);
             int damage;
             if(_attacker == null)
             {
@@ -132,5 +140,16 @@ public class Explosion : MonoBehaviour
                 characterBase.KnockBack(forceVec, forcePower * powerMagni, time);
             }
         }
+    }
+    private bool HasAttacked(CharacterBase characterBase)
+    {
+        foreach (var character in _characters)
+        {
+            if (character == characterBase)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

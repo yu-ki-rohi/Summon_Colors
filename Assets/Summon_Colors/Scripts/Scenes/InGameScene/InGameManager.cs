@@ -9,6 +9,7 @@ public class InGameManager : MonoBehaviour
     void Start()
     {
         _inGameBase.Start();
+        AudioManager.Instance.PlayMusic(0);
     }
 
     // Update is called once per frame

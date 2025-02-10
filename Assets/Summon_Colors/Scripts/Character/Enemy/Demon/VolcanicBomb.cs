@@ -8,12 +8,14 @@ public class VolcanicBomb : Projectiles
     [SerializeField] private GameObject _flames;
     private int _embersPower = 3;
     private int _explosionPower;
+    private AudioSource _audioSource;
 
     public void Initialize(int power, int explosionPower, int embersPower)
     {
         _explosionPower = explosionPower;
         _embersPower = embersPower;
         Initialize(power);
+        _audioSource = AudioManager.Instance.PlaySound((int)AudioManager.DemonSound.Breath, transform);
     }
 
     protected override void BehaviorOnHitStage(Collider stage)
@@ -34,6 +36,19 @@ public class VolcanicBomb : Projectiles
             {
                 embers.Initialize(_embersPower);
             }
+        }
+        if(_audioSource != null)
+        {
+            _audioSource.Stop();
+        }
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        if (_audioSource != null)
+        {
+            _audioSource.gameObject.transform.position = transform.position;
         }
     }
 

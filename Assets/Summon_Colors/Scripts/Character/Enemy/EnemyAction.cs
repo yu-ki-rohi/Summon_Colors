@@ -78,6 +78,14 @@ public class EnemyAction : MonoBehaviour
         }
     }
 
+    public void CheckThePosition(Vector3 position)
+    {
+        _walkTimer = 0.0f;
+        _walkTime = Random.Range(4.0f, 8.0f);
+        _walkVec = (position - transform.position).normalized;
+        _state = State.Walk;
+    }
+
     // Start is called before the first frame update
     protected virtual void Start()
     {

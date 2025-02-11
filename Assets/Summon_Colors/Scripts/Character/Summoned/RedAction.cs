@@ -5,6 +5,7 @@ using UnityEngine;
 public class RedAction : SummonedAction
 {
     [SerializeField] private Collider _attackCollider;
+    [SerializeField] private HitEffectManager.Type _type;
     private List<CharacterBase> _characters = new List<CharacterBase>();
     public virtual void Attack(Collider collider)
     {
@@ -16,6 +17,7 @@ public class RedAction : SummonedAction
                 if(!HasAttacked(character))
                 {
                     character.Damaged(_summonedBase.Attack, _summonedBase.Break, _summonedBase.Appearance, _summonedBase);
+                    HitEffectManager.Instance.Play(_type, collider.ClosestPointOnBounds(transform.position));
                     _characters.Add(character);
                 }
             }
@@ -34,8 +36,13 @@ public class RedAction : SummonedAction
 
     public override void FinishAction()
     {
-        _characters.Clear();
+        ResetHasAttacked();
         base.FinishAction();
+    }
+
+    public void ResetHasAttacked()
+    {
+        _characters.Clear();
     }
 
     protected override void Start()

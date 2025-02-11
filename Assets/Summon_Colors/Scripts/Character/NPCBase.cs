@@ -25,12 +25,7 @@ public class NPCBase : CharacterBase
 
             if(_targetCharacter == null)
             {
-                float sqrDistance = (attacker.gameObject.transform.position - transform.position).sqrMagnitude;
-                if(sqrDistance < 100.0f)
-                {
-                    _hate.Add(attacker, attack);
-                }
-            }
+                CheckThePosition(gameObject.transform.position);            }
         }
         return damage;
     }
@@ -139,6 +134,12 @@ public class NPCBase : CharacterBase
         }
         return character;
     }
+
+    protected virtual void CheckThePosition(Vector3 position)
+    {
+
+    }
+
     protected override void Update()
     {
         if(_eyesTransform != null)

@@ -31,7 +31,7 @@ public class SummonedBase : NPCBase
     {
         int damage = base.Damaged(attack, shock, hate, attacker);
         if (damage <= 0) { return 0; }
-        DamagedInvincible(0.5f);
+        DamagedInvincible(0.8f);
         if(Hp <= 0)
         {
             Die();
@@ -101,6 +101,11 @@ public class SummonedBase : NPCBase
             _action.ChangeDown();
         }
         base.Die();
+    }
+
+    protected override void CheckThePosition(Vector3 position)
+    {
+        _action.CheckThePosition(position);
     }
 
     // Start is called before the first frame update

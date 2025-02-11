@@ -114,7 +114,11 @@ public class Embers : MonoBehaviour
             CharacterBase characterBase = other.GetComponentInParent<CharacterBase>();
             if (characterBase != null)
             {
-                characterBase.Damaged(_power);
+                int damage = characterBase.Damaged(_power);
+                if (damage > 0)
+                {
+                    HitEffectManager.Instance.Play(HitEffectManager.Type.Fire, other.ClosestPointOnBounds(transform.position));
+                }
             }
         }
     }

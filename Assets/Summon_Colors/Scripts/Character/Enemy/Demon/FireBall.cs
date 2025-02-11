@@ -61,6 +61,7 @@ public class FireBall : Projectiles
                     float powerMagni = Mathf.Clamp01(damage / 100.0f);
                     Vector3 forceVec = (other.transform.position - transform.position);
                     characterBase.KnockBack(forceVec, forcePower * powerMagni, time);
+                    HitEffectManager.Instance.Play(HitEffectManager.Type.Fire, other.ClosestPointOnBounds(transform.position));
                 }
             }
         }

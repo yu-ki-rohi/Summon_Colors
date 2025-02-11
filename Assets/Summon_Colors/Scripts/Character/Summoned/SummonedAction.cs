@@ -12,7 +12,8 @@ public class SummonedAction : MonoBehaviour
         Combat,
         Return,
         Action,
-        Down
+        Down,
+        Check
     }
     [SerializeField] protected NavMeshAgent _agent;
     [SerializeField] protected Animator _animator;
@@ -22,6 +23,8 @@ public class SummonedAction : MonoBehaviour
     protected float _timer = 0.0f;
     private Rigidbody _rigidbody;
     private Timer _knockBackTimer;
+    private Timer _checkTimer;
+
 
     public void Initialize()
     {
@@ -75,6 +78,13 @@ public class SummonedAction : MonoBehaviour
             dir = dir.normalized;
         }
         _rigidbody.AddForce(dir * strength, ForceMode.Impulse);
+    }
+
+    public void CheckThePosition(Vector3 position)
+    {
+        _state = State.Check;
+        _agent.SetDestination(position);
+        _checkTimer = new Timer(FinishAction, 1.0f);
     }
 
     // Start is called before the first frame update
@@ -175,5 +185,14 @@ public class SummonedAction : MonoBehaviour
     {
         _knockBackTimer = null;
         Warp(transform.position);
+    }
+
+    private void FinishCheck()
+    {
+        if(_state == State.Check)
+        {
+            _state = State.Idle;
+        }
+        _checkTimer = null;
     }
 }

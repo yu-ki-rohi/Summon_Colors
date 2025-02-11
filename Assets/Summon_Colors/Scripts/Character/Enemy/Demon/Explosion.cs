@@ -79,7 +79,11 @@ public class Explosion : MonoBehaviour
         {
             if (other.tag == "Player" || other.tag == "Summoned")
             {
-               HitOther(other);
+                int damage = HitOther(other);
+                if (damage > 0)
+                {
+                    HitEffectManager.Instance.Play(HitEffectManager.Type.Fire, other.ClosestPointOnBounds(transform.position));
+                }
             }
         }
         else if (gameObject.tag == "Player" || gameObject.tag == "Summoned")
@@ -90,7 +94,7 @@ public class Explosion : MonoBehaviour
             }
         }
     }
-    private void HitOther(Collider other)
+    private int HitOther(Collider other)
     {
         Vector3 StartPos = gameObject.transform.position;
         StartPos.y += 1.0f;
@@ -107,14 +111,14 @@ public class Explosion : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, distance, layerMask))
         {
-            return;
+            return 0;
         }
         CharacterBase characterBase = other.GetComponentInParent<CharacterBase>();
         if (characterBase != null)
         {
             if (HasAttacked(characterBase))
             {
-                return;
+                return 0;
             }
             _characters.Add(characterBase);
             int damage;
@@ -129,7 +133,7 @@ public class Explosion : MonoBehaviour
 
             if (damage > 0)
             {
-                if (distance == 0) { return; }
+                if (distance == 0) { return damage; }
                 StartPos.y = 0.0f;
                 EndPos.y = 0.0f;
 
@@ -139,7 +143,9 @@ public class Explosion : MonoBehaviour
                 Vector3 forceVec = (EndPos - StartPos) / distance;
                 characterBase.KnockBack(forceVec, forcePower * powerMagni, time);
             }
+            return damage;
         }
+        return 0;
     }
     private bool HasAttacked(CharacterBase characterBase)
     {

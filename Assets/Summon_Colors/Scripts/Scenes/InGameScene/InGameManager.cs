@@ -84,21 +84,21 @@ public class InGameManager : MonoBehaviour
 
     public void ChoiceContinue()
     {
-        switch(_continueIndex)
+        _playerInput.actions.FindActionMap("Menu").Disable();
+        _playerInput.actions.FindActionMap("Player").Enable();
+        Time.timeScale = 1;
+        switch (_continueIndex)
         {
             case 0:
                 _player.Heal(10000);
-                _playerInput.actions.FindActionMap("Menu").Disable();
-                _playerInput.actions.FindActionMap("Player").Enable();
                 _inGameBase.UIManager.ChangeAlpha(0);
                 _inGameBase.UIManager.ChoiceView(false);
-                Time.timeScale = 1;
                 break;
             case 1:
-                SceneManager.LoadScene("SampleScene");
+                SceneManager.LoadScene("BossBattleScene");
                 break;
             case 2:
-                SceneManager.LoadScene("SampleScene");
+                SceneManager.LoadScene("BossBattleScene");
                 break;
         }
     }

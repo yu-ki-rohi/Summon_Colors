@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Summon_Colors/Level/Scenes/SampleScene/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Summon_Colors/Level/Scenes/SampleScene/BossBattleScene.unity
+    guid: 4657a2cc43cc6cd42ab591858e54c436
   m_configObjects: {}

@@ -68,6 +68,7 @@ public class AudioManager : MonoBehaviour
         FireBall,
         Tackle_Prepare01,
         Tackle_Prepare02,
+        Tackle_Prepare03,
         Rush,
         Roar
     }
@@ -194,15 +195,15 @@ public class AudioManager : MonoBehaviour
     #endregion
 
     #region--- Voice ---
-    public void PlayRandomVoice(int firstIndex, int range, Transform transform, float volume = 0.5f)
+    public void PlayRandomVoice(int firstIndex, int range, Transform transform)
     {
         if(firstIndex < 0 || firstIndex + range - 1 > (int)Voice.GameOver02) { return; }
         int judge = UnityEngine.Random.Range(0, range);
         int index = firstIndex + judge;
-        PlayVoice(index, transform, volume);
+        PlayVoice(index, transform);
     }
 
-    public void PlayVoice(int index, Transform transform, float volume = 0.5f)
+    public void PlayVoice(int index, Transform transform)
     {
         if (_voiceSource == null)
         {

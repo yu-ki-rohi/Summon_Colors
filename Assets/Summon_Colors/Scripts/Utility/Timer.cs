@@ -39,6 +39,11 @@ public class Timer
         return _timer;
     }
 
+    public float CountUp()
+    {
+        return CountUp(UnityEngine.Time.deltaTime);
+    }
+
     public float CountDown(float deltaTime)
     {
         if (_timer < 0.0f)
@@ -51,5 +56,10 @@ public class Timer
             _timer -= deltaTime;
         }
         return _timer;
+    }
+
+    public float CountDown()
+    {
+        return CountDown(UnityEngine.Time.deltaTime);
     }
 }

@@ -7,17 +7,7 @@ using UnityEngine.AI;
 public class HidingEnemyAction : EnemyAction
 {
     private int _power;
-    public override void Attack(Collider collider)
-    {
-        if (collider.tag == "Player" || collider.tag == "Summoned")
-        {
-            CharacterBase character = collider.GetComponentInParent<CharacterBase>();
-            if (character != null)
-            {
-                character.Damaged(_power, _enemyBase.Break, _enemyBase.Appearance, _enemyBase);
-            }
-        }
-    }
+   
     protected override void Idle()
     {
         _agent.velocity = Vector3.zero;
@@ -26,6 +16,12 @@ public class HidingEnemyAction : EnemyAction
     protected override void Walk()
     {
         
+    }
+
+    public override void CheckThePosition(Vector3 position)
+    {
+        base.CheckThePosition(position);
+        _animator.SetBool("Recognize", true);
     }
 
     protected override void SetState()
@@ -48,7 +44,10 @@ public class HidingEnemyAction : EnemyAction
                 }
                 else
                 {
-                    _animator.SetBool("Recognize", false);
+                    if(_state != State.Check)
+                    {
+                        _animator.SetBool("Recognize", false);
+                    }
                     _state = State.Idle;
                 }
             }

@@ -132,6 +132,11 @@ public class DemonAction : EnemyAction
         AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Tackle_Prepare02, transform);
     }
 
+     public void PlayTacklePrepare03()
+    {
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Tackle_Prepare03, transform);
+    }
+
     public void Bite()
     {
         _rushColliders[0].enabled = true;
@@ -267,6 +272,7 @@ public class DemonAction : EnemyAction
                     float powerMagni = Mathf.Clamp01(damage / 100.0f);
                     Vector3 forceVec = (collider.transform.position - transform.position);
                     character.KnockBack(forceVec, forcePower * powerMagni, time);
+                    HitEffectManager.Instance.Play(HitEffectManager.Type.Hit, collider.ClosestPointOnBounds(transform.position));
                 }
             }
         }

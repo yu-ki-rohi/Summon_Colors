@@ -17,6 +17,7 @@ public class PlayerActionController : MonoBehaviour
         Direction,
         Avoid,
         Throw,
+        Throw_Prepare,
         Prepare
     }
 
@@ -57,7 +58,8 @@ public class PlayerActionController : MonoBehaviour
     public bool IsBoolAnimation()
     {
         if (_state == State.Avoid || 
-            _state == State.Throw)
+            _state == State.Throw ||
+            _state == State.Throw_Prepare)
         {
             return false;
         }
@@ -132,6 +134,10 @@ public class PlayerActionController : MonoBehaviour
         _rigidbody.AddForce(dir * strength, ForceMode.Impulse);
     }
 
+    public void OnDie()
+    {
+        _canMove = false;
+    }
 
     public void OnMoveCamera(InputAction.CallbackContext context)
     {
@@ -229,6 +235,7 @@ public class PlayerActionController : MonoBehaviour
             if (_state == State.Idle)
             {
                 _canMove = false;
+                _state = State.Throw_Prepare;
                 _animator.SetTrigger("Throw");
                 _playerMove.Move(Vector2.zero);
                 _animator.SetFloat("Speed", 0.0f);

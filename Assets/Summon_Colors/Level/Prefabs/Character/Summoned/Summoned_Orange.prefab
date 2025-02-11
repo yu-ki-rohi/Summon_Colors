@@ -208,6 +208,7 @@ MonoBehaviour:
   _agent: {fileID: 0}
   _animator: {fileID: 0}
   _attackCollider: {fileID: 0}
+  _type: 5
 --- !u!54 &2231323270746891339
 Rigidbody:
   m_ObjectHideFlags: 0

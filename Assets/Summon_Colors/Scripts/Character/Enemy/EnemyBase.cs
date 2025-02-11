@@ -1,13 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EnemyBase : NPCBase
 {
     [SerializeField] private EnemyData _enemyData;
     [SerializeField] private UIManager _uiMmanager;
+    private EnemyAction _action;
     private CharacterBase _player;
-
+    
     public float StopDistance { get { return _enemyData.StopDistance; } }
 
     public void Initialize()
@@ -69,10 +72,27 @@ public class EnemyBase : NPCBase
         }
     }
 
+    protected override void CheckThePosition(CharacterBase attacker)
+    {
+        if(_action != null)
+        {
+            _action.CheckThePosition(attacker.transform.position);
+        }
+        else
+        {
+            _hate.Add(attacker, 1);
+            _targetCharacter = attacker;
+        }
+    }
+
     // Start is called before the first frame update
     protected override void Start()
     {
-        
+        if (_action == null)
+        {
+            _action = GetComponent<EnemyAction>();
+        }
+        if( _action == null ) { Debug.Log("Enemy Action " + gameObject + " has is Null" ); }
         base.Start();
     }
 

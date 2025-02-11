@@ -25,7 +25,8 @@ public class NPCBase : CharacterBase
 
             if(_targetCharacter == null)
             {
-                CheckThePosition(gameObject.transform.position);            }
+                CheckThePosition(attacker);
+            }
         }
         return damage;
     }
@@ -135,7 +136,7 @@ public class NPCBase : CharacterBase
         return character;
     }
 
-    protected virtual void CheckThePosition(Vector3 position)
+    protected virtual void CheckThePosition(CharacterBase attacker)
     {
 
     }

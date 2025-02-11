@@ -25,6 +25,8 @@ public class Summon : MonoBehaviour
 
     public ColorElements.ColorType Color { get { return _color; } }
 
+    public SummonedPool[] SummonedPools { get { return _summonedPools; } }
+
     public HomeBase GetHomeBase(ColorElements.ColorType color)
     {
         foreach(var homeBase in _homeBases)

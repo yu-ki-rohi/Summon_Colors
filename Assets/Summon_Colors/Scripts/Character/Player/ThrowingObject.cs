@@ -24,7 +24,11 @@ public class ThrowingObject : Projectiles
             CharacterBase characterBase = other.GetComponentInParent<CharacterBase>();
             if (characterBase != null)
             {
-                characterBase.Damaged(_power, _break, _hate, _character);
+                int damage = characterBase.Damaged(_power, _break, _hate, _character);
+                if(damage > 0)
+                {
+                    HitEffectManager.Instance.Play(HitEffectManager.Type.Hit, transform.position);
+                }
             }
             DisAppear();
         }

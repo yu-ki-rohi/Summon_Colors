@@ -103,9 +103,9 @@ public class SummonedBase : NPCBase
         base.Die();
     }
 
-    protected override void CheckThePosition(Vector3 position)
+    protected override void CheckThePosition(CharacterBase attacker)
     {
-        _action.CheckThePosition(position);
+        _action.CheckThePosition(attacker.transform.position);
     }
 
     // Start is called before the first frame update

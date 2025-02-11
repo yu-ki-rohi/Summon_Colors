@@ -27,7 +27,7 @@ public class CharacterBase : MonoBehaviour
 
     public bool IsActive { get { return _isActive; } }
     public bool IsInvincible { get {  return _isInvincible; } }
-
+    public bool IsAlive { get { return Hp > 0; } }
 
     public float GetPowerMagnification(int index)
     {

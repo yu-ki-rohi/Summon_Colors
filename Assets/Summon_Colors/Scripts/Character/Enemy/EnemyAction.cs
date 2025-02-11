@@ -17,7 +17,8 @@ public class EnemyAction : MonoBehaviour
         Walk,
         Combat,
         Action,
-        Down
+        Down,
+        Check
     }
     protected EnemyBase _enemyBase;
     protected State _state = State.Idle;
@@ -34,7 +35,11 @@ public class EnemyAction : MonoBehaviour
             CharacterBase character = collider.GetComponentInParent<CharacterBase>();
             if (character != null)
             {
-                character.Damaged(_enemyBase.Attack, _enemyBase.Break, _enemyBase.Appearance, _enemyBase);
+                int damage = character.Damaged(_enemyBase.Attack, _enemyBase.Break, _enemyBase.Appearance, _enemyBase);
+                if (damage > 0)
+                {
+                    HitEffectManager.Instance.Play(HitEffectManager.Type.Hit, collider.ClosestPointOnBounds(transform.position));
+                }
             }
         }
     }
@@ -78,12 +83,12 @@ public class EnemyAction : MonoBehaviour
         }
     }
 
-    public void CheckThePosition(Vector3 position)
+    public virtual void CheckThePosition(Vector3 position)
     {
         _walkTimer = 0.0f;
         _walkTime = Random.Range(4.0f, 8.0f);
-        _walkVec = (position - transform.position).normalized;
-        _state = State.Walk;
+        _agent.SetDestination(position);
+        _state = State.Check;
     }
 
     // Start is called before the first frame update
@@ -136,6 +141,9 @@ public class EnemyAction : MonoBehaviour
             case State.Action:
                 Action();
                 break;
+            case State.Check:
+                Check();
+                break;
         }
 
         if(_agent != null)
@@ -173,7 +181,7 @@ public class EnemyAction : MonoBehaviour
                 }
                 else
                 {
-                    if (_state != State.Walk)
+                    if (_state != State.Walk && _state != State.Check)
                     {
                         _state = State.Idle;
                     }
@@ -256,6 +264,21 @@ public class EnemyAction : MonoBehaviour
     protected virtual void Action()
     {
         
+    }
+
+    protected virtual void Check()
+    {
+        if (_walkTimer < _walkTime)
+        {
+            _walkTimer += Time.deltaTime;
+        }
+        else
+        {
+            _agent.SetDestination(transform.position);
+            _walkTimer = 0.0f;
+            _walkTime = Random.Range(2.0f, 4.0f);
+            _state = State.Idle;
+        }
     }
 
     protected virtual void StartAction()

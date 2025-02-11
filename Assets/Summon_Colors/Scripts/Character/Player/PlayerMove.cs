@@ -89,11 +89,12 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!_player.IsAlive) { return; }
         if(_velocity != Vector3.zero)
         {
             if(_speed < _player.Agility)
             {
-                _speed += _acceleration * _accelerationMagni *Time.deltaTime;
+                _speed += _acceleration * _accelerationMagni * Time.deltaTime;
             }
             else
             {

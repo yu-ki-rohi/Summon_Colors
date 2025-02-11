@@ -107,6 +107,12 @@ MonoBehaviour:
       Volume: 1
       MinDistance: 100
       MaxDistance: 500
+    - Name: Tackle Prepare03
+      Clip: {fileID: 8300000, guid: 9ed00ccb20586e84eb61c6109b514488, type: 3}
+      IsLoop: 0
+      Volume: 0.85
+      MinDistance: 100
+      MaxDistance: 500
     - Name: Rush
       Clip: {fileID: 8300000, guid: 0185f8e6e25fbbc4c91e51f5a88ba8ec, type: 3}
       IsLoop: 0

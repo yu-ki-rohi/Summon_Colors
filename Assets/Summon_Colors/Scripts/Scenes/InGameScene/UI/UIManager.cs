@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private PlayerIcon _playerIcon;
     [SerializeField] private SelectedColorDisplay _selectedColorDisplay;
     [SerializeField] private TextMeshProUGUI _timerText;
-
+    [SerializeField] private ChoicesMenu _choicesMenu;
+    [SerializeField] private Image _blackOut;
 
     #region--- Hit Point bar ---
     public void ReflectCurrentHp(float currentHp)
@@ -71,6 +73,28 @@ public class UIManager : MonoBehaviour
         _timerText.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
     }
     #endregion
+
+    #region--- Choice Menu ---
+    public void ChoiceCursor(int index)
+    {
+        _choicesMenu.ChoiceCursor(index);
+    }
+
+    public void ChoiceView(bool flag, int index = 0)
+    {
+        _choicesMenu.View(flag, index);
+    }
+    #endregion
+    
+    #region--- Black Out ---
+    public void ChangeAlpha(float alpha)
+    {
+        alpha = Mathf.Clamp01(alpha);
+        _blackOut.color = new Color(0,0,0,alpha);
+    }
+
+    #endregion
+
     // Start is called before the first frame update
     void Start()
     {

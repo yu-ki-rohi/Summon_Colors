@@ -24,28 +24,38 @@ public class Player : CharacterBase
 
     public override int Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
+        if(Hp <= 0) { return 0; };
+        int beforeHp = Hp;
         int damage = base.Damaged(attack, shock, hate, attacker);
         if (damage <= 0) { return damage; }
         _uiManager.ReflectCurrentHp((float)Hp / MaxHp);
-        if (Hp < MaxHp * 0.4f)
-        {
-            _uiManager.ChangeToExhausted();
-        }
         _uiManager.ChangeToDamaged(attack);
+        if (Hp <= 0)
+        {
+            Die();
+            return damage;
+        }
         DamagedInvincible(0.8f);
         if (damage <= _characterData.Armor)
         {
             AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Damage01, 2, transform);
-            return damage; 
         }
         else
         {
-            AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.BigDamage01, 2, transform);
+            AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.BigDamage01, 2, transform); 
+            if (_actionController.IsBoolAnimation())
+            {
+                _actionController.ChangeToIdle();
+            }
         }
-        if (_actionController.IsBoolAnimation())
+        float tiredBorder = 0.4f;
+        int judgeTired = (int)((Hp - MaxHp * tiredBorder) * (beforeHp - MaxHp * tiredBorder));
+        if (judgeTired < 0)
         {
-            _actionController.ChangeToIdle();
+            _uiManager.ChangeToExhausted();
+            AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Tired01, 1, transform);
         }
+        
         return damage;
     }
 
@@ -62,6 +72,13 @@ public class Player : CharacterBase
     public override void KnockBack(Vector3 dir, float strength, float time)
     {
         _actionController.KnockBack(dir, strength, time);
+    }
+
+    protected override void Die()
+    {
+        AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.GameOver01, 2, transform);
+        _actionController.OnDie();
+        InGameManager.Instance.GameOver();
     }
 
     // Start is called before the first frame update

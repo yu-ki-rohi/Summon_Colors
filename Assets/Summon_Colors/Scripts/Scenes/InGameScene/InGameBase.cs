@@ -10,6 +10,8 @@ public class InGameBase
     public Timer GameTimer;
     public SummonedPool[] SummonedPools;
     public UIManager UIManager;
+    public bool IsEvent = false;
+    public bool IsUsingCamera = false;
     
     public int GetSummonedsNum()
     {
@@ -19,6 +21,11 @@ public class InGameBase
             num += pool.GetActiveNum();
         }
         return num;
+    }
+
+    public void SetSummonedPools(SummonedPool[] pools)
+    {
+        SummonedPools = pools;
     }
 
     public virtual void OnGameClear()
@@ -41,6 +48,8 @@ public class InGameBase
     {
         GameTimer = new Timer(OnTimeUp, GameTime);
         GameTimer.PrepareCountDown();
+        UIManager.ChangeAlpha(0);
+        UIManager.ChoiceView(false);
     }
 
 

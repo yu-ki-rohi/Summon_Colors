@@ -58,6 +58,9 @@ public class HitEffectManager : MonoBehaviour
 
     public void Play(Type type, Vector3 position)
     {
+        Vector2 screenPos = Camera.main.WorldToViewportPoint(position);
+        if(screenPos.x < 0 || screenPos.x > 1 ||
+            screenPos.y < 0 || screenPos.y > 1) { return; }
         if ((int)type >= _hitEffectObjects.Length) { return; }
         HitEffect hitEffect = null;
         foreach(var use  in _hitEffects[(int)type])
@@ -71,7 +74,9 @@ public class HitEffectManager : MonoBehaviour
         if (hitEffect == null)
         {
             hitEffect = new HitEffect(Instantiate(_hitEffectObjects[(int)type], transform));
+            _hitEffects[(int)type].Add(hitEffect);
         }
+        position.y += 0.5f;
         hitEffect.Play(position);
     }
 

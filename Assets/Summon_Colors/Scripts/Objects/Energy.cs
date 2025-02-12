@@ -9,11 +9,13 @@ public class Energy : MonoBehaviour
     [SerializeField] private float _horizontallyRange = 20.0f;
     [SerializeField] private float _rotateSpeed = 5.0f;
     [SerializeField] private float _changeTime = 3.0f;
+    [SerializeField] private ParticleSystem _particleSystem01;
+    [SerializeField] private ParticleSystem _particleSystem02;
+    [SerializeField] private TrailRenderer _trailRenderer;
     private Absorb _absorb;
     private Transform _player;
     private ColorElements.ColorType _colorType;
     private Color _color;
-    private MeshRenderer _renderer;
     private int _energy;
     private int _movePattern;
     private float _timer = 0.0f;
@@ -41,8 +43,12 @@ public class Energy : MonoBehaviour
                 _color = Color.black;
                 break;
         }
-        _renderer = GetComponent<MeshRenderer>();
-        _renderer.materials[0].color = _color;
+        var main = _particleSystem01.main;
+        main.startColor = new ParticleSystem.MinMaxGradient(_color);
+        main = _particleSystem02.main;
+        main.startColor = new ParticleSystem.MinMaxGradient(_color);
+        _trailRenderer.startColor = _color;
+
 
         transform.LookAt(_player.position);
 #if false

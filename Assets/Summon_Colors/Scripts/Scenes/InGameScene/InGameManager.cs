@@ -51,8 +51,19 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private Summon _summon;
     [SerializeField] private Player _player;
     [SerializeField] private PlayerInput _playerInput;
+    private bool _isEvent = false;
+    private bool _isPlayerCamera = true;
 
     private int _continueIndex = 0;
+
+    public bool IsEvent { get { return _isEvent; } }
+    public bool IsPlayerCamera { get { return _isPlayerCamera; } }
+
+    public void StopEventCamera()
+    {
+        _isEvent = false;
+        _isPlayerCamera = true;
+    }
 
     public int ActiveSummonedNum
     {
@@ -67,6 +78,7 @@ public class InGameManager : MonoBehaviour
 
     public void GameClear()
     {
+        _isPlayerCamera = false;
         _inGameBase.OnGameClear();
     }
 

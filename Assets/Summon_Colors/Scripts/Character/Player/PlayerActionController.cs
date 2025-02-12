@@ -74,6 +74,7 @@ public class PlayerActionController : MonoBehaviour
         _animator.SetBool("Absorb", false);
         _animator.SetBool("Order", false);
         StopSound();
+        _summon.StopSummon();
     }
     public void ChangeToSummon()
     {
@@ -218,12 +219,14 @@ public class PlayerActionController : MonoBehaviour
                 _animator.SetFloat("Speed", 0.0f);
                 _state = State.Prepare;
                 AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Summon01, 2, transform);
+                _summon.StartSummon();
             }
         }
         else if (context.canceled)
         {
             _animator.SetBool("Summon", false);
             StopSound();
+            _summon.StopSummon();
         }
     }
 

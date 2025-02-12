@@ -58,7 +58,7 @@ public class RedAction : SummonedAction
     {
         base.Idle();
         
-        if((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude > 0.49f)
+        if((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude > 0.64f)
         {
             _animator.SetBool("IsWalking", true);
         }
@@ -74,7 +74,7 @@ public class RedAction : SummonedAction
         float dot = _summonedBase.GetDot();
         if (dot < 0) { return; }
         float distance = _summonedBase.GetDistance();
-        float buffar = 2.0f;
+        float buffar = 2.8f;
         float borderDistance = _summonedBase.StopDistance + buffar;
         borderDistance *= borderDistance;
         if (distance > borderDistance || dot < 0.7071)

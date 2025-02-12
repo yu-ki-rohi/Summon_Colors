@@ -57,13 +57,26 @@ public class DemonAction : EnemyAction
     private float _roarIntensity = 0.0f;
     private int _power = 0;
     private AudioSource _audioSource;
+    private Vector3 _targetPosition = Vector3.zero;
     public void CreateVolcanicBomb()
     {
         GameObject volcanicBomb = Instantiate(_volcanicBomb, _firePosition.position, Quaternion.identity);
         volcanicBomb.transform.forward = _firePosition.forward;
         if(volcanicBomb.TryGetComponent<Rigidbody>(out var rigidbody))
         {
-            rigidbody.AddForce(_firePosition.forward * _firePower, ForceMode.Impulse);
+            float sin = _firePosition.forward.y;
+            if(Mathf.Abs(sin) == 1.0f) { sin = 0.9848f; }
+            float cos = Mathf.Sqrt(1.0f - sin * sin);
+            float tan = sin / cos;
+
+            float height = 4.0f;
+            float sqrDistance = (_targetPosition - transform.position).sqrMagnitude;
+
+            float sqrVelocity = (-Physics.gravity.y * (tan * tan + 1) * sqrDistance) /
+                    (2.0f * (height + tan * Mathf.Sqrt(sqrDistance)));
+            float firePower = rigidbody.mass * Mathf.Sqrt(sqrVelocity);
+            Debug.Log(firePower);
+            rigidbody.AddForce(_firePosition.forward * firePower, ForceMode.Impulse);
         }
         if (volcanicBomb.TryGetComponent<VolcanicBomb>(out var projectile))
         {
@@ -319,7 +332,9 @@ public class DemonAction : EnemyAction
             {
                 _breathTimer = 0.0f;
                 GameObject breath = _breathPool.Get(_firePosition.position);
-                breath.transform.forward = _firePosition.forward;
+                float rangeAdjust = 0.4f;
+                Vector3 forward = (_firePosition.forward + transform.forward * rangeAdjust).normalized;
+                breath.transform.forward = forward;
                 if (breath.TryGetComponent<FireBall>(out var projectile))
                 {
                     projectile.Initialize(
@@ -381,6 +396,8 @@ public class DemonAction : EnemyAction
         {
             case 0:
                 _animator.SetTrigger("Ball");
+                Transform target = _enemyBase.TargetCharacter.GetNearestPart(this.transform);
+                _targetPosition = target.position;
                 _agent.updateRotation = false;
                 break;
             case 1:

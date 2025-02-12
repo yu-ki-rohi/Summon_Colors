@@ -11,10 +11,12 @@ public class Summon : MonoBehaviour
     [SerializeField] private HomeBase[] _homeBases;
     [SerializeField] private SummonedPool[] _summonedPools;
     [SerializeField] private ColorPalette _lightPalette;
+    [SerializeField] private GameObject _summonEffectObject;
     private Player _player;
     private Absorb _absorb;
     private PlayerActionController _actionController;
-    [SerializeField] private ColorElements.ColorType _color = ColorElements.ColorType.Red;
+    private ColorElements.ColorType _color = ColorElements.ColorType.Red;
+    private HitEffect _summonEffect;
 
     private Dictionary<ColorElements.ColorType, Transform[]> _summonBasePositions = new Dictionary<ColorElements.ColorType, Transform[]>();
     private Dictionary<ColorElements.ColorType, bool[]> _isSummoned = new Dictionary<ColorElements.ColorType, bool[]>();
@@ -50,6 +52,16 @@ public class Summon : MonoBehaviour
         return num;
     }
 
+    public void StartSummon()
+    {
+        _summonEffectObject.transform.position = _summonPosition.position + Vector3.down * 1.75f;
+        _summonEffect.Play();
+    }
+
+    public void StopSummon()
+    {
+        _summonEffect.Stop();
+    }
 
     public bool SummonColor()
     {
@@ -160,6 +172,7 @@ public class Summon : MonoBehaviour
         _collider.enabled = false;
         _player.UIManager.ChangeColor(_color);
         SetSummonPositions();
+        _summonEffect = new HitEffect(_summonEffectObject);
     }
 
     // Update is called once per frame

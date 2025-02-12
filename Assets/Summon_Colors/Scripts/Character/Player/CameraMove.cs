@@ -8,6 +8,7 @@ using UnityEngine.Windows;
 public class CameraMove : MonoBehaviour
 {
     [SerializeField] private Transform _player;
+    [SerializeField] private Transform _boss;
     [SerializeField] private CinemachineVirtualCamera _virtualCamera;
     [SerializeField] private float _baseDistance = 4.0f;
     [SerializeField] private float _horizontalSpeed = 2.0f;
@@ -16,6 +17,7 @@ public class CameraMove : MonoBehaviour
     [SerializeField, Range(0.5f,1.0f)] private float _baffa = 0.85f;
     [SerializeField] private bool _horizontalInvert = false;
     [SerializeField] private bool _verticalInvert = true;
+
     private Transform _target;
     private Vector3 _cameraVec = Vector3.back;
     private CinemachineTransposer _virtualCameraTransposer;
@@ -37,6 +39,11 @@ public class CameraMove : MonoBehaviour
         _rightStick = stick;
     }
 
+    public void StartGameClearCamera()
+    {
+        StartCoroutine(GameClearCameraMove());
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +54,23 @@ public class CameraMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    private void LateUpdate()
+    {
+        if(InGameManager.Instance.IsPlayerCamera)
+        {
+            PlayerCamera();
+        }
+        else
+        {
+
+        }
+    }
+
+    private void PlayerCamera()
+    {
         if (_isDirecting)
         {
             _cameraVec = (_player.position - _target.position).normalized;
@@ -55,11 +79,11 @@ public class CameraMove : MonoBehaviour
         {
             RotateCameraInfo();
         }
-    
+
         if (_virtualCameraTransposer != null)
         {
             Vector3 up = Vector3.zero;
-            if(_isDirecting)
+            if (_isDirecting)
             {
                 up = Vector3.up * _directingUp;
             }
@@ -142,5 +166,27 @@ public class CameraMove : MonoBehaviour
             value= value.normalized;
         }
         return value;
+    }
+
+    private IEnumerator GameClearCameraMove()
+    {
+        _virtualCamera.LookAt = _boss;
+        _virtualCamera.Follow = _boss;
+        _virtualCameraTransposer.m_FollowOffset =
+            Vector3.forward * 0.8f +
+            Vector3.up * 8.5f;
+        yield return new WaitForSeconds(3.2f);
+        _virtualCameraTransposer.m_FollowOffset =
+            Vector3.forward * 10.0f +
+            Vector3.up * -3.5f;
+        yield return new WaitForSeconds(2.2f);
+        _virtualCameraTransposer.m_FollowOffset =
+            Vector3.forward * -8.0f +
+            Vector3.up * 8.0f +
+            Vector3.right * -4.0f;
+        yield return new WaitForSeconds(3.5f);
+        _virtualCamera.LookAt = _player;
+        _virtualCamera.Follow = _player;
+        InGameManager.Instance.StopEventCamera();
     }
 }

@@ -22,7 +22,11 @@ public class GreenAction : SummonedAction
             CharacterBase character = collider.GetComponentInParent<CharacterBase>();
             if (character != null)
             {
-                character.Heal(_summonedBase.Attack);
+                if(character.Hp > 0)
+                {
+                    character.Heal(_summonedBase.Attack);
+                    HitEffectManager.Instance.Play(HitEffectManager.Type.Heal, character.gameObject.transform.position);
+                }
             }
         }
     }
@@ -30,7 +34,7 @@ public class GreenAction : SummonedAction
     protected override void Idle()
     {
         base.Idle();
-        if ((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude > 1.0f)
+        if ((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude > 0.64f)
         {
             _animator.SetBool("IsWalking", true);
         }

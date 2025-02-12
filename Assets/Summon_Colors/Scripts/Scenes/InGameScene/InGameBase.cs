@@ -10,9 +10,8 @@ public class InGameBase
     public Timer GameTimer;
     public SummonedPool[] SummonedPools;
     public UIManager UIManager;
-    public bool IsEvent = false;
-    public bool IsUsingCamera = false;
-    
+    public CameraMove _cameraMove;
+
     public int GetSummonedsNum()
     {
         int num = 0;
@@ -30,7 +29,7 @@ public class InGameBase
 
     public virtual void OnGameClear()
     {
-
+        _cameraMove.StartGameClearCamera();
     }
 
     public virtual void OnGameOver()

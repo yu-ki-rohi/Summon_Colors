@@ -95,9 +95,9 @@ public class Explosion : MonoBehaviour
     private int HitOther(Collider other)
     {
         Vector3 StartPos = gameObject.transform.position;
-        StartPos.y += 1.0f;
+        StartPos.y += 0.8f;
         Vector3 EndPos = other.gameObject.transform.position;
-        EndPos.y += 1.0f;
+        EndPos.y += 0.8f;
         Ray ray = new Ray(StartPos, EndPos - StartPos);
         RaycastHit hit;
         int layerNum = LayerMask.NameToLayer("Stage");

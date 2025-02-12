@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2093789401380340279}
   - component: {fileID: 6101045437798748448}
   - component: {fileID: 6230519971166810468}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: AbsorbBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1239040115196696232}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4317821744768965254}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_rightEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3121868288311235749}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_skirt05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7300894251631354560}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: EysPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7457048697131733179}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_skirt02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +171,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1732239347924202095}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_spine03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5684657545000202805}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8678006955257239291}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_spine01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,7 +268,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2668153367007924}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BodyColliderParent
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -300,7 +300,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1513983672424473831}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_mouthSmile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,7 +331,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4806931610414518140}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_skirt01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,7 +363,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5271344692557802167}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_skirt04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -394,7 +394,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 843798494652962274}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_mouthAngry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,7 +426,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7901582832181195949}
   - component: {fileID: 2829162356906182573}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -527,7 +527,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 541749773713205241}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_leftEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -558,7 +558,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6175638042815819423}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_skirt08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -591,7 +591,7 @@ GameObject:
   - component: {fileID: 5091065756287543811}
   - component: {fileID: 7760418616400290878}
   - component: {fileID: 346213708285850016}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Mushroom
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -675,7 +675,7 @@ GameObject:
   - component: {fileID: 2042508986524925464}
   - component: {fileID: 2257837681598389227}
   - component: {fileID: 8302014104457556247}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: AttackCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -762,7 +762,7 @@ GameObject:
   - component: {fileID: 3931463995181154847}
   - component: {fileID: 6707798226333893951}
   - component: {fileID: 5012167298988571406}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: DetectCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -847,7 +847,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4931834968663985401}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_skirt07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -879,7 +879,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5771373742130961703}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_skirt03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -912,7 +912,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6334543922155084377}
   - component: {fileID: 1190571050315172276}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BodyCollider
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -966,7 +966,7 @@ GameObject:
   - component: {fileID: 3654168708673856287}
   - component: {fileID: 7394955530714802575}
   - component: {fileID: 80343851482032617}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: ChaseLimit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1051,7 +1051,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5341078663846971593}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_spine02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1088,7 +1088,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1536890142685979458}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: mushroom_skirt06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1122,7 +1122,7 @@ GameObject:
   - component: {fileID: 7387934389947177873}
   - component: {fileID: 6443831329638504466}
   - component: {fileID: 5495424012729895948}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Model
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -1182,6 +1182,7 @@ MonoBehaviour:
   _partTransforms: []
   _eyesTransform: {fileID: 7300894251631354560}
   _enemyData: {fileID: 11400000, guid: c5bd6b73e8054a6418004321de85221f, type: 2}
+  _uiMmanager: {fileID: 0}
 --- !u!114 &5495424012729895948
 MonoBehaviour:
   m_ObjectHideFlags: 0

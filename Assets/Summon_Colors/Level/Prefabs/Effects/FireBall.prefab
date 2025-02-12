@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5677969360202809627}
   - component: {fileID: 7035065738179297813}
   - component: {fileID: 6397886348690170279}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4854,7 +4854,7 @@ GameObject:
   - component: {fileID: 9055024806224266152}
   - component: {fileID: 1110407526348929295}
   - component: {fileID: 1129717046783531108}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4927,7 +4927,7 @@ GameObject:
   - component: {fileID: 930813766620381331}
   - component: {fileID: 4932753361292716158}
   - component: {fileID: 4870566214664707539}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FireEmbers (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

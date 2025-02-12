@@ -13,6 +13,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _timerText;
     [SerializeField] private ChoicesMenu _choicesMenu;
     [SerializeField] private Image _blackOut;
+    [SerializeField] private TextMeshProUGUI _phisicsTime;
+    [SerializeField] private TextMeshProUGUI _scriptsTime;
+    [SerializeField] private TextMeshProUGUI _otherTime;
+    [SerializeField] private TextMeshProUGUI _fps;
+    int _countUpdate = 0;
+    float _timer = 0;
 
     #region--- Hit Point bar ---
     public void ReflectCurrentHp(float currentHp)
@@ -99,16 +105,40 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _playerIcon.Initialize();
+        StartCoroutine(ViewFPS());
     }
-
+    private void FixedUpdate()
+    {
+        _otherTime.text = (Time.time - _timer).ToString("0.0000");
+        _timer = Time.time;
+    }
     // Update is called once per frame
     void Update()
     {
+        _phisicsTime.text = Time.deltaTime.ToString("0.0000");
+
         _hitPointBar.CountTimer();
         _hitPointBar.ReduceRed();
         _enemyHitPointBar.CountTimer();
         _enemyHitPointBar.ReduceRed();
 
         _playerIcon.Update();
+        _countUpdate++;
+    }
+
+    private void LateUpdate()
+    {
+        _scriptsTime.text = (Time.time - _timer).ToString("0.0000");
+        _timer = Time.time;
+    }
+
+    private IEnumerator ViewFPS()
+    {
+        while (true)
+        {
+            _fps.text = _countUpdate.ToString();
+            _countUpdate = 0;
+            yield return new WaitForSeconds(1.0f);
+        }
     }
 }

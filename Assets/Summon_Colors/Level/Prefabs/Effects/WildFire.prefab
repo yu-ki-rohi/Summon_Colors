@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2995860090543735719}
   - component: {fileID: 4655231650055551115}
   - component: {fileID: 4521399154641879302}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: WildFire
   m_TagString: SubElement
   m_Icon: {fileID: 0}
@@ -4943,7 +4943,7 @@ GameObject:
   - component: {fileID: 7461178221780394535}
   - component: {fileID: 7488025062280752279}
   - component: {fileID: 5670207581243331819}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Embers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9695,7 +9695,7 @@ GameObject:
   - component: {fileID: 8701517062024128341}
   - component: {fileID: 6119686964094870702}
   - component: {fileID: 4052446115724967512}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}

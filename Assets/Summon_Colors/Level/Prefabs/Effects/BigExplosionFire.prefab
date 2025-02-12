@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8868076609892006048}
   - component: {fileID: 8560720845379711161}
   - component: {fileID: 7251185144331506548}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Embers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4767,7 +4767,7 @@ GameObject:
   - component: {fileID: 5141991735688781296}
   - component: {fileID: 5315909807004063880}
   - component: {fileID: 6860253630563554463}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: BigExplosionFire
   m_TagString: SubElement
   m_Icon: {fileID: 0}
@@ -9695,7 +9695,7 @@ GameObject:
   - component: {fileID: 1156180522439857865}
   - component: {fileID: 3632772072875116786}
   - component: {fileID: 3875646701318536906}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}

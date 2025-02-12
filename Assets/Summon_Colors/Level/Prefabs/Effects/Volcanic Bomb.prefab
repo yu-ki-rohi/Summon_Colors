@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5203518843696646523}
   - component: {fileID: 6812901250346890505}
   - component: {fileID: 4040143773094736883}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FireEmbers (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4763,7 +4763,7 @@ GameObject:
   - component: {fileID: 8510243043514802427}
   - component: {fileID: 8814207621717821044}
   - component: {fileID: 8651552308151991485}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Rock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4847,7 +4847,7 @@ GameObject:
   - component: {fileID: 5361590089721519394}
   - component: {fileID: 42501484256655279}
   - component: {fileID: 7234616707721291315}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Volcanic Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4949,7 +4949,7 @@ GameObject:
   - component: {fileID: 996722316241943929}
   - component: {fileID: 8863223330019505205}
   - component: {fileID: 7149874554163309037}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

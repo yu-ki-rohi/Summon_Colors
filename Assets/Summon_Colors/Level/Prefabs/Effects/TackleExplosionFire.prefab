@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8802375118756833159}
   - component: {fileID: 1032358487797383427}
   - component: {fileID: 727739099593292993}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: TackleExplosionFire
   m_TagString: SubElement
   m_Icon: {fileID: 0}
@@ -4943,7 +4943,7 @@ GameObject:
   - component: {fileID: 3931741753194345964}
   - component: {fileID: 388086959206460117}
   - component: {fileID: 3819117021896322795}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Embers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9695,7 +9695,7 @@ GameObject:
   - component: {fileID: 8096698714526156803}
   - component: {fileID: 3224971330040365235}
   - component: {fileID: 1379122875158676229}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}

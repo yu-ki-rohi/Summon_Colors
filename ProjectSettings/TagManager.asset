@@ -19,10 +19,10 @@ TagManager:
   - Stage
   - Effect
   - Ground
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - PlayerAttack
+  - Enemy
+  - EnemyAttack
   - 
   - 
   - 

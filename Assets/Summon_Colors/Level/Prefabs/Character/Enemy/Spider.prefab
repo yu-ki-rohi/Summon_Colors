@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6083602447748043998}
   - component: {fileID: 5497647758773944215}
   - component: {fileID: 9170383670718585486}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: AttackCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5380094632540017688}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LegFront2_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 721807867578505864}
   - component: {fileID: 8144506382928600688}
   - component: {fileID: 5220310947135134649}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,6 +191,7 @@ MonoBehaviour:
   _partTransforms: []
   _eyesTransform: {fileID: 534881941554879933}
   _enemyData: {fileID: 11400000, guid: eb8bc1515a660744abd1c75f1a06eb53, type: 2}
+  _uiMmanager: {fileID: 0}
 --- !u!114 &8144506382928600688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,7 +244,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6727431525257050622}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LegBack2_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -274,7 +275,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3797462882534419667}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LegBack2_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,7 +306,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 763382042572225774}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LegFront2_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -336,7 +337,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2590197475651287355}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LegBack1_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -368,7 +369,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4654929670653896440}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +404,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1680552398612571341}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LegBack1_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,7 +436,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5718117417426005858}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LegFront1_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -467,7 +468,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8483160871865200515}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Armature
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -504,7 +505,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5687350519068577767}
   - component: {fileID: 639935681624299021}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Spider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,7 +560,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7864053968106211971}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LegFront1_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -593,7 +594,7 @@ GameObject:
   - component: {fileID: 1830330311142253648}
   - component: {fileID: 840235235704336451}
   - component: {fileID: 1385841384249243766}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: ChaseLimit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -680,7 +681,7 @@ GameObject:
   - component: {fileID: 7029220455384454060}
   - component: {fileID: 4701658546463006940}
   - component: {fileID: 1938341599938165609}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: DetectCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -766,7 +767,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4949254433267330610}
   - component: {fileID: 4353177828483256197}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BodyCollider
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -819,7 +820,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1413066282947460189}
   - component: {fileID: 1331045363666465053}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -915,7 +916,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 534881941554879933}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: EyesPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}

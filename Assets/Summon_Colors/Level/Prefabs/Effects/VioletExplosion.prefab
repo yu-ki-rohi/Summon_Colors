@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6264391065620866372}
   - component: {fileID: 8338041122173466772}
   - component: {fileID: 7190458145667200750}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Shockwave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4913,7 +4913,7 @@ GameObject:
   - component: {fileID: 4530548578907214483}
   - component: {fileID: 7293646902812675094}
   - component: {fileID: 3761904020099421465}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: VioletExplosion
   m_TagString: Summoned
   m_Icon: {fileID: 0}
@@ -9877,7 +9877,7 @@ GameObject:
   - component: {fileID: 7714678799955053099}
   - component: {fileID: 6065342846813920884}
   - component: {fileID: 7704654936781766204}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Lightning
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14777,7 +14777,7 @@ GameObject:
   - component: {fileID: 2713222310372823008}
   - component: {fileID: 3126808318713564869}
   - component: {fileID: 8285079520217809565}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Embers
   m_TagString: Untagged
   m_Icon: {fileID: 0}

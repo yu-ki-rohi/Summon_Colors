@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6648594021633676179}
   - component: {fileID: 7278334167477704216}
   - component: {fileID: 669947793287652614}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SmokeTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4853,7 +4853,7 @@ GameObject:
   - component: {fileID: 407731167269509373}
   - component: {fileID: 6364905955867785336}
   - component: {fileID: 4739923277186206830}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Debris
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9754,7 +9754,7 @@ GameObject:
   - component: {fileID: 6792682622616407476}
   - component: {fileID: 5382175519959519706}
   - component: {fileID: 7846059529619571991}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: AdditonalSmoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14672,7 +14672,7 @@ GameObject:
   - component: {fileID: 6074944106232804018}
   - component: {fileID: 5896845987645496542}
   - component: {fileID: 8424363964616599593}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Embers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19492,7 +19492,7 @@ GameObject:
   - component: {fileID: 3071547208730302487}
   - component: {fileID: 7493044958326015897}
   - component: {fileID: 4295010220276572302}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Shockwave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24394,7 +24394,7 @@ GameObject:
   - component: {fileID: 7923494078526153655}
   - component: {fileID: 4156207618183233381}
   - component: {fileID: 3158568546152227304}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: BigExplosion
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -29369,7 +29369,7 @@ GameObject:
   - component: {fileID: 3770474088407375671}
   - component: {fileID: 1421514966556842472}
   - component: {fileID: 1092198803283725427}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Embers (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34188,7 +34188,7 @@ GameObject:
   - component: {fileID: 3448847257540915673}
   - component: {fileID: 4922486759346514087}
   - component: {fileID: 5142815628100076059}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

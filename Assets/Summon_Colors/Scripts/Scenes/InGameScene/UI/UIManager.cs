@@ -86,6 +86,11 @@ public class UIManager : MonoBehaviour
         _choicesMenu.ChoiceCursor(index);
     }
 
+    public void ChoiceScaling(int index)
+    {
+        _choicesMenu.ChoiceScaling(index);
+    }
+
     public void ChoiceView(bool flag, int index = 0)
     {
         _choicesMenu.View(flag, index);
@@ -105,9 +110,9 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _playerIcon.Initialize();
-        StartCoroutine(ViewFPS());
+        _choicesMenu.Start();
 #if UNITY_EDITOR
-
+        StartCoroutine(ViewFPS());
 #else
         _phisicsTime.enabled = false;
         _scriptsTime.enabled = false;
@@ -118,14 +123,19 @@ public class UIManager : MonoBehaviour
     }
     private void FixedUpdate()
     {
+#if UNITY_EDITOR
         _otherTime.text = (Time.time - _timer).ToString("0.0000");
+#else
+#endif
         _timer = Time.time;
     }
     // Update is called once per frame
     void Update()
     {
+#if UNITY_EDITOR
         _phisicsTime.text = Time.deltaTime.ToString("0.0000");
-
+#else
+#endif
         _hitPointBar.CountTimer();
         _hitPointBar.ReduceRed();
         _enemyHitPointBar.CountTimer();
@@ -137,7 +147,11 @@ public class UIManager : MonoBehaviour
 
     private void LateUpdate()
     {
+#if UNITY_EDITOR
         _scriptsTime.text = (Time.time - _timer).ToString("0.0000");
+#else
+#endif
+
         _timer = Time.time;
     }
 

@@ -41,6 +41,7 @@ public class Absorb : MonoBehaviour
     {
         _colorElements.Add(colorType, value);
         ReflectGemIcon();
+        InGameManager.Instance.AbsorbColor(value);
     }
 
     public int ReduceColor(ColorElements.ColorType colorType, int value, bool exhoust = false)

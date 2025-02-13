@@ -29,6 +29,7 @@ public class Player : CharacterBase
         int damage = base.Damaged(attack, shock, hate, attacker);
         if (damage == 0) { return damage; }
         else if (damage < 0) { damage = attack; }
+        else { InGameManager.Instance.Damage(damage); }
         _uiManager.ReflectCurrentHp((float)Hp / MaxHp);
         _uiManager.ChangeToDamaged(attack);
         if (Hp <= 0)

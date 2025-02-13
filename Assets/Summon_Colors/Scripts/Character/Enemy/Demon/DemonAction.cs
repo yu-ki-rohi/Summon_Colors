@@ -447,6 +447,7 @@ public class DemonAction : EnemyAction
             case 3:
                 if (_enemyBase.Hp > _enemyBase.MaxHp * 0.5f)
                 {
+                    Debug.Log("Re Far");
                     SelectFarAttack(dot);
                     break;
                 }
@@ -505,11 +506,7 @@ public class DemonAction : EnemyAction
                 _agent.updateRotation = false;
                 break;
             case 4:
-                if(_enemyBase.Hp > _enemyBase.MaxHp * 0.5f)
-                {
-                    SelectNearAttack(dot);
-                    break;
-                }
+                
                 if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
                     (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 12.0f,
                     out navMeshHit, 10.0f, NavMesh.AllAreas))
@@ -524,6 +521,12 @@ public class DemonAction : EnemyAction
                 }
                 break;
             case 5:
+                if (_enemyBase.Hp > _enemyBase.MaxHp * 0.5f)
+                {
+                    Debug.Log("Re Near");
+                    SelectNearAttack(dot);
+                    break;
+                }
                 if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
                     out navMeshHit, 10.0f, NavMesh.AllAreas))
                 {

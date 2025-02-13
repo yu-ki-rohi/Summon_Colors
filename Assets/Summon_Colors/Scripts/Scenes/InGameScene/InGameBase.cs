@@ -12,6 +12,12 @@ public class InGameBase
     public UIManager UIManager;
     public CameraMove _cameraMove;
     private bool _isClear = false;
+    private bool _isPausing = false;
+    private int _defeatNum = 0;
+    private int _enegyAmount = 0;
+    private int _damageAmount = 0;
+    private int _continueNum = 0;
+
 
     public bool IsClear { get { return _isClear; } }
 
@@ -28,6 +34,26 @@ public class InGameBase
     public void SetSummonedPools(SummonedPool[] pools)
     {
         SummonedPools = pools;
+    }
+
+    public void DefeatEnemy()
+    {
+        _defeatNum++;
+    }
+
+    public void AbsorbColor(int energy)
+    {
+        _enegyAmount += energy;
+    }
+
+    public void Damage(int damage)
+    {
+        _damageAmount += damage;
+    }
+
+    public void Continue()
+    {
+        _continueNum++;
     }
 
     public virtual void OnGameClear()

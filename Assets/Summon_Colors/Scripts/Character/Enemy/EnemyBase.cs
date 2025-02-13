@@ -41,6 +41,7 @@ public class EnemyBase : NPCBase
         }
         if (Hp <= 0)
         {
+            InGameManager.Instance.DefeatEnemy();
             Die();
         }
         return damage;

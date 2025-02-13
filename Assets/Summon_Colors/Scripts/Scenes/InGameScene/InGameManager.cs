@@ -60,6 +60,7 @@ public class InGameManager : MonoBehaviour
     public bool IsPlayerCamera { get { return _isPlayerCamera; } }
     public bool IsClear { get { return _inGameBase.IsClear; } }
 
+
     public void StopEventCamera()
     {
         _isEvent = false;
@@ -71,11 +72,14 @@ public class InGameManager : MonoBehaviour
         get { return _inGameBase.GetSummonedsNum(); }
     }
 
+
     public void GameOver()
     {
         _inGameBase.OnGameOver();
         StartCoroutine(GameOverTimeStop());
     }
+
+
 
     public void GameClear()
     {
@@ -93,7 +97,7 @@ public class InGameManager : MonoBehaviour
             _continueIndex += CONTINUE_CHOICES;
         }
         _continueIndex %= CONTINUE_CHOICES;
-        _inGameBase.UIManager.ChoiceCursor(_continueIndex);
+        _inGameBase.UIManager.ChoiceScaling(_continueIndex);
     }
 
     public void ChoiceContinue()
@@ -105,6 +109,7 @@ public class InGameManager : MonoBehaviour
         {
             case 0:
                 _player.Heal(10000);
+                _inGameBase.Continue();
                 _inGameBase.UIManager.ChangeAlpha(0);
                 _inGameBase.UIManager.ChoiceView(false);
                 break;
@@ -116,6 +121,23 @@ public class InGameManager : MonoBehaviour
                 break;
         }
     }
+
+    #region --- Data 登録 ---
+    public void DefeatEnemy()
+    {
+        _inGameBase.DefeatEnemy();
+    }
+
+    public void AbsorbColor(int energy)
+    {
+        _inGameBase.AbsorbColor(energy);
+    }
+
+    public void Damage(int damage)
+    {
+        _inGameBase.Damage(damage);
+    }
+    #endregion
 
     // Start is called before the first frame update
     void Start()

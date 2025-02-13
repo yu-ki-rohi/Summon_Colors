@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class TitleSceneManager : MonoBehaviour
+public class StageSelectSceneManager : MonoBehaviour
 {
     [SerializeField] private ChoicesMenu _choicesMenu;
     [SerializeField] private AudioSource _audioSource;
@@ -14,10 +14,14 @@ public class TitleSceneManager : MonoBehaviour
 
     public void OnUp(InputAction.CallbackContext context)
     {
-        if(_lockControll) { return; }
+        if (_lockControll) { return; }
         if (context.performed)
         {
-            _selectedIndex = 0;
+            _selectedIndex--;
+            if (_selectedIndex < 0 )
+            {
+                _selectedIndex = 0;
+            }
             _choicesMenu.ChoiceCursor(_selectedIndex);
         }
         else if (context.canceled)
@@ -31,7 +35,11 @@ public class TitleSceneManager : MonoBehaviour
         if (_lockControll) { return; }
         if (context.performed)
         {
-            _selectedIndex = 1;
+            _selectedIndex++;
+            if (_selectedIndex > 2)
+            {
+                _selectedIndex = 2;
+            }
             _choicesMenu.ChoiceCursor(_selectedIndex);
         }
         else if (context.canceled)
@@ -67,26 +75,22 @@ public class TitleSceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
-    
+
     private IEnumerator SelectedBehavior()
     {
         yield return new WaitForSeconds(0.8f);
-        switch(_selectedIndex)
+        switch (_selectedIndex)
         {
             case 0:
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene(3);
                 break;
             case 1:
-                // yu-ki-rohi
-                // 参考サイト
-                // http://popii33.com/how-to-quit-a-game-in-unity/
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
-#else
-                Application.Quit();//ゲームプレイ終了
-#endif
+                _lockControll = false;
+                break;
+            case 2:
+                SceneManager.LoadScene(0);
                 break;
         }
     }

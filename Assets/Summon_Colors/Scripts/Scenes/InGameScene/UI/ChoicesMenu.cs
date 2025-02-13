@@ -11,8 +11,32 @@ public class ChoicesMenu
     public Image[] ChoiceFonts;
     public Image[] Cursors;
     private RectTransform[] _rectTransforms;
+    private Animator[] _animators;
+
+    public Animator GetCursorAnimator(int index)
+    {
+        if (index < 0 || index >= Cursors.Length) { return null; }
+        return _animators[index];
+    }
 
     public void ChoiceCursor(int index)
+    {
+        if (Cursors.Length == 0) { return; }
+        Start();
+        foreach (var c in Cursors)
+        {
+            c.enabled = false;
+        }
+        foreach (var a in _animators)
+        {
+            a.enabled = false;
+        }
+        if (index < 0 || index >= Cursors.Length) { return; }
+        Cursors[index].enabled = true;
+        _animators[index].enabled = true;
+    }
+
+    private void SetCursor(int index)
     {
         foreach (var c in Cursors)
         {
@@ -20,6 +44,16 @@ public class ChoicesMenu
         }
         if (index < 0 || index >= Cursors.Length) { return; }
         Cursors[index].enabled = true;
+    }
+    private void SetAnimator(int index)
+    {
+        if(_animators == null) { return; }
+        foreach (var a in _animators)
+        {
+            a.enabled = false;
+        }
+        if (index < 0 || index >= _animators.Length) { return; }
+        _animators[index].enabled = true;
     }
 
     public void ChoiceScaling(int index)
@@ -56,12 +90,29 @@ public class ChoicesMenu
 
     public void Start()
     {
-        if (_rectTransforms != null) { return; }
-            
+        SetRectTransforms();
+        SetCursorAnimator();
+    }
+    private void SetRectTransforms()
+    {
+        if (_rectTransforms != null ||
+            ChoiceFonts.Length == 0) { return; }
+
         _rectTransforms = new RectTransform[ChoiceFonts.Length];
-        for(int i = 0; i < _rectTransforms.Length; i++)
+        for (int i = 0; i < _rectTransforms.Length; i++)
         {
             _rectTransforms[i] = ChoiceFonts[i].gameObject.GetComponent<RectTransform>();
+        }
+    }
+    private void SetCursorAnimator()
+    {
+        if (_animators != null ||
+            Cursors.Length == 0) { return; }
+
+        _animators = new Animator[Cursors.Length];
+        for (int i = 0; i < _animators.Length; i++)
+        {
+            _animators[i] = Cursors[i].transform.parent.GetComponent<Animator>();
         }
     }
 }

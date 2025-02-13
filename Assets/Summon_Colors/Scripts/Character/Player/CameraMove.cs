@@ -194,6 +194,6 @@ public class CameraMove : MonoBehaviour
         InGameManager.Instance.StopEventCamera();
         yield return new WaitForSeconds(10.0f);
 
-        SceneManager.LoadScene("BossBattleScene");
+        SceneManager.LoadScene(4);
     }
 }

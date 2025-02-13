@@ -103,7 +103,6 @@ public class InGameManager : MonoBehaviour
     public void ChoiceContinue()
     {
         _playerInput.actions.FindActionMap("Menu").Disable();
-        _playerInput.actions.FindActionMap("Player").Enable();
         Time.timeScale = 1;
         switch (_continueIndex)
         {
@@ -117,7 +116,7 @@ public class InGameManager : MonoBehaviour
                 SceneManager.LoadScene("BossBattleScene");
                 break;
             case 2:
-                SceneManager.LoadScene("BossBattleScene");
+                SceneManager.LoadScene(2);
                 break;
         }
     }
@@ -191,5 +190,25 @@ public class InGameManager : MonoBehaviour
         _inGameBase.UIManager.ChangeAlpha(1);
         _inGameBase.UIManager.ChoiceView(true, _continueIndex);
         Time.timeScale = 0.0f;
+    }
+    private IEnumerator ContinueBehavior()
+    {
+        yield return new WaitForSeconds(0.8f);
+        _playerInput.actions.FindActionMap("Player").Enable();
+        switch (_continueIndex)
+        {
+            case 0:
+                _player.Heal(10000);
+                _inGameBase.Continue();
+                _inGameBase.UIManager.ChangeAlpha(0);
+                _inGameBase.UIManager.ChoiceView(false);
+                break;
+            case 1:
+                SceneManager.LoadScene("BossBattleScene");
+                break;
+            case 2:
+                SceneManager.LoadScene(2);
+                break;
+        }
     }
 }

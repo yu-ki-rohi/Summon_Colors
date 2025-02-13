@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Summon_Colors/Level/Scenes/StageSelectScene.unity
     guid: e741cc5f98a32d849b5dbf0e0316d797
+  - enabled: 1
+    path: Assets/Summon_Colors/Level/Scenes/SampleScene/BossBattleScene.unity
+    guid: 4657a2cc43cc6cd42ab591858e54c436
+  - enabled: 1
+    path: Assets/Summon_Colors/Level/Scenes/EndingMovieScene.unity
+    guid: bdb60abd3c2b72a46887ada9e59c4a7c
   m_configObjects: {}

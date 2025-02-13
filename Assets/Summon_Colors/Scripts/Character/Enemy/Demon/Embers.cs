@@ -115,7 +115,7 @@ public class Embers : MonoBehaviour
             if (characterBase != null)
             {
                 int damage = characterBase.Damaged(_power);
-                if (damage > 0)
+                if (damage != 0)
                 {
                     HitEffectManager.Instance.Play(HitEffectManager.Type.Fire, other.ClosestPointOnBounds(transform.position));
                 }

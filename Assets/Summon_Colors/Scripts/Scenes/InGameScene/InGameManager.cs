@@ -58,6 +58,7 @@ public class InGameManager : MonoBehaviour
 
     public bool IsEvent { get { return _isEvent; } }
     public bool IsPlayerCamera { get { return _isPlayerCamera; } }
+    public bool IsClear { get { return _inGameBase.IsClear; } }
 
     public void StopEventCamera()
     {
@@ -79,6 +80,7 @@ public class InGameManager : MonoBehaviour
     public void GameClear()
     {
         _isPlayerCamera = false;
+        AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.GameClear01, 3, _player.transform);
         _inGameBase.OnGameClear();
     }
 

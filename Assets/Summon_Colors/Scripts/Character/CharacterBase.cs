@@ -65,10 +65,8 @@ public class CharacterBase : MonoBehaviour
     }
     public virtual int Damaged(int attack, int shock = 0,int hate = 0, CharacterBase attacker = null)
     {
-        if(!_isActive || _isInvincible)
-        {
-            return 0;
-        }
+        if(!_isActive || _isInvincible){ return 0; }
+        if (InGameManager.Instance.IsClear || Hp <= 0) { return -1; }
         int damage = (int)(attack * (1.0f - Vitality * 0.01f));
         if (damage > 0)
         {

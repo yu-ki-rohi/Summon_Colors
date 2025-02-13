@@ -78,7 +78,7 @@ public class Explosion : MonoBehaviour
             if (other.tag == "Player" || other.tag == "Summoned")
             {
                 int damage = HitOther(other);
-                if (damage > 0)
+                if (damage != 0)
                 {
                     HitEffectManager.Instance.Play(HitEffectManager.Type.Fire, other.ClosestPointOnBounds(transform.position));
                 }
@@ -89,6 +89,7 @@ public class Explosion : MonoBehaviour
             if((other.tag == "Enemy"))
             {
                 HitOther(other);
+                HitEffectManager.Instance.Play(HitEffectManager.Type.Darkness, other.ClosestPointOnBounds(transform.position));
             }
         }
     }

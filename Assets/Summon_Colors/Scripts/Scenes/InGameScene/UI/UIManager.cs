@@ -106,6 +106,15 @@ public class UIManager : MonoBehaviour
     {
         _playerIcon.Initialize();
         StartCoroutine(ViewFPS());
+#if UNITY_EDITOR
+
+#else
+        _phisicsTime.enabled = false;
+        _scriptsTime.enabled = false;
+        _otherTime.enabled = false;
+        _fps.enabled = false;
+#endif
+
     }
     private void FixedUpdate()
     {

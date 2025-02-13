@@ -36,7 +36,7 @@ public class EnemyAction : MonoBehaviour
             if (character != null)
             {
                 int damage = character.Damaged(_enemyBase.Attack, _enemyBase.Break, _enemyBase.Appearance, _enemyBase);
-                if (damage > 0)
+                if (damage != 0)
                 {
                     HitEffectManager.Instance.Play(HitEffectManager.Type.Hit, collider.ClosestPointOnBounds(transform.position));
                 }
@@ -62,7 +62,7 @@ public class EnemyAction : MonoBehaviour
         //_bodyCollider.enabled = true;
     }
 
-    public void FinishAction()
+    public virtual void FinishAction()
     {
         _state = State.Combat;
         _agent.updateRotation = true;

@@ -58,6 +58,7 @@ public class DemonAction : EnemyAction
     private int _power = 0;
     private AudioSource _audioSource;
     private Vector3 _targetPosition = Vector3.zero;
+    private bool _stateLock = false;
     public void CreateVolcanicBomb()
     {
         GameObject volcanicBomb = Instantiate(_volcanicBomb, _firePosition.position, Quaternion.identity);
@@ -75,7 +76,6 @@ public class DemonAction : EnemyAction
             float sqrVelocity = (-Physics.gravity.y * (tan * tan + 1) * sqrDistance) /
                     (2.0f * (height + tan * Mathf.Sqrt(sqrDistance)));
             float firePower = rigidbody.mass * Mathf.Sqrt(sqrVelocity);
-            Debug.Log(firePower);
             rigidbody.AddForce(_firePosition.forward * firePower, ForceMode.Impulse);
         }
         if (volcanicBomb.TryGetComponent<VolcanicBomb>(out var projectile))
@@ -109,6 +109,21 @@ public class DemonAction : EnemyAction
             embers.Initialize((int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Landing_Remain)));
         }
         AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Rush, transform);
+    }
+
+    public void IgnitTacckle()
+    {
+        if(_enemyBase.TargetCharacter == null) { return; }
+        _state = State.Action;
+        NavMeshHit navMeshHit;
+        if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
+                    out navMeshHit, 10.0f, NavMesh.AllAreas))
+        {
+            _rushVector = navMeshHit.position;
+            _agent.updateRotation = false;
+            _animator.SetTrigger("Explosion");
+            _stateLock = true;
+        }
     }
 
     public void PlayFootStep01()
@@ -197,6 +212,7 @@ public class DemonAction : EnemyAction
         {
             col.enabled = true;
         }
+        _state = State.Action;
         _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Tail));
         AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.TailAttack, transform);
     }
@@ -218,7 +234,7 @@ public class DemonAction : EnemyAction
     {
         _agent.speed = _enemyBase.Agility * _explosionTackleSpeed;
         _agent.velocity = (_rushVector- transform.position).normalized * _agent.speed * 0.5f;
-
+        _stateLock = false;
         _agent.SetDestination(_rushVector);
         foreach (Collider col in _rushColliders)
         {
@@ -268,6 +284,15 @@ public class DemonAction : EnemyAction
         StopSound();
         _agent.updateRotation = true;
         _power = 0;
+    }
+
+    public override void FinishAction()
+    {
+        base.FinishAction();
+        if(_stateLock)
+        {
+            IgnitTacckle();
+        }
     }
 
     public override void Attack(Collider collider)
@@ -402,6 +427,7 @@ public class DemonAction : EnemyAction
                 break;
             case 1:
                 _animator.SetTrigger("Breath");
+                AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Growl, transform);
                 _agent.updateRotation = false;
                 break;
             case 2:
@@ -411,6 +437,7 @@ public class DemonAction : EnemyAction
                 {
                     _rushVector = navMeshHit.position;
                     _animator.SetTrigger("Rush");
+                    AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Growl, transform);
                 }
                 else
                 {
@@ -418,6 +445,11 @@ public class DemonAction : EnemyAction
                 }
                 break;
             case 3:
+                if (_enemyBase.Hp > _enemyBase.MaxHp * 0.5f)
+                {
+                    SelectFarAttack(dot);
+                    break;
+                }
                 if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
                     out navMeshHit, 10.0f, NavMesh.AllAreas))
                 {
@@ -465,6 +497,7 @@ public class DemonAction : EnemyAction
                 break;
             case 2:
                 _animator.SetTrigger("Breath");
+                AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Growl, transform);
                 _agent.updateRotation = false;
                 break;
             case 3:
@@ -472,12 +505,18 @@ public class DemonAction : EnemyAction
                 _agent.updateRotation = false;
                 break;
             case 4:
+                if(_enemyBase.Hp > _enemyBase.MaxHp * 0.5f)
+                {
+                    SelectNearAttack(dot);
+                    break;
+                }
                 if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position +
                     (_enemyBase.TargetCharacter.GetNearestPart(this.transform).position - transform.position).normalized * 12.0f,
                     out navMeshHit, 10.0f, NavMesh.AllAreas))
                 {
                     _rushVector = navMeshHit.position;
                     _animator.SetTrigger("Rush");
+                    AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Growl, transform);
                 }
                 else
                 {

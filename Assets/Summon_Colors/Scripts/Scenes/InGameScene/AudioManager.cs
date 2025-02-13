@@ -63,6 +63,7 @@ public class AudioManager : MonoBehaviour
         TailAttack,
         Walk01,
         Walk02,
+        Growl,
         Breath,
         FireBall_Prepare,
         FireBall,
@@ -70,7 +71,8 @@ public class AudioManager : MonoBehaviour
         Tackle_Prepare02,
         Tackle_Prepare03,
         Rush,
-        Roar
+        Roar,
+        Die
     }
 
     public enum Voice

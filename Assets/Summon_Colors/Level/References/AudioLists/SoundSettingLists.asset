@@ -16,7 +16,7 @@ MonoBehaviour:
   - Name: Player
     Settinglist:
     - Name: Vacuum
-      Clip: {fileID: 8300000, guid: 6b892a44e49c76e4d8e4d4139c1055cb, type: 3}
+      Clip: {fileID: 8300000, guid: 841692a26ea9a504b9b9e7e31ccb6c49, type: 3}
       IsLoop: 1
       Volume: 0.5
       MinDistance: 1
@@ -77,6 +77,12 @@ MonoBehaviour:
       Volume: 0.7
       MinDistance: 5
       MaxDistance: 50
+    - Name: Growl
+      Clip: {fileID: 8300000, guid: 9763dfcc0f04bfd40ba8cc0a102ffe91, type: 3}
+      IsLoop: 0
+      Volume: 0.7
+      MinDistance: 20
+      MaxDistance: 80
     - Name: Breath
       Clip: {fileID: 8300000, guid: d90a269a5e916574abd732e1e41678e8, type: 3}
       IsLoop: 1
@@ -98,9 +104,9 @@ MonoBehaviour:
     - Name: Tackle Prepare01
       Clip: {fileID: 8300000, guid: 8cd854d788981164d9cbf007c6274627, type: 3}
       IsLoop: 0
-      Volume: 0.65
+      Volume: 0.7
       MinDistance: 15
-      MaxDistance: 60
+      MaxDistance: 150
     - Name: Tackle Prepare02
       Clip: {fileID: 8300000, guid: 6dc930d25296960478ddfff3151cf11d, type: 3}
       IsLoop: 0
@@ -124,4 +130,10 @@ MonoBehaviour:
       IsLoop: 0
       Volume: 0.85
       MinDistance: 20
+      MaxDistance: 80
+    - Name: Die
+      Clip: {fileID: 8300000, guid: ea0a6aaa676bd8a4ba431f905c224104, type: 3}
+      IsLoop: 0
+      Volume: 0.35
+      MinDistance: 30
       MaxDistance: 80

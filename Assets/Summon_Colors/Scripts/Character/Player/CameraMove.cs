@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
 
 public class CameraMove : MonoBehaviour
@@ -176,17 +177,23 @@ public class CameraMove : MonoBehaviour
             Vector3.forward * 0.8f +
             Vector3.up * 8.5f;
         yield return new WaitForSeconds(3.2f);
+
         _virtualCameraTransposer.m_FollowOffset =
             Vector3.forward * 10.0f +
             Vector3.up * -3.5f;
         yield return new WaitForSeconds(2.2f);
+
         _virtualCameraTransposer.m_FollowOffset =
             Vector3.forward * -8.0f +
             Vector3.up * 8.0f +
             Vector3.right * -4.0f;
         yield return new WaitForSeconds(3.5f);
+
         _virtualCamera.LookAt = _player;
         _virtualCamera.Follow = _player;
         InGameManager.Instance.StopEventCamera();
+        yield return new WaitForSeconds(10.0f);
+
+        SceneManager.LoadScene("BossBattleScene");
     }
 }

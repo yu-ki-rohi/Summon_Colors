@@ -11,6 +11,9 @@ public class InGameBase
     public SummonedPool[] SummonedPools;
     public UIManager UIManager;
     public CameraMove _cameraMove;
+    private bool _isClear = false;
+
+    public bool IsClear { get { return _isClear; } }
 
     public int GetSummonedsNum()
     {
@@ -30,6 +33,7 @@ public class InGameBase
     public virtual void OnGameClear()
     {
         _cameraMove.StartGameClearCamera();
+        _isClear = true;
     }
 
     public virtual void OnGameOver()
@@ -54,10 +58,15 @@ public class InGameBase
 
     public virtual void Update(float elapsedTime)
     {
-        if( GameTimer != null )
-        {
-            UIManager.ReflectTime(GameTimer.CurrentTime);
-            GameTimer.CountDown(elapsedTime);
-        }
+
+        if(IsClear) { return; }
+        CountTime(elapsedTime);
+    }
+
+    private void CountTime(float elapsedTime)
+    {
+        if (GameTimer == null) { return;  }
+        UIManager.ReflectTime(GameTimer.CurrentTime);
+        GameTimer.CountDown(elapsedTime);
     }
 }

@@ -25,7 +25,7 @@ public class ThrowingObject : Projectiles
             if (characterBase != null)
             {
                 int damage = characterBase.Damaged(_power, _break, _hate, _character);
-                if(damage > 0)
+                if(damage != 0)
                 {
                     HitEffectManager.Instance.Play(HitEffectManager.Type.Hit, transform.position);
                 }

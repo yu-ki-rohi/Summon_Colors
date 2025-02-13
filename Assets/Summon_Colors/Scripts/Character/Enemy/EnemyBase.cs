@@ -27,6 +27,7 @@ public class EnemyBase : NPCBase
 
     public override int Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
+        if (Hp <= 0) { return -1; }
         // プレイヤーに個別の処理を入れる場合
         if (attacker == _player)
         {

@@ -104,21 +104,7 @@ public class InGameManager : MonoBehaviour
     {
         _playerInput.actions.FindActionMap("Menu").Disable();
         Time.timeScale = 1;
-        switch (_continueIndex)
-        {
-            case 0:
-                _player.Heal(10000);
-                _inGameBase.Continue();
-                _inGameBase.UIManager.ChangeAlpha(0);
-                _inGameBase.UIManager.ChoiceView(false);
-                break;
-            case 1:
-                SceneManager.LoadScene("BossBattleScene");
-                break;
-            case 2:
-                SceneManager.LoadScene(2);
-                break;
-        }
+        StartCoroutine(ContinueBehavior());
     }
 
     #region --- Data 登録 ---
@@ -193,12 +179,14 @@ public class InGameManager : MonoBehaviour
     }
     private IEnumerator ContinueBehavior()
     {
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(1.0f);
+        Time.timeScale = 1;
         _playerInput.actions.FindActionMap("Player").Enable();
         switch (_continueIndex)
         {
             case 0:
                 _player.Heal(10000);
+                _player.StartInvincible(2.0f);
                 _inGameBase.Continue();
                 _inGameBase.UIManager.ChangeAlpha(0);
                 _inGameBase.UIManager.ChoiceView(false);

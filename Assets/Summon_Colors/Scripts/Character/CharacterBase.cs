@@ -104,6 +104,13 @@ public class CharacterBase : MonoBehaviour
         _isInvincible = true;
     }
 
+    public void StartInvincible(float time)
+    {
+        _isInvincible = true;
+        _invincibleTimer = new Timer(FinishInvincible, time);
+    }
+
+
     public void FinishInvincible()
     {
         _isInvincible = false;

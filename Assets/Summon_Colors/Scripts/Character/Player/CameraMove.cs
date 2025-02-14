@@ -204,5 +204,6 @@ public class CameraMove : MonoBehaviour
         _virtualCamera.gameObject.SetActive(true);
         yield return new WaitForSeconds(1.6f);
         InGameManager.Instance.StopEventCamera();
+        InGameManager.Instance.ViewButtonDisplay();
     }
 }

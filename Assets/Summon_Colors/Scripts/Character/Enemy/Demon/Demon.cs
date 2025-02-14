@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class Demon : EnemyBase
 {
+
+    
     public override int Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
         int beforeHp = Hp;
         int damage = base.Damaged(attack, shock, hate, attacker);
         float changeBorder = 0.5f;
-        int judgeChange = (int)((Hp - MaxHp * changeBorder) * (beforeHp - MaxHp * changeBorder));
-        if (judgeChange < 0 && _demonAction != null)
+        int judgeChange = (Hp - (int)(MaxHp * changeBorder)) * (beforeHp - (int)(MaxHp * changeBorder));
+        if (judgeChange <= 0 && _demonAction != null)
         {
-            _demonAction.IgnitTacckle();
+            Debug.Log("Ignit");
+            _demonAction.IgnitEventMove();
         }
         return damage;
     }

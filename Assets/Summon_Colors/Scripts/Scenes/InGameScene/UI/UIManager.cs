@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private FadePanel _fadePanel;
     [SerializeField] private TextMeshProUGUI _enemyNum;
     [SerializeField] private GameObject _scoreSheet;
+    [SerializeField] private GameObject _rankingSheet;
+    [SerializeField] private Image[] _buttonDisplays;
     [SerializeField] private TextMeshProUGUI _phisicsTime;
     [SerializeField] private TextMeshProUGUI _scriptsTime;
     [SerializeField] private TextMeshProUGUI _otherTime;
@@ -134,6 +136,22 @@ public class UIManager : MonoBehaviour
         _scoreSheet.SetActive(true);
     }
     #endregion
+
+    #region--- Ranking ---
+    public void ViewRanking()
+    {
+        _rankingSheet.SetActive(true);
+    }
+    #endregion
+
+
+    public void SwitchViewButtonDisplay(bool isView)
+    {
+        foreach(var bd in _buttonDisplays)
+        {
+            bd.enabled = isView;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()

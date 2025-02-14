@@ -39,6 +39,7 @@ public class PlayerActionController : MonoBehaviour
     private bool _isLookAtCameraTarget = false;
     private AudioSource _audioSource;
 
+    public ColorElements.ColorType Color { get { return _summon.Color; } }
     public bool IsAbsorbing()
     {
         return _state == State.Absorb;
@@ -404,6 +405,11 @@ public class PlayerActionController : MonoBehaviour
                 transform.position =_initTransform.position;
             }
             _rigidbody.velocity = Vector3.zero;
+        }
+        if(InGameManager.Instance.IsGameOver)
+        {
+            _isLookAtCameraTarget = false;
+            _canMove = true;
         }
     }
 

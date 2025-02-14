@@ -14,6 +14,10 @@ public class InGameBase
     public CameraMove CameraMove;
 
     public TextMeshProUGUI[] _scoreTexts;
+    public TextMeshProUGUI[] _rankingTexts;
+    public TextMeshProUGUI SummonedNumText;
+
+    public ShaderManager ShaderManager;
     private bool _isClear = false;
     private bool _isGameOver = false;
     private int _enemyNum = 0;
@@ -21,8 +25,10 @@ public class InGameBase
     private int _enegyAmount = 0;
     private int _damageAmount = 0;
     private int _continueNum = 0;
-
+    private Ranking _ranking;
+    private int _score;
  
+
     public bool IsClear { get { return _isClear; } }
     public bool IsGameOver { get { return _isGameOver; } }
     public int GetActiveSummonedsNum()
@@ -47,6 +53,11 @@ public class InGameBase
     public void SetSummonedPools(SummonedPool[] pools)
     {
         SummonedPools = pools;
+    }
+
+    public void SetSummonedNumText(ColorElements.ColorType  color)
+    {
+        SummonedNumText.text = SummonedPools[(int)color].GetActiveNum().ToString();
     }
 
     public void AddEnemyNum()
@@ -107,6 +118,23 @@ public class InGameBase
             _scoreTexts[i].text = scores[i].ToString();
             _scoreTexts[i].enabled = false;
         }
+        _score = scores[scores.Length - 1];
+    }
+
+    public void ViewRanking()
+    {
+        UIManager.ViewRanking();
+        _ranking = new Ranking();
+        _ranking.GetRanking();
+        _ranking.SetRanking(_score);
+        int[] rankingValue = _ranking.RankingValue;
+        if(rankingValue.Length != _rankingTexts.Length -1) { return; }
+        for(int i = 0;i < rankingValue.Length;i++)
+        {
+            _rankingTexts[i].text = rankingValue[i].ToString();
+        }
+        _rankingTexts[_rankingTexts.Length - 1].text = _score.ToString();
+
     }
 
     public virtual void OnGameOver()
@@ -125,6 +153,7 @@ public class InGameBase
         GameTimer = new Timer(null, -1);
         UIManager.ChangeAlpha(0);
         UIManager.ChoiceView(false);
+        ShaderManager.SetIntensity(Vector3.zero, 0);
     }
 
 

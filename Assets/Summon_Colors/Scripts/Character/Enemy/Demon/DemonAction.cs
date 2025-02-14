@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering.LookDev;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public class DemonAction : EnemyAction
@@ -49,6 +51,8 @@ public class DemonAction : EnemyAction
     [SerializeField] private float _rushSpeed = 2.0f;
     [SerializeField] private float _explosionTackleSpeed = 60.0f;
     [SerializeField] private float _breathCoolTime = 0.3f;
+    [SerializeField] private Material _sky01;
+    [SerializeField] private Material _sky02;
 
     private float _breathTimer = 0.0f;
     private Vector3 _rushVector = Vector3.zero;
@@ -59,6 +63,45 @@ public class DemonAction : EnemyAction
     private AudioSource _audioSource;
     private Vector3 _targetPosition = Vector3.zero;
     private bool _stateLock = false;
+    private float _red = 0.5f;
+    private float _green = 0.1f;
+    private float _blue = 0.1f;
+    public void IgnitEventMove()
+    {
+        _state = State.Action;
+        _animator.SetTrigger("Event");
+    }
+
+    public void ChangeSky()
+    {
+        if (_sky01 != null && !InGameManager.Instance.IsEvent)
+        {
+            Debug.Log("Called!");
+#if false
+            RenderSettings.skybox = _sky01;
+#else
+            SetSkyBox(_sky01);
+#endif
+        }
+        IgnitTacckle();
+    }
+    public void StartAmbientChange()
+    {
+        StartCoroutine(ChangeAmbient());
+    }
+    public void ChangeSkyOnDie()
+    {
+        if (_sky02 != null)
+        {
+            Debug.Log("Called!!");
+#if true
+            RenderSettings.skybox = _sky02;
+#else
+            SetSkyBox(_sky02);
+#endif
+        }
+    }
+
     public void CreateVolcanicBomb()
     {
         GameObject volcanicBomb = Instantiate(_volcanicBomb, _firePosition.position, Quaternion.identity);
@@ -549,6 +592,44 @@ public class DemonAction : EnemyAction
         {
             _audioSource.Stop();
             _audioSource = null;
+        }
+    }
+    private void SetSkyBox(Material sky)
+    {
+        Debug.Log("Change!");
+        // 環境光のライティング設定
+        // ソースをSkyboxに変更する
+        RenderSettings.ambientMode = AmbientMode.Skybox;
+        // スカイボックスのマテリアルを設定する
+        RenderSettings.skybox = sky;
+        // 光の強度を1に設定する
+        RenderSettings.ambientIntensity = 1.0f;
+
+        //// 環境光の反射設定
+        //// ソースをSkyboxに変更する
+        //RenderSettings.defaultReflectionMode = DefaultReflectionMode.Skybox;
+        //// 解像度を設定する
+        //RenderSettings.defaultReflectionResolution = 128;
+        //// 反射の強度を1に設定する
+        //RenderSettings.reflectionIntensity = 1.0f;
+        //// 反射の回数を1に設定する
+        //RenderSettings.reflectionBounces = 1;
+
+        // 環境光の更新(Skyboxマテリアル更新のため）
+        DynamicGI.UpdateEnvironment();
+
+    }
+    private IEnumerator ChangeAmbient()
+    {
+        RenderSettings.ambientMode = AmbientMode.Flat;
+        while (_blue < 0.65f)
+        {
+            _blue += 0.05f;
+            _green += 0.03f;
+            _red -= 0.005f;
+            RenderSettings.ambientLight = new Color(_red, _green, _blue);
+            RenderSettings.defaultReflectionMode = DefaultReflectionMode.Custom;
+            yield return new WaitForSeconds(0.03f);
         }
     }
 }

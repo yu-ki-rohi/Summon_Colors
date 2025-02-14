@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class StageSelectSceneManager : MonoBehaviour
 {
@@ -11,8 +12,10 @@ public class StageSelectSceneManager : MonoBehaviour
     [SerializeField] private AudioClip[] _clips;
     [SerializeField] private FadePanel _fadePanel;
     [SerializeField] private AudioSource _bgmPlayer;
+    [SerializeField] private TextMeshProUGUI[] _rankingTexts;
     private int _selectedIndex = 0;
     private bool _lockControll = false;
+    private Ranking _ranking;
 
     public void OnUp(InputAction.CallbackContext context)
     {
@@ -76,6 +79,7 @@ public class StageSelectSceneManager : MonoBehaviour
     {
         _choicesMenu.ChoiceCursor(_selectedIndex);
         _fadePanel.ChangeAlpha(0.0f);
+        SetRankingText();
     }
 
     // Update is called once per frame
@@ -83,6 +87,18 @@ public class StageSelectSceneManager : MonoBehaviour
     {
 
     }
+
+    private void SetRankingText()
+    {
+        _ranking = new Ranking();
+        _ranking.GetRanking();
+        int[] rankingValue = _ranking.RankingValue;
+        for(int i = 0; i < _rankingTexts.Length; i++)
+        {
+            _rankingTexts[i].text = rankingValue[i].ToString();
+        }
+    }
+
 
     private IEnumerator SelectedBehavior()
     {

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Switch;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
 
 public class InGameManager : MonoBehaviour
 {
@@ -58,6 +59,7 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private Type _type;
     [SerializeField] private GameObject Enemies;
+    [SerializeField] private Material _sky;
     private bool _isEvent = false;
     private bool _isPlayerCamera = true;
 
@@ -79,6 +81,10 @@ public class InGameManager : MonoBehaviour
         get { return _inGameBase.GetActiveSummonedsNum(); }
     }
 
+    public void ViewButtonDisplay()
+    {
+        _inGameBase.UIManager.SwitchViewButtonDisplay(true);
+    }
 
     public void GameOver()
     {
@@ -182,6 +188,33 @@ public class InGameManager : MonoBehaviour
     }
     #endregion
 
+    // https://bluebirdofoz.hatenablog.com/entry/2019/06/07/091715
+    private void SetSkyBox()
+    {
+        if (_sky == null) { return; }
+        
+        // 環境光のライティング設定
+        // ソースをSkyboxに変更する
+        RenderSettings.ambientMode = AmbientMode.Skybox;
+        // スカイボックスのマテリアルを設定する
+        RenderSettings.skybox = _sky;
+        // 光の強度を1に設定する
+        RenderSettings.ambientIntensity = 1.0f;
+
+        //// 環境光の反射設定
+        //// ソースをSkyboxに変更する
+        //RenderSettings.defaultReflectionMode = DefaultReflectionMode.Skybox;
+        //// 解像度を設定する
+        //RenderSettings.defaultReflectionResolution = 128;
+        //// 反射の強度を1に設定する
+        //RenderSettings.reflectionIntensity = 1.0f;
+        //// 反射の回数を1に設定する
+        //RenderSettings.reflectionBounces = 1;
+
+        // 環境光の更新(Skyboxマテリアル更新のため）
+        DynamicGI.UpdateEnvironment();
+
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -190,6 +223,7 @@ public class InGameManager : MonoBehaviour
         {
             _inGameBase.SetSummonedPools(_summon.SummonedPools);
         }
+        SetSkyBox();
         switch(_type)
         {
             case Type.Boss:
@@ -198,6 +232,7 @@ public class InGameManager : MonoBehaviour
                 _isEvent = true;
                 _isPlayerCamera = false;
                 _inGameBase.CameraMove.BossEventCameraMove();
+                _inGameBase.UIManager.SwitchViewButtonDisplay(false);
                 break;
             case Type.Enemy:
                 AudioManager.Instance.PlayMusic((int)AudioManager.Music.Enemy);
@@ -211,6 +246,7 @@ public class InGameManager : MonoBehaviour
     {
         if(_isEvent) { return; }
         _inGameBase.Update(Time.deltaTime);
+        _inGameBase.SetSummonedNumText(_summon.Color);
     }
 
     private void SetUpInAwake()
@@ -303,7 +339,9 @@ public class InGameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         _inGameBase.ViewScore();
         if (Enemies != null) {  Destroy(Enemies); }
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(5.0f);
+        _inGameBase.ViewRanking();
+        yield return new WaitForSeconds(1.5f);
         _playerInput.actions.FindActionMap("Menu").Enable();
     }
     private IEnumerator EnemyClearCoroutine()

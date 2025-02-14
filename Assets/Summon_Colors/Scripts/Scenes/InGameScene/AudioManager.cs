@@ -47,6 +47,15 @@ public class AudioManager : MonoBehaviour
     }
     #endregion
 
+    public enum Music
+    { 
+        Test,
+        Boss,
+        Enemy,
+        Clear,
+        Score
+    }
+
     public enum PlayerSound
     { 
         Vacuum,
@@ -73,6 +82,12 @@ public class AudioManager : MonoBehaviour
         Rush,
         Roar,
         Die
+    }
+
+    public enum SystemSound
+    {
+        Decide = 20,
+        Select
     }
 
     public enum Voice

@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerMove : MonoBehaviour
 {
     [SerializeField] private float _accelerationMagni;
-    [SerializeField] private GameObject _throwing;
+    [SerializeField] private GameObject[] _throwing;
     [SerializeField] private Transform _handTransform;
     private Player _player;
     private Vector3 _stick = Vector3.zero;
@@ -56,7 +56,8 @@ public class PlayerMove : MonoBehaviour
 
     public void ThrowItem()
     {
-        GameObject throwing = Instantiate(_throwing, _handTransform.position, Quaternion.identity);
+        int judge = Random.Range(0, _throwing.Length);
+        GameObject throwing = Instantiate(_throwing[judge], _handTransform.position, Quaternion.identity);
         if (throwing.TryGetComponent<ThrowingObject>(out var projectiles))
         {
             projectiles.Initialize(_player.Attack, _player.Break, _player.Appearance, _player);

@@ -80,14 +80,14 @@ MonoBehaviour:
     - Name: Growl
       Clip: {fileID: 8300000, guid: 9763dfcc0f04bfd40ba8cc0a102ffe91, type: 3}
       IsLoop: 0
-      Volume: 0.7
-      MinDistance: 20
+      Volume: 0.4
+      MinDistance: 10
       MaxDistance: 80
     - Name: Breath
       Clip: {fileID: 8300000, guid: d90a269a5e916574abd732e1e41678e8, type: 3}
       IsLoop: 1
       Volume: 0.7
-      MinDistance: 5
+      MinDistance: 10
       MaxDistance: 50
     - Name: Fire Ball Prepare
       Clip: {fileID: 8300000, guid: 1a157e80ff9a2eb4cb727c5639440afe, type: 3}
@@ -128,8 +128,8 @@ MonoBehaviour:
     - Name: Voice
       Clip: {fileID: 8300000, guid: 162f2798c9d764d4ab461724988d8dac, type: 3}
       IsLoop: 0
-      Volume: 0.85
-      MinDistance: 20
+      Volume: 0.95
+      MinDistance: 30
       MaxDistance: 80
     - Name: Die
       Clip: {fileID: 8300000, guid: ea0a6aaa676bd8a4ba431f905c224104, type: 3}
@@ -137,3 +137,17 @@ MonoBehaviour:
       Volume: 0.35
       MinDistance: 30
       MaxDistance: 80
+  - Name: System
+    Settinglist:
+    - Name: Decide
+      Clip: {fileID: 8300000, guid: 9d556855c7eecb1478b6d0d77a3c9b2c, type: 3}
+      IsLoop: 0
+      Volume: 0.5
+      MinDistance: 40
+      MaxDistance: 100
+    - Name: Select
+      Clip: {fileID: 8300000, guid: f531fe72fbcd555498ec3580d2d094b0, type: 3}
+      IsLoop: 0
+      Volume: 0.5
+      MinDistance: 40
+      MaxDistance: 100

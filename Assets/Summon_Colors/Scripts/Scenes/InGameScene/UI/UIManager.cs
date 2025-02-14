@@ -12,13 +12,21 @@ public class UIManager : MonoBehaviour
     [SerializeField] private SelectedColorDisplay _selectedColorDisplay;
     [SerializeField] private TextMeshProUGUI _timerText;
     [SerializeField] private ChoicesMenu _choicesMenu;
-    [SerializeField] private Image _blackOut;
+    [SerializeField] private FadePanel _fadePanel;
+    [SerializeField] private TextMeshProUGUI _enemyNum;
     [SerializeField] private TextMeshProUGUI _phisicsTime;
     [SerializeField] private TextMeshProUGUI _scriptsTime;
     [SerializeField] private TextMeshProUGUI _otherTime;
     [SerializeField] private TextMeshProUGUI _fps;
     int _countUpdate = 0;
     float _timer = 0;
+
+    public bool SetEnemyNum(int num)
+    {
+        if (_enemyNum == null) { return false; }
+        _enemyNum.text = num.ToString("00");
+        return false;
+    }
 
     #region--- Hit Point bar ---
     public void ReflectCurrentHp(float currentHp)
@@ -100,8 +108,12 @@ public class UIManager : MonoBehaviour
     #region--- Black Out ---
     public void ChangeAlpha(float alpha)
     {
-        alpha = Mathf.Clamp01(alpha);
-        _blackOut.color = new Color(0,0,0,alpha);
+        _fadePanel.ChangeAlpha(alpha);
+    }
+
+    public void ChangeColor(float red, float green, float blue)
+    {
+        _fadePanel.ChangeColor(red, green, blue);
     }
 
     #endregion

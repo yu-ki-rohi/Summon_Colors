@@ -503,6 +503,7 @@ public class DemonAction : EnemyAction
                 break;
             case 3:
                 _animator.SetTrigger("Tail");
+                AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Growl, transform);
                 _agent.updateRotation = false;
                 break;
             case 4:

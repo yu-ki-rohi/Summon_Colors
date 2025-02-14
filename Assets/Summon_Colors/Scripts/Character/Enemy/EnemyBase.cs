@@ -90,6 +90,7 @@ public class EnemyBase : NPCBase
     // Start is called before the first frame update
     protected override void Start()
     {
+        InGameManager.Instance.AddEnemy();
         if (_action == null)
         {
             _action = GetComponent<EnemyAction>();

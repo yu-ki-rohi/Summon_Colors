@@ -10,15 +10,16 @@ public class InGameBase
     public Timer GameTimer;
     public SummonedPool[] SummonedPools;
     public UIManager UIManager;
-    public CameraMove _cameraMove;
+    public CameraMove CameraMove;
     private bool _isClear = false;
     private bool _isPausing = false;
+    private int _enemyNum = 0;
     private int _defeatNum = 0;
     private int _enegyAmount = 0;
     private int _damageAmount = 0;
     private int _continueNum = 0;
 
-
+ 
     public bool IsClear { get { return _isClear; } }
 
     public int GetSummonedsNum()
@@ -36,9 +37,20 @@ public class InGameBase
         SummonedPools = pools;
     }
 
+    public void AddEnemyNum()
+    {
+        _enemyNum++;
+    }
+
     public void DefeatEnemy()
     {
         _defeatNum++;
+        int activeNum = _enemyNum - _defeatNum;
+        bool isEnemy = UIManager.SetEnemyNum(_enemyNum - _defeatNum);
+        if (isEnemy && activeNum == 0)
+        {
+            InGameManager.Instance.GameClear();
+        }
     }
 
     public void AbsorbColor(int energy)
@@ -58,7 +70,6 @@ public class InGameBase
 
     public virtual void OnGameClear()
     {
-        _cameraMove.StartGameClearCamera();
         _isClear = true;
     }
 

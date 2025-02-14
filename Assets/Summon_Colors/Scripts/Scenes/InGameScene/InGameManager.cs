@@ -47,10 +47,16 @@ public class InGameManager : MonoBehaviour
     }
     #endregion
 
+    private enum Type
+    { 
+        Boss,
+        Enemy
+    }
     [SerializeField] private InGameBase _inGameBase;
     [SerializeField] private Summon _summon;
     [SerializeField] private Player _player;
     [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private Type _type;
     private bool _isEvent = false;
     private bool _isPlayerCamera = true;
 
@@ -76,6 +82,7 @@ public class InGameManager : MonoBehaviour
     public void GameOver()
     {
         _inGameBase.OnGameOver();
+        AudioManager.Instance.StopMusic();
         StartCoroutine(GameOverTimeStop());
     }
 
@@ -83,8 +90,19 @@ public class InGameManager : MonoBehaviour
 
     public void GameClear()
     {
-        _isPlayerCamera = false;
+        
         AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.GameClear01, 3, _player.transform);
+        AudioManager.Instance.PlayMusic((int)AudioManager.Music.Clear);
+        switch (_type)
+        {
+            case Type.Boss:
+                _isPlayerCamera = false;
+                _inGameBase.CameraMove.StartGameClearCamera();
+                break;
+            case Type.Enemy:
+                
+                break;
+        }
         _inGameBase.OnGameClear();
     }
 
@@ -98,16 +116,22 @@ public class InGameManager : MonoBehaviour
         }
         _continueIndex %= CONTINUE_CHOICES;
         _inGameBase.UIManager.ChoiceScaling(_continueIndex);
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.SystemSound.Select, _player.transform);
     }
 
     public void ChoiceContinue()
     {
         _playerInput.actions.FindActionMap("Menu").Disable();
         Time.timeScale = 1;
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.SystemSound.Decide, _player.transform);
         StartCoroutine(ContinueBehavior());
     }
 
     #region --- Data 登録 ---
+    public void AddEnemy()
+    {
+        _inGameBase.AddEnemyNum();
+    }
     public void DefeatEnemy()
     {
         _inGameBase.DefeatEnemy();
@@ -132,7 +156,15 @@ public class InGameManager : MonoBehaviour
         {
             _inGameBase.SetSummonedPools(_summon.SummonedPools);
         }
-        AudioManager.Instance.PlayMusic(0);
+        switch(_type)
+        {
+            case Type.Boss:
+                AudioManager.Instance.PlayMusic((int)AudioManager.Music.Boss);
+                break;
+            case Type.Enemy:
+                AudioManager.Instance.PlayMusic((int)AudioManager.Music.Enemy);
+                break;
+        }
 
     }
 
@@ -190,6 +222,15 @@ public class InGameManager : MonoBehaviour
                 _inGameBase.Continue();
                 _inGameBase.UIManager.ChangeAlpha(0);
                 _inGameBase.UIManager.ChoiceView(false);
+                switch (_type)
+                {
+                    case Type.Boss:
+                        AudioManager.Instance.PlayMusic((int)AudioManager.Music.Boss);
+                        break;
+                    case Type.Enemy:
+                        AudioManager.Instance.PlayMusic((int)AudioManager.Music.Enemy);
+                        break;
+                }
                 break;
             case 1:
                 SceneManager.LoadScene("BossBattleScene");

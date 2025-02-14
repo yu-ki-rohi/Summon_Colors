@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ThrowingObject : Projectiles
 {
+    [SerializeField] private float _powerMagni;
     private int _break = 0;
     private int _hate = 0;
     private CharacterBase _character;
@@ -24,7 +25,7 @@ public class ThrowingObject : Projectiles
             CharacterBase characterBase = other.GetComponentInParent<CharacterBase>();
             if (characterBase != null)
             {
-                int damage = characterBase.Damaged(_power, _break, _hate, _character);
+                int damage = characterBase.Damaged((int)(_power * _powerMagni),(int)(_break * _powerMagni), (int)(_hate * _powerMagni), _character);
                 if(damage != 0)
                 {
                     HitEffectManager.Instance.Play(HitEffectManager.Type.Hit, transform.position);

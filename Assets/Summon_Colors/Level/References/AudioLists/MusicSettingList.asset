@@ -19,3 +19,27 @@ MonoBehaviour:
     Volume: 0.8
     MinDistance: 100
     MaxDistance: 1000
+  - Name: BassBattle
+    Clip: {fileID: 8300000, guid: 638a44d5779f78d44b7acf973256572d, type: 3}
+    IsLoop: 1
+    Volume: 0.8
+    MinDistance: 100
+    MaxDistance: 1000
+  - Name: EnemyBattle
+    Clip: {fileID: 8300000, guid: 25e292b07ce635c449c8bc9dc8c34d94, type: 3}
+    IsLoop: 1
+    Volume: 0.8
+    MinDistance: 100
+    MaxDistance: 1000
+  - Name: Clear
+    Clip: {fileID: 8300000, guid: 75a111af2297a38468f0fcc91ec91bd4, type: 3}
+    IsLoop: 0
+    Volume: 0.5
+    MinDistance: 100
+    MaxDistance: 1000
+  - Name: Score
+    Clip: {fileID: 8300000, guid: 3a5fbd45ef995f6438770a18cbd5e90f, type: 3}
+    IsLoop: 1
+    Volume: 0.8
+    MinDistance: 100
+    MaxDistance: 1000

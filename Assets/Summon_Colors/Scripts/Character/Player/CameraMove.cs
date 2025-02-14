@@ -183,6 +183,7 @@ public class CameraMove : MonoBehaviour
             Vector3.up * -3.5f;
         yield return new WaitForSeconds(2.2f);
 
+        AudioManager.Instance.PlayMusic((int)AudioManager.Music.Score);
         _virtualCameraTransposer.m_FollowOffset =
             Vector3.forward * -8.0f +
             Vector3.up * 8.0f +

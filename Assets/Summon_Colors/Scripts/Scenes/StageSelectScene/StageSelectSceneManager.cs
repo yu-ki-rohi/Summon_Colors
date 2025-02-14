@@ -9,6 +9,8 @@ public class StageSelectSceneManager : MonoBehaviour
     [SerializeField] private ChoicesMenu _choicesMenu;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip[] _clips;
+    [SerializeField] private FadePanel _fadePanel;
+    [SerializeField] private AudioSource _bgmPlayer;
     private int _selectedIndex = 0;
     private bool _lockControll = false;
 
@@ -23,6 +25,7 @@ public class StageSelectSceneManager : MonoBehaviour
                 _selectedIndex = 0;
             }
             _choicesMenu.ChoiceCursor(_selectedIndex);
+            _audioSource.PlayOneShot(_clips[1]);
         }
         else if (context.canceled)
         {
@@ -41,6 +44,7 @@ public class StageSelectSceneManager : MonoBehaviour
                 _selectedIndex = 2;
             }
             _choicesMenu.ChoiceCursor(_selectedIndex);
+            _audioSource.PlayOneShot(_clips[1]);
         }
         else if (context.canceled)
         {
@@ -58,6 +62,7 @@ public class StageSelectSceneManager : MonoBehaviour
             Animator animator = _choicesMenu.GetCursorAnimator(_selectedIndex);
             animator.SetTrigger("OnDecide");
             _audioSource.PlayOneShot(_clips[0]);
+            _bgmPlayer.Stop();
             StartCoroutine(SelectedBehavior());
         }
         else if (context.canceled)
@@ -70,6 +75,7 @@ public class StageSelectSceneManager : MonoBehaviour
     void Start()
     {
         _choicesMenu.ChoiceCursor(_selectedIndex);
+        _fadePanel.ChangeAlpha(0.0f);
     }
 
     // Update is called once per frame
@@ -81,6 +87,11 @@ public class StageSelectSceneManager : MonoBehaviour
     private IEnumerator SelectedBehavior()
     {
         yield return new WaitForSeconds(0.8f);
+        while (_fadePanel.Alpha < 1.0f)
+        {
+            _fadePanel.ChangeAlpha(_fadePanel.Alpha + 0.1f);
+            yield return new WaitForSeconds(0.03f);
+        }
         switch (_selectedIndex)
         {
             case 0:

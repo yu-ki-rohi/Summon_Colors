@@ -9,7 +9,14 @@ public class MenuController : MonoBehaviour
     {
         if (context.performed)
         {
-            InGameManager.Instance.SetMenuIndex(-1);
+            if (InGameManager.Instance.IsClear)
+            {
+
+            }
+            else
+            {
+                InGameManager.Instance.SetMenuIndex(-1);
+            }
         }
         else if (context.canceled)
         {
@@ -21,7 +28,14 @@ public class MenuController : MonoBehaviour
     {
         if (context.performed)
         {
-            InGameManager.Instance.SetMenuIndex(1);
+            if (InGameManager.Instance.IsClear)
+            {
+
+            }
+            else
+            {
+                InGameManager.Instance.SetMenuIndex(1);
+            }
         }
         else if (context.canceled)
         {
@@ -57,7 +71,14 @@ public class MenuController : MonoBehaviour
     {
         if (context.performed)
         {
-            InGameManager.Instance.ChoiceContinue();
+            if(InGameManager.Instance.IsClear)
+            {
+                InGameManager.Instance.FinishBattleScene();
+            }
+            else
+            {
+                InGameManager.Instance.ChoiceContinue();
+            }
         }
         else if (context.canceled)
         {

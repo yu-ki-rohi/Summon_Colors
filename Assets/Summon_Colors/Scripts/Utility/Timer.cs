@@ -27,14 +27,21 @@ public class Timer
 
     public float CountUp(float deltaTime)
     {
-        if(_timer > Time)
+        if (_behavior == null || Time < 0.0f)
         {
-            _behavior();
-            _timer = 0.0f;
+            _timer += deltaTime;
         }
         else
         {
-            _timer += deltaTime;
+            if (_timer > Time)
+            {
+                _behavior();
+                _timer = 0.0f;
+            }
+            else
+            {
+                _timer += deltaTime;
+            }
         }
         return _timer;
     }

@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private ChoicesMenu _choicesMenu;
     [SerializeField] private FadePanel _fadePanel;
     [SerializeField] private TextMeshProUGUI _enemyNum;
+    [SerializeField] private GameObject _scoreSheet;
     [SerializeField] private TextMeshProUGUI _phisicsTime;
     [SerializeField] private TextMeshProUGUI _scriptsTime;
     [SerializeField] private TextMeshProUGUI _otherTime;
@@ -21,12 +22,7 @@ public class UIManager : MonoBehaviour
     int _countUpdate = 0;
     float _timer = 0;
 
-    public bool SetEnemyNum(int num)
-    {
-        if (_enemyNum == null) { return false; }
-        _enemyNum.text = num.ToString("00");
-        return false;
-    }
+   
 
     #region--- Hit Point bar ---
     public void ReflectCurrentHp(float currentHp)
@@ -104,8 +100,22 @@ public class UIManager : MonoBehaviour
         _choicesMenu.View(flag, index);
     }
     #endregion
-    
+
+    #region --- Enemy Num ---
+    public bool SetEnemyNum(int num)
+    {
+        if (_enemyNum == null) { return false; }
+        _enemyNum.text = num.ToString("00");
+        return true;
+    }
+    #endregion
+
     #region--- Black Out ---
+
+    public float GetFadeAlpha()
+    {
+        return _fadePanel.Alpha;
+    }
     public void ChangeAlpha(float alpha)
     {
         _fadePanel.ChangeAlpha(alpha);
@@ -116,6 +126,13 @@ public class UIManager : MonoBehaviour
         _fadePanel.ChangeColor(red, green, blue);
     }
 
+    #endregion
+
+    #region--- Score ---
+    public void ViewScore()
+    {
+        _scoreSheet.SetActive(true);
+    }
     #endregion
 
     // Start is called before the first frame update

@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Summon_Colors/Level/Scenes/EndingMovieScene.unity
     guid: bdb60abd3c2b72a46887ada9e59c4a7c
+  - enabled: 1
+    path: Assets/Summon_Colors/Level/Scenes/SampleScene/EnemyBattleScene.unity
+    guid: 888af49ae1a858747aa5a900872445a4
   m_configObjects: {}

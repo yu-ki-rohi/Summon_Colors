@@ -53,7 +53,8 @@ MonoBehaviour:
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
   - {fileID: -1878332245247344467}
-  m_RendererFeatureMap: adc0de57c6d2eee5
+  - {fileID: 8453601571918449647}
+  m_RendererFeatureMap: adc0de57c6d2eee5ef0be22ed7395175
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -96,3 +97,23 @@ MonoBehaviour:
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &8453601571918449647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de534044c7729644e896d657084404e8, type: 3}
+  m_Name: RadialBlurFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  _parameters:
+    intensity: 4.97308e-40
+    sampleCount: 3
+    radialCenter: {x: 0.8320189, y: 0.7226419}
+    useDither: 1
+    blurShader: {fileID: 4800000, guid: bf7e910650f37c74eaeedf43d0193ac6, type: 3}
+  _renderPassEvent: 550

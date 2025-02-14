@@ -57,6 +57,7 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private Player _player;
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private Type _type;
+    [SerializeField] private GameObject Enemies;
     private bool _isEvent = false;
     private bool _isPlayerCamera = true;
 
@@ -75,7 +76,7 @@ public class InGameManager : MonoBehaviour
 
     public int ActiveSummonedNum
     {
-        get { return _inGameBase.GetSummonedsNum(); }
+        get { return _inGameBase.GetActiveSummonedsNum(); }
     }
 
 
@@ -93,14 +94,16 @@ public class InGameManager : MonoBehaviour
         
         AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.GameClear01, 3, _player.transform);
         AudioManager.Instance.PlayMusic((int)AudioManager.Music.Clear);
+        _inGameBase.UIManager.ChangeColor(1,1,1);
         switch (_type)
         {
             case Type.Boss:
                 _isPlayerCamera = false;
                 _inGameBase.CameraMove.StartGameClearCamera();
+                StartCoroutine(BossClearCoroutine());
                 break;
             case Type.Enemy:
-                
+                StartCoroutine(EnemyClearCoroutine());
                 break;
         }
         _inGameBase.OnGameClear();
@@ -125,6 +128,12 @@ public class InGameManager : MonoBehaviour
         Time.timeScale = 1;
         AudioManager.Instance.PlaySoundOneShot((int)AudioManager.SystemSound.Decide, _player.transform);
         StartCoroutine(ContinueBehavior());
+    }
+
+    public void FinishBattleScene()
+    {
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.SystemSound.Decide, _player.transform);
+        SceneManager.LoadScene(4);
     }
 
     #region --- Data 登録 ---
@@ -233,11 +242,48 @@ public class InGameManager : MonoBehaviour
                 }
                 break;
             case 1:
-                SceneManager.LoadScene("BossBattleScene");
+                switch (_type)
+                {
+                    case Type.Boss:
+                        SceneManager.LoadScene(3);
+                        break;
+                    case Type.Enemy:
+                        SceneManager.LoadScene(5);
+                        break;
+                }
                 break;
             case 2:
                 SceneManager.LoadScene(2);
                 break;
         }
+    }
+
+    private IEnumerator BossClearCoroutine()
+    {
+
+        yield return new WaitForSeconds(20.0f);
+        while (_inGameBase.UIManager.GetFadeAlpha() < 1.0f)
+        {
+            _inGameBase.UIManager.ChangeAlpha(_inGameBase.UIManager.GetFadeAlpha() + 0.1f);
+            yield return new WaitForSeconds(0.03f);
+        }
+        _playerInput.actions.FindActionMap("Player").Disable();
+        yield return new WaitForSeconds(0.5f);
+        _inGameBase.ViewScore();
+        if (Enemies != null) {  Destroy(Enemies); }
+        yield return new WaitForSeconds(3.0f);
+        _playerInput.actions.FindActionMap("Menu").Enable();
+    }
+    private IEnumerator EnemyClearCoroutine()
+    {
+        yield return new WaitForSeconds(5.5f);
+        AudioManager.Instance.PlayMusic((int)AudioManager.Music.Score);
+        yield return new WaitForSeconds(8.0f);
+        while (_inGameBase.UIManager.GetFadeAlpha() < 1.0f)
+        {
+            _inGameBase.UIManager.ChangeAlpha(_inGameBase.UIManager.GetFadeAlpha() + 0.1f);
+            yield return new WaitForSeconds(0.03f);
+        }
+        SceneManager.LoadScene(2);
     }
 }

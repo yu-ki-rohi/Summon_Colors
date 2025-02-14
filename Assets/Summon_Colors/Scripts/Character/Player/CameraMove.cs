@@ -193,8 +193,5 @@ public class CameraMove : MonoBehaviour
         _virtualCamera.LookAt = _player;
         _virtualCamera.Follow = _player;
         InGameManager.Instance.StopEventCamera();
-        yield return new WaitForSeconds(10.0f);
-
-        SceneManager.LoadScene(4);
     }
 }

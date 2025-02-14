@@ -82,7 +82,7 @@ public class TitleSceneManager : MonoBehaviour
             _noisePlayer.volume == _firstNoiseVolume &&
             _noisePlayer.volume != 1.0f)
         {
-            _noisePlayer.volume = Mathf.Clamp01(_firstNoiseVolume * 1.2f);
+            _noisePlayer.volume = Mathf.Clamp01(_firstNoiseVolume * 1.5f);
             StartCoroutine(LoopTitle());
             Debug.Log("Start Loop Count");
         }

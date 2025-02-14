@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [Serializable]
@@ -11,6 +12,8 @@ public class InGameBase
     public SummonedPool[] SummonedPools;
     public UIManager UIManager;
     public CameraMove CameraMove;
+
+    public TextMeshProUGUI[] _scoreTexts;
     private bool _isClear = false;
     private bool _isPausing = false;
     private int _enemyNum = 0;
@@ -22,12 +25,21 @@ public class InGameBase
  
     public bool IsClear { get { return _isClear; } }
 
-    public int GetSummonedsNum()
+    public int GetActiveSummonedsNum()
     {
         int num = 0;
         foreach (var pool in SummonedPools)
         {
             num += pool.GetActiveNum();
+        }
+        return num;
+    }
+    public int GetSummonedsNum()
+    {
+        int num = 0;
+        foreach (var pool in SummonedPools)
+        {
+            num += pool.SummonedNum;
         }
         return num;
     }
@@ -40,6 +52,7 @@ public class InGameBase
     public void AddEnemyNum()
     {
         _enemyNum++;
+        UIManager.SetEnemyNum(_enemyNum - _defeatNum);
     }
 
     public void DefeatEnemy()
@@ -73,6 +86,28 @@ public class InGameBase
         _isClear = true;
     }
 
+    public void ViewScore()
+    {
+        UIManager.ViewScore();
+        int[] scores = new int[7];
+        scores[0] = 10000 + (_defeatNum - 1) * 500;
+        scores[1] = (int)(100 * (GameTime - GameTimer.CurrentTime));
+        scores[2] = 100 * GetSummonedsNum();
+        scores[3] = -_enegyAmount;
+        scores[4] = -_damageAmount;
+        scores[5] = -_continueNum * 2000;
+        for(int i = 0; i < scores.Length - 1; i++)
+        {
+            scores[scores.Length - 1] += scores[i];
+        }
+        for(int i = 0; i < _scoreTexts.Length; i++)
+        {
+            _scoreTexts[i].enabled = true;
+            _scoreTexts[i].text = scores[i].ToString();
+            _scoreTexts[i].enabled = false;
+        }
+    }
+
     public virtual void OnGameOver()
     {
 
@@ -86,8 +121,7 @@ public class InGameBase
 
     public virtual void Start()
     {
-        GameTimer = new Timer(OnTimeUp, GameTime);
-        GameTimer.PrepareCountDown();
+        GameTimer = new Timer(null, -1);
         UIManager.ChangeAlpha(0);
         UIManager.ChoiceView(false);
     }
@@ -104,6 +138,6 @@ public class InGameBase
     {
         if (GameTimer == null) { return;  }
         UIManager.ReflectTime(GameTimer.CurrentTime);
-        GameTimer.CountDown(elapsedTime);
+        GameTimer.CountUp(elapsedTime);
     }
 }

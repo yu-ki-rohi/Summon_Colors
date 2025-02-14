@@ -98,7 +98,7 @@ public class StageSelectSceneManager : MonoBehaviour
                 SceneManager.LoadScene(3);
                 break;
             case 1:
-                _lockControll = false;
+                SceneManager.LoadScene(5);
                 break;
             case 2:
                 SceneManager.LoadScene(0);

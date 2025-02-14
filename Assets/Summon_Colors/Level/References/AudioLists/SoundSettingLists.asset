@@ -44,13 +44,13 @@ MonoBehaviour:
     - Name: Bite
       Clip: {fileID: 8300000, guid: 5ec7b9f5f3e62684f8ffa648c1412f32, type: 3}
       IsLoop: 0
-      Volume: 0.7
+      Volume: 0.5
       MinDistance: 10
       MaxDistance: 40
     - Name: Small Bite
       Clip: {fileID: 8300000, guid: 5ec7b9f5f3e62684f8ffa648c1412f32, type: 3}
       IsLoop: 0
-      Volume: 0.35
+      Volume: 0.25
       MinDistance: 10
       MaxDistance: 40
     - Name: Attack

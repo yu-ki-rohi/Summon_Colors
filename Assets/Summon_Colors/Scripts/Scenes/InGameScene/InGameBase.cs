@@ -15,7 +15,7 @@ public class InGameBase
 
     public TextMeshProUGUI[] _scoreTexts;
     private bool _isClear = false;
-    private bool _isPausing = false;
+    private bool _isGameOver = false;
     private int _enemyNum = 0;
     private int _defeatNum = 0;
     private int _enegyAmount = 0;
@@ -24,7 +24,7 @@ public class InGameBase
 
  
     public bool IsClear { get { return _isClear; } }
-
+    public bool IsGameOver { get { return _isGameOver; } }
     public int GetActiveSummonedsNum()
     {
         int num = 0;
@@ -79,6 +79,7 @@ public class InGameBase
     public void Continue()
     {
         _continueNum++;
+        _isGameOver = false;
     }
 
     public virtual void OnGameClear()
@@ -110,7 +111,7 @@ public class InGameBase
 
     public virtual void OnGameOver()
     {
-
+        _isGameOver = true;
     }
     
     public virtual void OnTimeUp()

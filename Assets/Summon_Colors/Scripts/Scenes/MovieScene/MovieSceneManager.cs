@@ -40,7 +40,7 @@ public class MovieSceneManager : MonoBehaviour
 
     private void OnLoopPointReached(VideoPlayer vp)
     {
-        ChangeScene();
+        StartCoroutine(FinishScene());
     }
 
     private void ChangeScene()
@@ -79,5 +79,11 @@ public class MovieSceneManager : MonoBehaviour
     {
         _videoPlayer.loopPointReached -= OnLoopPointReached;
         _videoPlayer.prepareCompleted -= OnPrepareCompleted;
+    }
+    
+    private IEnumerator FinishScene()
+    {
+        yield return new WaitForSeconds(1);
+        ChangeScene();
     }
 }

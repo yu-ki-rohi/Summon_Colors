@@ -62,16 +62,16 @@ public class InGameManager : MonoBehaviour
     private bool _isPlayerCamera = true;
 
     private int _continueIndex = 0;
-
     public bool IsEvent { get { return _isEvent; } }
     public bool IsPlayerCamera { get { return _isPlayerCamera; } }
     public bool IsClear { get { return _inGameBase.IsClear; } }
-
+    public bool IsGameOver { get { return _inGameBase.IsGameOver; } }
 
     public void StopEventCamera()
     {
         _isEvent = false;
         _isPlayerCamera = true;
+        _playerInput.actions.FindActionMap("Player").Enable();
     }
 
     public int ActiveSummonedNum
@@ -87,7 +87,15 @@ public class InGameManager : MonoBehaviour
         StartCoroutine(GameOverTimeStop());
     }
 
-
+    public void ChangePause()
+    {
+        _playerInput.actions.FindActionMap("Menu").Enable();
+        _playerInput.actions.FindActionMap("Player").Disable();
+        _continueIndex = 0;
+        _inGameBase.UIManager.ChangeAlpha(0.5f);
+        _inGameBase.UIManager.ChoiceView(true, _continueIndex);
+        Time.timeScale = 0.0f;
+    }
 
     public void GameClear()
     {
@@ -130,6 +138,23 @@ public class InGameManager : MonoBehaviour
         StartCoroutine(ContinueBehavior());
     }
 
+    public void ChoiceInPause()
+    {
+        Time.timeScale = 1;
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.SystemSound.Decide, _player.transform);
+        _playerInput.actions.FindActionMap("Menu").Disable();
+        if ( _continueIndex == 0 )
+        {
+            _playerInput.actions.FindActionMap("Player").Enable();
+            _inGameBase.UIManager.ChangeAlpha(0);
+            _inGameBase.UIManager.ChoiceView(false);
+        }
+        else
+        {
+            StartCoroutine(ContinueBehavior());
+        }
+    }
+
     public void FinishBattleScene()
     {
         AudioManager.Instance.PlaySoundOneShot((int)AudioManager.SystemSound.Decide, _player.transform);
@@ -168,7 +193,11 @@ public class InGameManager : MonoBehaviour
         switch(_type)
         {
             case Type.Boss:
-                AudioManager.Instance.PlayMusic((int)AudioManager.Music.Boss);
+                AudioManager.Instance.PlayMusic((int)AudioManager.Music.Boss); 
+                _playerInput.actions.FindActionMap("Player").Disable();
+                _isEvent = true;
+                _isPlayerCamera = false;
+                _inGameBase.CameraMove.BossEventCameraMove();
                 break;
             case Type.Enemy:
                 AudioManager.Instance.PlayMusic((int)AudioManager.Music.Enemy);
@@ -180,6 +209,7 @@ public class InGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(_isEvent) { return; }
         _inGameBase.Update(Time.deltaTime);
     }
 
@@ -260,13 +290,15 @@ public class InGameManager : MonoBehaviour
 
     private IEnumerator BossClearCoroutine()
     {
-
+        Time.timeScale = 1;
         yield return new WaitForSeconds(20.0f);
+        Time.timeScale = 1;
         while (_inGameBase.UIManager.GetFadeAlpha() < 1.0f)
         {
             _inGameBase.UIManager.ChangeAlpha(_inGameBase.UIManager.GetFadeAlpha() + 0.1f);
             yield return new WaitForSeconds(0.03f);
         }
+        Time.timeScale = 1;
         _playerInput.actions.FindActionMap("Player").Disable();
         yield return new WaitForSeconds(0.5f);
         _inGameBase.ViewScore();
@@ -279,6 +311,7 @@ public class InGameManager : MonoBehaviour
         yield return new WaitForSeconds(5.5f);
         AudioManager.Instance.PlayMusic((int)AudioManager.Music.Score);
         yield return new WaitForSeconds(8.0f);
+        Time.timeScale = 1;
         while (_inGameBase.UIManager.GetFadeAlpha() < 1.0f)
         {
             _inGameBase.UIManager.ChangeAlpha(_inGameBase.UIManager.GetFadeAlpha() + 0.1f);

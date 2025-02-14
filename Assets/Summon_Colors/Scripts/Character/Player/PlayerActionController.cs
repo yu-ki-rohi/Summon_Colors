@@ -356,7 +356,18 @@ public class PlayerActionController : MonoBehaviour
             _lightPalette.HideColorPalette();
         }
     }
-
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (InGameManager.Instance.IsClear) { return; }
+            InGameManager.Instance.ChangePause();
+        }
+        else if (context.canceled)
+        {
+            
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {

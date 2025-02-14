@@ -44,7 +44,10 @@ public class CameraMove : MonoBehaviour
     {
         StartCoroutine(GameClearCameraMove());
     }
-
+    public void BossEventCameraMove()
+    {
+        StartCoroutine(BossEventCamera());
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -192,6 +195,14 @@ public class CameraMove : MonoBehaviour
 
         _virtualCamera.LookAt = _player;
         _virtualCamera.Follow = _player;
+        InGameManager.Instance.StopEventCamera();
+    }
+
+    private IEnumerator BossEventCamera()
+    {
+        yield return new WaitForSeconds(3.2f);
+        _virtualCamera.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1.6f);
         InGameManager.Instance.StopEventCamera();
     }
 }

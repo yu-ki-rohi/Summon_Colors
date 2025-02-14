@@ -75,9 +75,13 @@ public class MenuController : MonoBehaviour
             {
                 InGameManager.Instance.FinishBattleScene();
             }
-            else
+            else if(InGameManager.Instance.IsGameOver)
             {
                 InGameManager.Instance.ChoiceContinue();
+            }
+            else
+            {
+                InGameManager.Instance.ChoiceInPause();
             }
         }
         else if (context.canceled)

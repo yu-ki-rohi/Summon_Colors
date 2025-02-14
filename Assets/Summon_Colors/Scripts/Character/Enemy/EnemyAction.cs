@@ -100,7 +100,7 @@ public class EnemyAction : MonoBehaviour
         {
             _animator = GetComponent<Animator>();
         }
-
+        _animator.SetTrigger("Event");
         if (_enemyBase == null)
         {
             Debug.Log("Enemy Base is Null!!");
@@ -125,6 +125,7 @@ public class EnemyAction : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        if (InGameManager.Instance.IsEvent) { return; }
         SetState();
 
         switch (_state)

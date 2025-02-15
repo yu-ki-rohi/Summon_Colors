@@ -123,7 +123,10 @@ public class PlayerMove : MonoBehaviour
         {
             _speed = 0f;
         }
-
+        if(_speed == 0f)
+        {
+            _player.ActionController.CreateStayVoiceTimer();
+        }
         _animator.SetFloat("Speed", _acceleration);
     }
 }

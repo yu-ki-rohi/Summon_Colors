@@ -1937,6 +1937,7 @@ MonoBehaviour:
   _clips:
   - {fileID: 8300000, guid: 9d556855c7eecb1478b6d0d77a3c9b2c, type: 3}
   - {fileID: 8300000, guid: f531fe72fbcd555498ec3580d2d094b0, type: 3}
+  - {fileID: 8300000, guid: 4790728ac70fa9b4d9a31b63ab3c0bf5, type: 3}
   _fadePanel:
     ScreenPanel: {fileID: 1977616688}
   _bgmPlayer: {fileID: 992531530}
@@ -1988,7 +1989,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0

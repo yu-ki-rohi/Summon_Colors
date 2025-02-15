@@ -34,6 +34,23 @@ public class GreenAction : SummonedAction
     protected override void Idle()
     {
         base.Idle();
+        WalkAndRecover();
+    }
+
+    protected override void Action()
+    {
+        _animator.SetTrigger("Action");
+        _state = State.Action;
+        _agent.SetDestination(transform.position);
+    }
+    protected override void Return()
+    {
+        base.Return();
+        WalkAndRecover();
+    }
+
+    private void WalkAndRecover()
+    {
         if ((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude > 0.64f)
         {
             _animator.SetBool("IsWalking", true);
@@ -42,7 +59,7 @@ public class GreenAction : SummonedAction
         {
             _animator.SetBool("IsWalking", false);
         }
-        if((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude < _summonedBase.StopDistance * _summonedBase.StopDistance)
+        if ((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude < _summonedBase.StopDistance * _summonedBase.StopDistance)
         {
             if (_timer < _summonedBase.CoolTime)
             {
@@ -54,12 +71,5 @@ public class GreenAction : SummonedAction
                 _timer = 0.0f;
             }
         }
-    }
-
-    protected override void Action()
-    {
-        _animator.SetTrigger("Action");
-        _state = State.Action;
-        _agent.SetDestination(transform.position);
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static ColorElements;
 
 [RequireComponent(typeof(Absorb))]
 [RequireComponent(typeof(Summon))]
@@ -26,6 +27,10 @@ public class PlayerActionController : MonoBehaviour
     [SerializeField, Range(0.0f,1.0f)] private float _directionDelayScale = 0.5f;
     [SerializeField, Range(0.0f,1.0f)] private float _changeDelayScale = 0.5f;
     [SerializeField] private Transform _initTransform;
+    [SerializeField] private GameObject _bloomObject;
+    [SerializeField] private ParticleSystem _particleSystem01;
+    [SerializeField] private ParticleSystem _particleSystem02;
+    [SerializeField] private TrailRenderer _trailRenderer;
     private PlayerMove _playerMove;
     private Absorb _absorb;
     private Summon _summon;
@@ -38,6 +43,7 @@ public class PlayerActionController : MonoBehaviour
     private Timer _knockBackTimer;
     private bool _isLookAtCameraTarget = false;
     private AudioSource _audioSource;
+    private Timer _stayVoiceTimer;
 
     public ColorElements.ColorType Color { get { return _summon.Color; } }
     public bool IsAbsorbing()
@@ -66,6 +72,18 @@ public class PlayerActionController : MonoBehaviour
         return true;
     }
 
+    public void CreateStayVoiceTimer()
+    {
+        if (_canMove &&
+            _stayVoiceTimer == null &&
+           !InGameManager.Instance.IsClear
+           && !InGameManager.Instance.IsEvent)
+        {
+            Debug.Log("Create Voice Timer");
+            _stayVoiceTimer = new Timer(PlayStayVoice, 5.0f);
+        }
+    }
+
     public void ChangeToIdle()
     {
         _state = State.Idle;
@@ -75,6 +93,7 @@ public class PlayerActionController : MonoBehaviour
         _animator.SetBool("Absorb", false);
         _animator.SetBool("Order", false);
         StopSound();
+        ViewBloom(false);
         _summon.StopSummon();
     }
     public void ChangeToSummon()
@@ -114,6 +133,12 @@ public class PlayerActionController : MonoBehaviour
             Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
         }
         _state = State.Absorb;
+    }
+
+    public void ViewBloom(bool flag)
+    {
+        if (flag) { SetBloom(); }
+        _bloomObject.SetActive(flag);
     }
 
     public void ThrowObject()
@@ -170,6 +195,10 @@ public class PlayerActionController : MonoBehaviour
         if(_canMove)
         {
             _playerMove.Move(stick);
+            if(stick != Vector2.zero)
+            {
+                _stayVoiceTimer = null;
+            }
         }
         else
         {
@@ -199,6 +228,7 @@ public class PlayerActionController : MonoBehaviour
                 Vector3 forward = Camera.main.transform.forward;
                 forward.y = 0.0f;
                 gameObject.transform.forward = forward.normalized;
+                _stayVoiceTimer = null;
             }
         }
         else if (context.canceled)
@@ -221,6 +251,8 @@ public class PlayerActionController : MonoBehaviour
                 _state = State.Prepare;
                 AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Summon01, 2, transform);
                 _summon.StartSummon();
+                _stayVoiceTimer = null;
+                ViewBloom(true);
             }
         }
         else if (context.canceled)
@@ -228,6 +260,7 @@ public class PlayerActionController : MonoBehaviour
             _animator.SetBool("Summon", false);
             StopSound();
             _summon.StopSummon();
+            ViewBloom(false);
         }
     }
 
@@ -246,6 +279,7 @@ public class PlayerActionController : MonoBehaviour
                 forward.y = 0.0f;
                 gameObject.transform.forward = forward.normalized;
                 AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Attack01, 2, transform);
+                _stayVoiceTimer = null;
             }
         }
         else if (context.canceled)
@@ -271,16 +305,33 @@ public class PlayerActionController : MonoBehaviour
             _animator.SetBool("Absorb", false);
             _animator.SetBool("Order", false);
             _canMove = false;
+            ViewBloom(false);
             Time.timeScale = 1.0f;
             _cameraMove.ChangeTarget(transform, false);
             Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
             AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Evasion01, 2, transform);
+            _stayVoiceTimer = null;
         }
     }
 
     public void OnDirect(InputAction.CallbackContext context)
     {
         if (context.performed)
+        {
+           
+            if (_state == State.Idle)
+            {
+                _state = State.Direction;
+                _animator.SetBool("Order",true);
+                _canMove = false;
+                Time.timeScale = _directionDelayScale;
+                _cameraMove.ChangeTarget(_summon.GetHomeBase(_summon.Color).transform, true);
+                Camera.main.cullingMask |= (1 << LayerMask.NameToLayer("UI"));
+                _stayVoiceTimer = null;
+                ViewBloom(true);
+            }
+        }
+        else if (context.canceled)
         {
             if (_state == State.Direction)
             {
@@ -289,20 +340,8 @@ public class PlayerActionController : MonoBehaviour
                 Time.timeScale = 1.0f;
                 _cameraMove.ChangeTarget(transform, false);
                 Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+                ViewBloom(false);
             }
-            else if (_state == State.Idle)
-            {
-                _state = State.Direction;
-                _animator.SetBool("Order",true);
-                _canMove = false;
-                Time.timeScale = _directionDelayScale;
-                _cameraMove.ChangeTarget(_summon.GetHomeBase(_summon.Color).transform, true);
-                Camera.main.cullingMask |= (1 << LayerMask.NameToLayer("UI"));
-            }
-        }
-        else if (context.canceled)
-        {
-
         }
     }
 
@@ -313,6 +352,24 @@ public class PlayerActionController : MonoBehaviour
             if (_state == State.Direction)
             {
                 _direction.Return();
+            }
+            else
+            {
+               
+            }
+        }
+        else if (context.canceled)
+        {
+
+        }
+    }
+     public void OnCallBack(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (_state == State.Direction)
+            {
+                _direction.CallBack();
             }
             else
             {
@@ -336,6 +393,7 @@ public class PlayerActionController : MonoBehaviour
                 _colorPalette.DisplayColorPalette();
                 _lightPalette.DisplayColorPalette();
                 _lightPalette.TurnOffLight();
+                ViewBloom(true);
             }
             
         }
@@ -344,6 +402,7 @@ public class PlayerActionController : MonoBehaviour
             if (_state != State.Direction)
             {
                 Time.timeScale = 1.0f;
+                ViewBloom(false);
             }
             else
             {
@@ -378,6 +437,7 @@ public class PlayerActionController : MonoBehaviour
         _direction = GetComponent<Direction>();
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
+        ViewBloom(false);
     }
 
     // Update is called once per frame
@@ -411,6 +471,11 @@ public class PlayerActionController : MonoBehaviour
             _isLookAtCameraTarget = false;
             _canMove = true;
         }
+        if(_stayVoiceTimer != null)
+        {
+            _stayVoiceTimer.CountUp();
+        }
+       
     }
 
     private void FinishKnockBack()
@@ -429,5 +494,40 @@ public class PlayerActionController : MonoBehaviour
             _audioSource.Stop();
             _audioSource = null;
         }
+    }
+
+    private void PlayStayVoice()
+    {
+        AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Stay01, 4, transform);
+    }
+    private void SetBloom()
+    {
+        Color color = UnityEngine.Color.black;
+        switch (_summon.Color)
+        {
+            case ColorElements.ColorType.Blue:
+                color = UnityEngine.Color.blue;
+                break;
+            case ColorElements.ColorType.Red:
+                color = UnityEngine.Color.red;
+                break;
+            case ColorElements.ColorType.Yellow:
+                color = UnityEngine.Color.yellow;
+                break;
+            case ColorElements.ColorType.Orange:
+                color = new Color(1, 0.3f, 0, 1);
+                break;
+            case ColorElements.ColorType.Green:
+                color = UnityEngine.Color.green;
+                break;
+            case ColorElements.ColorType.Violet:
+                color = new Color(0.9f, 0, 0.9f, 1);
+                break;
+        }
+        var main = _particleSystem01.main;
+        main.startColor = new ParticleSystem.MinMaxGradient(color);
+        main = _particleSystem02.main;
+        main.startColor = new ParticleSystem.MinMaxGradient(color);
+        _trailRenderer.startColor = color;
     }
 }

@@ -103,6 +103,11 @@ public class StageSelectSceneManager : MonoBehaviour
     private IEnumerator SelectedBehavior()
     {
         yield return new WaitForSeconds(0.8f);
+        if(_selectedIndex != 2)
+        {
+            _audioSource.PlayOneShot(_clips[2],1.0f);
+        }
+        yield return new WaitForSeconds(0.8f);
         while (_fadePanel.Alpha < 1.0f)
         {
             _fadePanel.ChangeAlpha(_fadePanel.Alpha + 0.1f);

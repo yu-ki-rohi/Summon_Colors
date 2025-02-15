@@ -295,10 +295,7 @@ public class DemonAction : EnemyAction
 
     public void Roar()
     {
-        if(_renderer.isVisible)
-        {
-            _roarIntensity = 0.8f;
-        }
+        _roarIntensity = 0.8f;
         AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Roar, transform);
     }
 

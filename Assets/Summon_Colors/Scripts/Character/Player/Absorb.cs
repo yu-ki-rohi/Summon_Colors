@@ -27,6 +27,8 @@ public class Absorb : MonoBehaviour
 
     public ObjectPoolBase Pool { get { return _pool; } }
     public PlayerActionController ActionController { get { return _player.ActionController;} }
+
+    public Transform FireTransform { get { return _firePosition; } }
     public bool IsAbsorbing()
     {
         return _player.ActionController.IsAbsorbing();

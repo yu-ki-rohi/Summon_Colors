@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8242760215854808715}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: arm_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5550602004888694275}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: IK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8697962455674211818}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: s_m_skelton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 1564730513659696514}
   - component: {fileID: 2606727967975294662}
   - component: {fileID: 3491513019495190942}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: ChaseLimit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,7 +196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6089570977142053200}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: arm_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8315181299376491683}
   - component: {fileID: 3675256013427601984}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Summon_Green_mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -326,7 +326,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 808497436851352900}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: reg_R1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -357,7 +357,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7558771127814089724}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: EyesPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,7 +390,7 @@ GameObject:
   - component: {fileID: 2222105635101184151}
   - component: {fileID: 8772391806598639383}
   - component: {fileID: 2030503754493979218}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: DetectCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -476,7 +476,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8749802043602930594}
   - component: {fileID: 6729575605396356290}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Summon_Green_mesh (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -573,7 +573,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8346910287077222462}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: feet_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -604,7 +604,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6576880144299544194}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: s_m_rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -636,7 +636,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1977109020096880308}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: hip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -673,7 +673,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3689187367441700881}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: reg_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -705,7 +705,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5646209714273113590}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: ikHandle4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -736,7 +736,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7116234271655842898}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: head2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -772,7 +772,7 @@ GameObject:
   - component: {fileID: 4439741742149310126}
   - component: {fileID: 8303919529182691199}
   - component: {fileID: 43327332644808353}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Summoned_Green
   m_TagString: Summoned
   m_Icon: {fileID: 0}
@@ -909,7 +909,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4785489181530970165}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -942,7 +942,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8415989964917075857}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: hand_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -973,7 +973,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7182454921512398207}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: reg_L1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1004,7 +1004,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8077288784256046409}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: tail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1035,7 +1035,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7601549081428094500}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: feet_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1066,7 +1066,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 629025989521795472}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: hand_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1097,7 +1097,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5440251847175103026}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: hand_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1128,7 +1128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7915205674066934113}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: head_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1161,7 +1161,7 @@ GameObject:
   - component: {fileID: 6544690230582949882}
   - component: {fileID: 3499658535666675753}
   - component: {fileID: 3227180240809766736}
-  m_Layer: 11
+  m_Layer: 15
   m_Name: AttackCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1246,7 +1246,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2668833765833957145}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: ikHandle5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1277,7 +1277,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6372715208094127205}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1309,7 +1309,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5196783149910383123}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: hand_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1340,7 +1340,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4999955103945463575}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: reg_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1373,7 +1373,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1872179509117612403}
   - component: {fileID: 3554883039815718085}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: BodyCollider
   m_TagString: Summoned
   m_Icon: {fileID: 0}
@@ -1425,7 +1425,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9099433953137874750}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Summon_Green_mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1458,7 +1458,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7285628353775060752}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: head1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1576,7 +1576,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8784596583678041824}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: teal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1607,7 +1607,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2972586871943295867}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1640,7 +1640,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7868275562412049936}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: hip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1678,7 +1678,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8359811811768806793}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: ikHandle2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1709,7 +1709,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 20673583605400255}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: ikHandle1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -79,7 +79,7 @@ public class Energy : MonoBehaviour
             }
             else
             {
-                transform.LookAt(_player.position);
+                transform.LookAt(_absorb.FireTransform.position);
             }
         }
         transform.position += transform.forward * _speed * Time.deltaTime;
@@ -87,7 +87,7 @@ public class Energy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if(other.tag == "Stone")
         {
             _absorb.AddColor(_colorType, _energy);
             _absorb.Pool.Release(this.gameObject);

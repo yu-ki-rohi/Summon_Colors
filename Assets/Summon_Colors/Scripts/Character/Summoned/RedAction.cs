@@ -113,6 +113,19 @@ public class RedAction : SummonedAction
         _agent.SetDestination(transform.position);
     }
 
+    protected override void Return()
+    {
+        base.Return();
+        if ((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude > 0.64f)
+        {
+            _animator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            _animator.SetBool("IsWalking", false);
+        }
+    }
+
     protected bool HasAttacked(CharacterBase characterBase)
     {
         foreach(var character in _characters)

@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Summoned
   - SubElement
+  - Stone
   layers:
   - Default
   - TransparentFX
@@ -23,8 +24,8 @@ TagManager:
   - PlayerAttack
   - Enemy
   - EnemyAttack
-  - 
-  - 
+  - Summoned
+  - SummonedAttack
   - 
   - 
   - 

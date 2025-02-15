@@ -26,6 +26,7 @@ public class Summon : MonoBehaviour
     public ColorElements.ColorType Color { get { return _color; } }
 
     public SummonedPool[] SummonedPools { get { return _summonedPools; } }
+    public HomeBase[] HomeBases { get { return _homeBases; } }
 
     public HomeBase GetHomeBase(ColorElements.ColorType color)
     {
@@ -151,6 +152,7 @@ public class Summon : MonoBehaviour
                 _player.UIManager.ChangeColor(_color);
                 _lightPalette.TurnOffLight();
                 _lightPalette.LightColor(i);
+                _actionController.ViewBloom(true);
                 return;
             }
         }

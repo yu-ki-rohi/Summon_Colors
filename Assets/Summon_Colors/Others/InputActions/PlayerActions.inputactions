@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CallBack",
+                    "type": "Button",
+                    "id": "86915982-463b-4e37-83dc-226f4f40c488",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -144,7 +153,7 @@
                 {
                     "name": "",
                     "id": "cd54adab-1078-484c-9730-d0dfd0a3325e",
-                    "path": "<Gamepad>/buttonNorth",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -155,7 +164,7 @@
                 {
                     "name": "",
                     "id": "852cac68-20a5-44f6-9e13-486746133a04",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -204,6 +213,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b32b8f65-ee93-4c3f-9215-969f3bf3d181",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CallBack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

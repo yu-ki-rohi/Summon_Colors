@@ -11,13 +11,32 @@ public class HomeBase : MonoBehaviour
     private const float _up = 0.65f;
     private Vector3 _velocity = Vector3.zero;
     private float _timer = 0.0f;
+    private bool _isUpdateWithPlayer = true;
     public ColorElements.ColorType Color { get { return _color; } }
 
     public Vector3 Velocity { get { return _velocity; } set { _velocity = value; } }
 
-    public void SetReturn(float value)
+    public void SetReturn(float value, Transform transform)
     {
+        if(transform != null && 
+            IsReturn())
+        {
+            SetPositionImmediately(transform.position);
+        }
         _timer = value;
+    }
+
+    public void SetPositionImmediately(Vector3 position)
+    {
+        _isUpdateWithPlayer = true;
+        SetPosition(position);
+        SetReturn(1.0f, null);
+    }
+
+    public void UpdatePositionWithPlayer(Vector3 position)
+    {
+        if(!_isUpdateWithPlayer) { return; }
+        SetPosition(position);
     }
 
     public bool IsReturn()
@@ -51,22 +70,26 @@ public class HomeBase : MonoBehaviour
 
         if (_velocity != Vector3.zero)
         {
-            Vector3 newPos = transform.position;
+            _isUpdateWithPlayer = false;
             transform.forward = _velocity.normalized;
-            newPos += _velocity * Time.deltaTime;
-            float height = 10.0f;
-            float distance = 30.0f;
-            newPos.y += height;
+            SetPosition(transform.position + _velocity * Time.deltaTime);
+        }
+    }
 
-            Ray ray = new Ray(newPos, Vector3.down);
-            RaycastHit hit;
-            int layerNum = LayerMask.NameToLayer("Ground");
-            int layerMask = 1 << layerNum;
+    private void SetPosition(Vector3 newPos)
+    {
+        float height = 10.0f;
+        float distance = 30.0f;
+        newPos.y += height;
 
-            if (Physics.Raycast(ray, out hit, distance, layerMask))
-            {
-                transform.position = hit.point + Vector3.up * _up;
-            }
+        Ray ray = new Ray(newPos, Vector3.down);
+        RaycastHit hit;
+        int layerNum = LayerMask.NameToLayer("Ground");
+        int layerMask = 1 << layerNum;
+
+        if (Physics.Raycast(ray, out hit, distance, layerMask))
+        {
+            transform.position = hit.point + Vector3.up * _up;
         }
     }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UIElements;
 
 public class ShaderManager : MonoBehaviour
 {
@@ -14,8 +15,8 @@ public class ShaderManager : MonoBehaviour
         {
             _radialBlurFeature.Intensity = intensity;
             Vector3 screenPos = Camera.main.WorldToScreenPoint(position);
-            screenPos.x /= Camera.main.pixelWidth;
-            screenPos.y /= Camera.main.pixelHeight;
+            screenPos.x = Mathf.Clamp01(screenPos.x / Camera.main.pixelWidth);
+            screenPos.y = Mathf.Clamp01(screenPos.y / Camera.main.pixelHeight);
             _radialBlurFeature.RadialCenter = screenPos;
         }
     }
@@ -41,4 +42,5 @@ public class ShaderManager : MonoBehaviour
     {
         
     }
+
 }

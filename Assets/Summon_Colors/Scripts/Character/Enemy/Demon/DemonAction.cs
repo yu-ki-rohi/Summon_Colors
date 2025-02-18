@@ -63,11 +63,13 @@ public class DemonAction : EnemyAction
     private AudioSource _audioSource;
     private Vector3 _targetPosition = Vector3.zero;
     private bool _stateLock = false;
+    private bool _willChangeSky = false;
     private float _red = 0.5f;
     private float _green = 0.1f;
     private float _blue = 0.1f;
     public void IgnitEventMove()
     {
+        _willChangeSky = true;
         _state = State.Action;
         _animator.SetTrigger("Event");
     }
@@ -77,13 +79,14 @@ public class DemonAction : EnemyAction
         if (_sky01 != null && !InGameManager.Instance.IsEvent)
         {
             Debug.Log("Called!");
+            _willChangeSky = false;
 #if false
             RenderSettings.skybox = _sky01;
 #else
             SetSkyBox(_sky01);
 #endif
+            IgnitTacckle();
         }
-        IgnitTacckle();
     }
     public void StartAmbientChange()
     {
@@ -329,7 +332,11 @@ public class DemonAction : EnemyAction
     public override void FinishAction()
     {
         base.FinishAction();
-        if(_stateLock)
+        if(_willChangeSky)
+        {
+            IgnitEventMove();
+        }
+        else if(_stateLock)
         {
             IgnitTacckle();
         }
@@ -345,11 +352,11 @@ public class DemonAction : EnemyAction
                 int damage = character.Damaged(_power, _enemyBase.Break, _enemyBase.Appearance, _enemyBase);
                 if (damage > 0)
                 {
-                    float time = 0.15f;
-                    float forcePower = 25.0f;
-                    float powerMagni = Mathf.Clamp01(damage / 100.0f);
+                    float time = 18.0f;
+                    float forcePower = 550.0f;
+                    float powerMagni = Mathf.Clamp01((damage + 40.0f) / 100.0f);
                     Vector3 forceVec = (collider.transform.position - transform.position);
-                    character.KnockBack(forceVec, forcePower * powerMagni, time);
+                    character.KnockBack(forceVec, forcePower * powerMagni, time * powerMagni);
                     HitEffectManager.Instance.Play(HitEffectManager.Type.Hit, collider.ClosestPointOnBounds(transform.position));
                 }
             }
@@ -359,6 +366,7 @@ public class DemonAction : EnemyAction
     protected override void Start()
     {
         base.Start();
+        _animator.SetTrigger("Event");
         FinishAttack();
     }
 
@@ -415,21 +423,21 @@ public class DemonAction : EnemyAction
     {
         float dot = _enemyBase.GetDot();
         if (dot < 0) { return; }
-
+        float sqrDistance = _enemyBase.GetDistance();
         float buffar = 2.0f;
         float borderDistance = _enemyBase.StopDistance + buffar;
         borderDistance *= borderDistance;
-        if (_enemyBase.GetDistance() > borderDistance)
+        if (sqrDistance > borderDistance)
         {
             if (_timer > _enemyBase.CoolTime)
             {
                 _timer = 0.0f;
-                SelectFarAttack(dot);
+                SelectFarAttack(dot, sqrDistance);
             }
         }
         else
         {
-            if (_enemyBase.GetDistance() < _enemyBase.StopDistance * _enemyBase.StopDistance)
+            if (sqrDistance < _enemyBase.StopDistance * _enemyBase.StopDistance)
             { _agent.velocity = Vector3.zero; }
                 
             if (_timer > _enemyBase.CoolTime)
@@ -440,7 +448,7 @@ public class DemonAction : EnemyAction
         }
     }
 
-    private void SelectFarAttack(float dot)
+    private void SelectFarAttack(float dot, float sqrDistance)
     {
         if(dot < 0.866f) { return; }
 
@@ -454,8 +462,16 @@ public class DemonAction : EnemyAction
         }
         else
         {
-            judge = Random.Range(0, 4);
+            if(sqrDistance < 500.0f)
+            {
+                judge = Random.Range(0, 4);
+            }
+            else
+            {
+                judge = Random.Range(0, 2) * 3;
+            }
         }
+        NavMeshPath path = new NavMeshPath();
         NavMeshHit navMeshHit;
         switch (judge)
         {
@@ -485,16 +501,29 @@ public class DemonAction : EnemyAction
                 }
                 break;
             case 3:
+
+#if UNITY_EDITOR
+#else
                 if (_enemyBase.Hp > _enemyBase.MaxHp * 0.5f)
                 {
                     Debug.Log("Re Far");
-                    SelectFarAttack(dot);
+                    SelectFarAttack(dot, sqrDistance);
                     break;
                 }
+                
+#endif
                 if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
                     out navMeshHit, 10.0f, NavMesh.AllAreas))
                 {
-                    _rushVector = navMeshHit.position;
+                    if(NavMesh.CalculatePath(transform.position,navMeshHit.position, NavMesh.AllAreas,path))
+                    {
+                        _rushVector = path.corners[path.corners.Length - 1];
+                    }
+                    else
+                    {
+                        _rushVector = navMeshHit.position;
+                    }
+                    Debug.Log(path.status);
                     _agent.updateRotation = false;
                     _animator.SetTrigger("Explosion");
                 }
@@ -562,12 +591,15 @@ public class DemonAction : EnemyAction
                 }
                 break;
             case 5:
+#if UNITY_EDITOR
+#else
                 if (_enemyBase.Hp > _enemyBase.MaxHp * 0.5f)
                 {
                     Debug.Log("Re Near");
                     SelectNearAttack(dot);
                     break;
                 }
+#endif
                 if (NavMesh.SamplePosition(_enemyBase.TargetCharacter.GetNearestPart(this.transform).position,
                     out navMeshHit, 10.0f, NavMesh.AllAreas))
                 {

@@ -71,7 +71,7 @@ public class SummonedAction : MonoBehaviour
         _agent.updatePosition = false;
         _agent.updateRotation = false;
 
-        _knockBackTimer = new Timer(FinishKnockBack, time + 0.5f);
+        _knockBackTimer = new Timer(FinishKnockBack, time / _rigidbody.mass);
         dir.y = 0;
         if (dir.sqrMagnitude != 1.0f)
         {
@@ -169,7 +169,7 @@ public class SummonedAction : MonoBehaviour
     protected virtual void Return()
     {
         _agent.SetDestination(_summonedBase.StandByPosition.position);
-        if((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude < 1.0f)
+        if((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude < 25.0f)
         {
             _summonedBase.ReleaseCharacters();
             _state = State.Idle;

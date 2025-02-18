@@ -29,6 +29,10 @@ public class Absorb : MonoBehaviour
     public PlayerActionController ActionController { get { return _player.ActionController;} }
 
     public Transform FireTransform { get { return _firePosition; } }
+    public int Red { get { return _colorElements.CurrentRed; } }
+    public int Blue { get { return _colorElements.CurrentBlue; } }
+    public int Yellow { get { return _colorElements.CurrentYellow; } }
+
     public bool IsAbsorbing()
     {
         return _player.ActionController.IsAbsorbing();

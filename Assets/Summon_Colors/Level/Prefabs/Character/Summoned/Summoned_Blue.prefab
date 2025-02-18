@@ -393,7 +393,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Radius: 0.01
+  m_Radius: 0.025
   m_Center: {x: 0.005, y: 0, z: 0}
 --- !u!114 &4567297149549539883
 MonoBehaviour:
@@ -642,7 +642,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Radius: 0.01
+  m_Radius: 0.025
   m_Center: {x: -0.005, y: 0, z: 0}
 --- !u!114 &6815838704177960356
 MonoBehaviour:
@@ -792,6 +792,7 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _attackCollider: {fileID: 0}
   _type: 1
+  _inverseForceVec: 1
 --- !u!54 &125322500198838160
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -800,7 +801,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4622315132166582462}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 25
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

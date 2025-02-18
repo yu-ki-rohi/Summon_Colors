@@ -133,6 +133,6 @@ public class TitleSceneManager : MonoBehaviour
         _lockControll = true;
         _noisePlayer.Stop();
         yield return new WaitForSeconds(0.5f);
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(6);
     }
 }

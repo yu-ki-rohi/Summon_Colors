@@ -39,6 +39,12 @@ MonoBehaviour:
       Volume: 0.5
       MinDistance: 1
       MaxDistance: 100
+    - Name: Call Back
+      Clip: {fileID: 8300000, guid: 34bceb2e67f08e647a58d752fa4f898e, type: 3}
+      IsLoop: 0
+      Volume: 0.5
+      MinDistance: 1
+      MaxDistance: 100
   - Name: Demon
     Settinglist:
     - Name: Bite

@@ -45,8 +45,14 @@ public class GreenAction : SummonedAction
     }
     protected override void Return()
     {
-        base.Return();
-        WalkAndRecover();
+        base.Return(); if ((_summonedBase.StandByPosition.position - transform.position).sqrMagnitude > 0.64f)
+        {
+            _animator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            _animator.SetBool("IsWalking", false);
+        }
     }
 
     private void WalkAndRecover()

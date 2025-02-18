@@ -53,13 +53,13 @@ public class FireBall : Projectiles
             {
                 int damage = characterBase.Damaged(_power);
 
-                if(damage > 0)
+                if (damage > 0)
                 {
-                    float time = 0.15f;
-                    float forcePower = 25.0f;
-                    float powerMagni = Mathf.Clamp01(damage / 100.0f);
+                    float time = 18.0f;
+                    float forcePower = 500.0f;
+                    float powerMagni = Mathf.Clamp01((damage + 40.0f) / 100.0f);
                     Vector3 forceVec = (other.transform.position - transform.position);
-                    characterBase.KnockBack(forceVec, forcePower * powerMagni, time);
+                    characterBase.KnockBack(forceVec, forcePower * powerMagni, time * powerMagni);
                     HitEffectManager.Instance.Play(HitEffectManager.Type.Fire, other.ClosestPointOnBounds(transform.position));
                 }
             }

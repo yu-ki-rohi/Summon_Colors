@@ -99,7 +99,7 @@ public class CharacterBase : MonoBehaviour
 
     }
 
-    public void StartInvincible()
+    public virtual void StartInvincible()
     {
         _isInvincible = true;
     }

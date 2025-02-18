@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Demon : EnemyBase
 {
+    private DemonAction _demonAction;
 
-    
     public override int Damaged(int attack, int shock = 0, int hate = 0, CharacterBase attacker = null)
     {
         int beforeHp = Hp;
@@ -19,7 +19,12 @@ public class Demon : EnemyBase
         }
         return damage;
     }
-    private DemonAction _demonAction;
+
+    public override void KnockBack(Vector3 dir, float strength, float time)
+    {
+        
+    }
+
     protected override void Die()
     {
         InGameManager.Instance.GameClear();

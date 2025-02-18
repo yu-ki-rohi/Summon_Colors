@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class ThrowingObject : Projectiles
 {
@@ -29,6 +30,11 @@ public class ThrowingObject : Projectiles
                 if(damage != 0)
                 {
                     HitEffectManager.Instance.Play(HitEffectManager.Type.Hit, transform.position);
+                    float time = 6.0f;
+                    float forcePower = 120.0f;
+                    float powerMagni = Mathf.Clamp01(damage/ 20.0f);
+                    Vector3 forceVec = (other.transform.position - transform.position);
+                    characterBase.KnockBack(forceVec, forcePower * powerMagni, time);
                 }
             }
             DisAppear();

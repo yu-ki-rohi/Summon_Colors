@@ -15,7 +15,8 @@ public class MovieSceneManager : MonoBehaviour
     private enum Type
     {
         Opening,
-        Ending
+        Ending,
+        Demo
     }
 
     [SerializeField] private VideoPlayer _videoPlayer;
@@ -52,6 +53,9 @@ public class MovieSceneManager : MonoBehaviour
                 SceneManager.LoadScene(2);
                 break;
             case Type.Ending:
+                SceneManager.LoadScene(0);
+                break;
+            case Type.Demo:
                 SceneManager.LoadScene(0);
                 break;
         }

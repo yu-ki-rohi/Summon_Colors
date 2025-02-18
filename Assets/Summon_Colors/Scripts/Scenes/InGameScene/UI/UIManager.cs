@@ -6,6 +6,32 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public enum ButtonMask
+    { 
+        None = 0,
+        BackText = 1 << 0,
+        BackButton = 1 << 1,
+        Attack = 1 << 2,
+        Gathering = 1 << 3,
+        Avoid = 1 << 4,
+        Absorb = 1 << 5,
+        Change = 1 << 6,
+        Summon = 1 << 7,
+        Command = 1 << 8,
+        All = 511
+    }
+
+    public enum ButtonState
+    {
+        Idle,
+        Attack,
+        Avoid, 
+        Absorb, 
+        Summon,
+        Command,
+    }
+
+
     [SerializeField] private HitPointBar _hitPointBar;
     [SerializeField] private HitPointBar _enemyHitPointBar;
     [SerializeField] private PlayerIcon _playerIcon;
@@ -17,6 +43,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _scoreSheet;
     [SerializeField] private GameObject _rankingSheet;
     [SerializeField] private Image[] _buttonDisplays;
+    [SerializeField] private Animator _buttonDisplayAnimator;
     [SerializeField] private TextMeshProUGUI _phisicsTime;
     [SerializeField] private TextMeshProUGUI _scriptsTime;
     [SerializeField] private TextMeshProUGUI _otherTime;
@@ -144,15 +171,85 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-
-    public void SwitchViewButtonDisplay(bool isView)
+    #region--- Button Display ---
+    public void SwitchViewBackButtonDisplay(bool isView)
     {
-        foreach(var bd in _buttonDisplays)
+        int mask = (int)ButtonMask.All;
+        if(!isView)
         {
-            bd.enabled = isView;
+            mask &= ~((int)ButtonMask.BackButton | (int)ButtonMask.BackText);
+        }
+        SwitchViewButtonDisplay(mask);
+    }
+
+    public void SwitchViewButtonDisplay(int mask)
+    {
+        for (int i = _buttonDisplays.Length - 1; i >= 0; i--)
+        {
+            int pow = 1;
+            for (int j = 0; j < i; j++)
+            {
+                pow *= 2;
+            }
+            if (mask >= pow)
+            {
+                _buttonDisplays[i].enabled = true;
+                mask -= pow;
+            }
+            else
+            {
+                _buttonDisplays[i].enabled = false;
+            }
+        }
+    }
+    public void SwitchViewButtonDisplay(ButtonState state)
+    {
+        switch(state)
+        {
+            case ButtonState.Idle:
+                _buttonDisplayAnimator.SetTrigger("Idle");
+                break;
+            case ButtonState.Attack: 
+                break;
+            case ButtonState.Avoid: 
+                break;
+            case ButtonState.Absorb: 
+                break;
+            case ButtonState.Summon: 
+                break;
+            case ButtonState.Command:
+                _buttonDisplayAnimator.SetTrigger("Command");
+                break;
+
         }
     }
 
+    public void ChangeButtonColor(int mask, Color color)
+    {
+        for (int i = _buttonDisplays.Length - 1; i >= 0; i--)
+        {
+            int pow = 1;
+            for (int j = 0; j < i; j++)
+            {
+                pow *= 2;
+            }
+            if (mask >= pow)
+            {
+                mask -= pow;
+                if (_buttonDisplays[i].enabled == false) 
+                {
+                    _buttonDisplays[i].enabled = true;
+                    _buttonDisplays[i].color = color;
+                    _buttonDisplays[i].enabled = false;
+                }
+                else
+                {
+                    _buttonDisplays[i].color = color;
+                }
+            }
+        }
+    }
+    #endregion
     // Start is called before the first frame update
     void Start()
     {

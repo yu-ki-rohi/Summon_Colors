@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class VolcanicBomb : Projectiles
 {
@@ -61,7 +62,16 @@ public class VolcanicBomb : Projectiles
             CharacterBase characterBase = other.GetComponentInParent<CharacterBase>();
             if(characterBase != null)
             {
-                characterBase.Damaged(_power);
+                int damage = characterBase.Damaged(_power);
+                if (damage > 0)
+                {
+                    float time = 18.0f;
+                    float forcePower = 1000.0f;
+                    float powerMagni = Mathf.Clamp01((damage + 40.0f) / 100.0f);
+                    Vector3 forceVec = (other.transform.position - transform.position);
+                    characterBase.KnockBack(forceVec, forcePower * powerMagni, time * powerMagni);
+                    HitEffectManager.Instance.Play(HitEffectManager.Type.Fire, other.ClosestPointOnBounds(transform.position));
+                }
             }
         }
     }

@@ -124,27 +124,45 @@ public class Explosion : MonoBehaviour
             if(_attacker == null)
             {
                 damage = characterBase.Damaged(_power);
+                if (damage > 0)
+                {
+                    // 仮置き　下のとまとめてメソッド化したい
+                    if (distance == 0) { return damage; }
+                    StartPos.y = 0.0f;
+                    EndPos.y = 0.0f;
+
+                    float time = 18.0f;
+                    float forcePower = 7000.0f / (distance + 10.0f);
+                    float powerMagni = Mathf.Clamp01((damage + 40.0f) / 100.0f);
+                    Vector3 forceVec = (EndPos - StartPos) / distance;
+                    characterBase.KnockBack(forceVec, forcePower * powerMagni, time * powerMagni);
+                }
             }
             else
             {
                 damage = characterBase.Damaged(_power, _attacker.Break, _attacker.Appearance, _attacker);
+                if (damage > 0)
+                {
+                    if (distance == 0) { return damage; }
+                    StartPos.y = 0.0f;
+                    EndPos.y = 0.0f;
+
+                    float time = 18.0f;
+                    float forcePower = 80.0f;
+                    Vector3 forceVec = (EndPos - StartPos) / distance;
+                    characterBase.KnockBack(forceVec, forcePower, time);
+                }
             }
 
-            if (damage > 0)
-            {
-                if (distance == 0) { return damage; }
-                StartPos.y = 0.0f;
-                EndPos.y = 0.0f;
-
-                float time = 0.3f;
-                float forcePower = 25.0f;
-                float powerMagni = Mathf.Clamp01(damage / 100.0f);
-                Vector3 forceVec = (EndPos - StartPos) / distance;
-                characterBase.KnockBack(forceVec, forcePower * powerMagni, time);
-            }
+            
             return damage;
         }
         return 0;
+    }
+
+    private void ShockOther(int damage)
+    {
+
     }
     private bool HasAttacked(CharacterBase characterBase)
     {

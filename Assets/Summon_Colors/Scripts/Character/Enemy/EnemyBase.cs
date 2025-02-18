@@ -10,7 +10,6 @@ public class EnemyBase : NPCBase
     [SerializeField] private UIManager _uiMmanager;
     private EnemyAction _action;
     private CharacterBase _player;
-    
     public float StopDistance { get { return _enemyData.StopDistance; } }
 
     public void Initialize()
@@ -45,6 +44,11 @@ public class EnemyBase : NPCBase
             Die();
         }
         return damage;
+    }
+
+    public override void KnockBack(Vector3 dir, float strength, float time)
+    {
+        _action.KnockBack(dir, strength, time);
     }
 
     public override void RecognizeCharacter(Collider collider)
@@ -85,6 +89,12 @@ public class EnemyBase : NPCBase
             _hate.Add(attacker, 1);
             _targetCharacter = attacker;
         }
+    }
+
+    protected override void Die()
+    {
+        _action.Die();
+        base.Die();
     }
 
     // Start is called before the first frame update

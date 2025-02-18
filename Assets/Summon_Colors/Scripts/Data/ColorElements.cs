@@ -26,6 +26,10 @@ public class ColorElements
     private int _red = 0;
     private int _yellow = 0;
 
+
+    public int CurrentBlue {  get { return _blue; } }
+    public int CurrentRed { get { return _red; } }
+    public int CurrentYellow { get { return _yellow; } }
     /// <summary>
     /// ColorTypeの項目数を取得
     /// </summary>

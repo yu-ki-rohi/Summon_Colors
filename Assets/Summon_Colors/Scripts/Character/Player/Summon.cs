@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Absorb))]
 public class Summon : MonoBehaviour
@@ -22,6 +23,8 @@ public class Summon : MonoBehaviour
     private Dictionary<ColorElements.ColorType, bool[]> _isSummoned = new Dictionary<ColorElements.ColorType, bool[]>();
 
     private float _timer = 0.0f;
+    private bool _isSuggestingAbsorb = false;
+    private bool _isSuggestingSummon = false;
 
     public ColorElements.ColorType Color { get { return _color; } }
 
@@ -102,6 +105,35 @@ public class Summon : MonoBehaviour
                             {
                                 return false;
                             }
+#if true
+                            NavMeshHit navMeshHit01;
+                            if (!NavMesh.SamplePosition(transform.position, out navMeshHit01, 10.0f, NavMesh.AllAreas))
+                            {
+                                return false;
+                            }
+                            NavMeshHit navMeshHit02;
+                            if (!NavMesh.SamplePosition(_summonPosition.position, out navMeshHit02, 10.0f, NavMesh.AllAreas))
+                            {
+                                return false;
+                            }
+                            NavMeshPath path = new NavMeshPath();
+                            if (NavMesh.CalculatePath(navMeshHit01.position, navMeshHit02.position, NavMesh.AllAreas, path))
+                            {
+                                Debug.Log(path.status);
+                                _isSummoned[_color][i] = true;
+                                // 生成処理
+                                GameObject summoned = summonedPools.Get(path.corners[path.corners.Length - 1]);
+                                // 初期化処理
+                                summoned.transform.forward = transform.forward;
+                                if (summoned.TryGetComponent<SummonedBase>(out var summonedBase))
+                                {
+                                    summonedBase.Initialize(i, _summonBasePositions[_color][i], this, path.corners[path.corners.Length - 1]);
+                                }
+                                return true;
+                            }
+
+                            Debug.Log(path.status);
+#else
                             NavMeshHit navMeshHit;
                             if (NavMesh.SamplePosition(_summonPosition.position, out navMeshHit, 10.0f, NavMesh.AllAreas))
                             {
@@ -116,6 +148,7 @@ public class Summon : MonoBehaviour
                                 }
                                 return true;
                             }
+#endif
                         }
                     }
                     return false;
@@ -157,7 +190,28 @@ public class Summon : MonoBehaviour
             }
         }
     }
-
+    public void PrepareChangeColor(ColorElements.ColorType colorType)
+    {
+        ColorElements.ColorType[] colorTypes =
+        {
+            ColorElements.ColorType.Blue,
+            ColorElements.ColorType.Red,
+            ColorElements.ColorType.Yellow,
+            ColorElements.ColorType.All,
+            ColorElements.ColorType.Violet,
+            ColorElements.ColorType.Orange,
+            ColorElements.ColorType.Green,
+        };
+        for (int i = 0; i < colorTypes.Length; i++)
+        {
+            if (colorType == colorTypes[i])
+            {
+                _lightPalette.LightColor(i);
+                _actionController.ViewBloom(true);
+                return;
+            }
+        }
+    }
     public void Release(ColorElements.ColorType color, int id)
     {
         _isSummoned[color][id] = false;
@@ -198,6 +252,12 @@ public class Summon : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            _timer = 0.0f;
+        }
+
+        SuggestButton();
     }
 
     private void SetSummonPositions()
@@ -229,6 +289,218 @@ public class Summon : MonoBehaviour
         else
         {
             return GetBlackRank(pool, ++rank);
+        }
+    }
+
+    private void SuggestButton()
+    {
+        bool enoughColor;
+        int cost = 0;
+        int activeNum = 0;
+        foreach (var summonedPools in _summonedPools)
+        {
+            if (summonedPools.ColorType == _color)
+            {
+                cost = summonedPools.GetCosts();
+                activeNum = summonedPools.GetActiveNum();
+            }
+        }
+        switch (_color)
+        {
+            case ColorElements.ColorType.Red:
+                enoughColor = _absorb.Red >= cost;
+                break;
+            case ColorElements.ColorType.Blue:
+                enoughColor = _absorb.Blue >= cost;
+                break;
+            case ColorElements.ColorType.Yellow:
+                enoughColor = _absorb.Yellow >= cost;
+                break;
+            case ColorElements.ColorType.Violet:
+                enoughColor = (_absorb.Red >= cost && _absorb.Blue >= cost);
+                break;
+            case ColorElements.ColorType.Green:
+                enoughColor = (_absorb.Yellow >= cost && _absorb.Blue >= cost);
+                break;
+            case ColorElements.ColorType.Orange:
+                enoughColor = (_absorb.Red >= cost && _absorb.Yellow >= cost);
+                break;
+            default:
+                enoughColor = (_absorb.Red >= cost && _absorb.Blue >= cost && _absorb.Yellow >= cost);
+                break;
+        }
+        if (enoughColor)
+        {
+            SuggestSummon(activeNum);
+        }
+        else
+        {
+            SuggestAbsorb(activeNum);
+        }
+    }
+
+    private void SuggestAbsorb(int activeNum)
+    {
+        if (_isSuggestingSummon)
+        {
+            ChangeButtonColorWhite();
+        }
+        // この先もう少しアルゴリズムいい感じにしたい
+        if (_isSuggestingAbsorb)
+        {
+            if (_color == ColorElements.ColorType.All)
+            {
+                if (activeNum > 0)
+                {
+                    ChangeButtonColorWhite();
+                }
+                return;
+            }
+            else
+            {
+                if (activeNum >= _player.SummonMax)
+                {
+                    ChangeButtonColorWhite();
+                }
+                return;
+            }
+        }
+        if (_color == ColorElements.ColorType.All)
+        {
+            if (activeNum > 0)
+            {
+                return;
+            }
+        }
+        else
+        {
+            if (activeNum >= _player.SummonMax)
+            {
+                return;
+            }
+        }
+        Debug.Log("SuggestAbsorb");
+        StartCoroutine(BlinkingAbsorb());
+        _isSuggestingAbsorb = true;
+
+    }
+
+    private void SuggestSummon(int activeNum)
+    {
+        if (_isSuggestingAbsorb)
+        {
+            ChangeButtonColorWhite();
+            _isSuggestingAbsorb = false;
+        }
+
+        // この先もう少しアルゴリズムいい感じにしたい
+        if(_isSuggestingSummon)
+        {
+            if (_color == ColorElements.ColorType.All)
+            {
+                if (activeNum > 0)
+                {
+                    ChangeButtonColorWhite();
+                }
+                return;
+            }
+            else
+            {
+                if (activeNum >= _player.SummonMax)
+                {
+                    ChangeButtonColorWhite();
+                }
+                return;
+            }
+        }
+        if (_color == ColorElements.ColorType.All)
+        {
+            if (activeNum > 0)
+            {
+                return;
+            }
+        }
+        else
+        {
+            if (activeNum >= _player.SummonMax)
+            {
+                return;
+            }
+        }
+
+        Debug.Log("SuggestSummon");
+
+        StartCoroutine(BlinkingSummon());
+        _isSuggestingSummon = true;
+    }
+
+    private void ChangeButtonColorWhite()
+    {
+        StopAllCoroutines();
+        int mask = (int)UIManager.ButtonMask.Absorb | (int)UIManager.ButtonMask.Summon;
+        InGameManager.Instance.ChangeButtonColor(mask, UnityEngine.Color.white);
+
+        _isSuggestingSummon = false;
+        _isSuggestingAbsorb = false;
+    }
+
+    private IEnumerator BlinkingAbsorb()
+    {
+        float blue = 0.5f;
+        int mask = (int)UIManager.ButtonMask.Absorb;
+        bool isIncrese = true;
+        while (true)
+        {
+            if(isIncrese)
+            {
+                blue += 0.2f;
+            }
+            else
+            {
+                blue -= 0.05f;
+            }
+
+            InGameManager.Instance.ChangeButtonColor(mask, new Color(1.0f, 1.0f, Mathf.Clamp01(blue)));
+
+            if(blue > 1.0f)
+            {
+                isIncrese = false;
+            }
+            else if(blue < 0.0f)
+            {
+                isIncrese = true;
+            }
+            yield return new WaitForSeconds(0.05f);
+        }
+    }
+
+    private IEnumerator BlinkingSummon()
+    {
+        float blue = 0.5f;
+        int mask = (int)UIManager.ButtonMask.Summon;
+        bool isIncrese = true;
+        while (true)
+        {
+            if(isIncrese)
+            {
+                blue += 0.2f;
+            }
+            else
+            {
+                blue -= 0.05f;
+            }
+
+            InGameManager.Instance.ChangeButtonColor(mask, new Color(1.0f, 1.0f, Mathf.Clamp01(blue)));
+
+            if(blue > 1.0f)
+            {
+                isIncrese = false;
+            }
+            else if(blue < 0.0f)
+            {
+                isIncrese = true;
+            }
+            yield return new WaitForSeconds(0.05f);
         }
     }
 }

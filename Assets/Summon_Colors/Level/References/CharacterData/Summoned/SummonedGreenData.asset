@@ -23,4 +23,4 @@ MonoBehaviour:
   PowerMagnifications: []
   ColorType: 4
   Costs: 5
-  StopDistance: 2
+  StopDistance: 10

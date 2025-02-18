@@ -16,7 +16,7 @@ MonoBehaviour:
   Attack: 10
   Vitality: 0
   Break: 10
-  Armor: 50
+  Armor: 5000
   Appearance: 10
   Agility: 2.8
   CoolTime: 2

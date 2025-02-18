@@ -11,6 +11,7 @@ public class EnemyAction : MonoBehaviour
     [SerializeField] protected NavMeshAgent _agent;
     [SerializeField] protected bool _isForwardInverse = false;
     protected Animator _animator;
+    private Rigidbody _rigidbody;
     protected enum State
     {
         Idle,
@@ -27,6 +28,8 @@ public class EnemyAction : MonoBehaviour
     protected float _walkTime = 3.0f;
     protected Vector3 _walkVec = Vector3.zero;
     protected Timer _actionTimer = null;
+    protected Timer _knockBackTimer = null;
+
 
     public virtual void Attack(Collider collider)
     {
@@ -42,6 +45,36 @@ public class EnemyAction : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void KnockBack(Vector3 dir, float strength, float time)
+    {
+        _agent.velocity = Vector3.zero;
+        _agent.updatePosition = false;
+        _agent.updateRotation = false;
+        Debug.Log("Strength = " + strength);
+        Debug.Log("Time = " + time / _rigidbody.mass);
+        _knockBackTimer = new Timer(FinishKnockBack, time / _rigidbody.mass);
+        dir.y = 0;
+        if (dir.sqrMagnitude != 1.0f)
+        {
+            dir = dir.normalized;
+        }
+        _rigidbody.isKinematic = false;
+        _rigidbody.AddForce(dir * strength, ForceMode.Impulse);
+    }
+
+    public void Warp(Vector3 pos)
+    {
+        if (_agent == null)
+        {
+            _agent = GetComponent<NavMeshAgent>();
+        }
+        _agent.Warp(pos);
+
+        // 再起動時に呼ばれるので、ついでに実行
+        _agent.updatePosition = true;
+        _agent.updateRotation = true;
     }
 
     public void StartAttack()
@@ -83,6 +116,12 @@ public class EnemyAction : MonoBehaviour
         }
     }
 
+    public void Die()
+    {
+        ChangeDown();
+        _rigidbody.isKinematic = true;
+    }
+
     public virtual void CheckThePosition(Vector3 position)
     {
         _walkTimer = 0.0f;
@@ -100,7 +139,6 @@ public class EnemyAction : MonoBehaviour
         {
             _animator = GetComponent<Animator>();
         }
-        _animator.SetTrigger("Event");
         if (_enemyBase == null)
         {
             Debug.Log("Enemy Base is Null!!");
@@ -112,6 +150,11 @@ public class EnemyAction : MonoBehaviour
         if (_agent == null)
         {
             Debug.Log("Agent is Null!!");
+        }
+        _rigidbody = GetComponentInParent<Rigidbody>();
+        if (_rigidbody == null)
+        {
+            Debug.Log("RigidBody is Null at " + gameObject);
         }
 
         _agent.speed = _enemyBase.Agility;
@@ -128,23 +171,31 @@ public class EnemyAction : MonoBehaviour
         if (InGameManager.Instance.IsEvent) { return; }
         SetState();
 
-        switch (_state)
+        if (_knockBackTimer != null)
         {
-            case State.Idle:
-                Idle();
-                break;
-            case State.Walk:
-                Walk();
-                break;
-            case State.Combat:
-                Combat();
-                break;
-            case State.Action:
-                Action();
-                break;
-            case State.Check:
-                Check();
-                break;
+            _knockBackTimer.CountUp(Time.deltaTime);
+        }
+        else
+        {
+
+            switch (_state)
+            {
+                case State.Idle:
+                    Idle();
+                    break;
+                case State.Walk:
+                    Walk();
+                    break;
+                case State.Combat:
+                    Combat();
+                    break;
+                case State.Action:
+                    Action();
+                    break;
+                case State.Check:
+                    Check();
+                    break;
+            }
         }
 
         if(_agent != null)
@@ -289,4 +340,12 @@ public class EnemyAction : MonoBehaviour
         _state = State.Action;
         _agent.updateRotation = false;
     }
+    private void FinishKnockBack()
+    {
+        _knockBackTimer = null;
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.isKinematic = true;
+        Warp(transform.position);
+    }
+
 }

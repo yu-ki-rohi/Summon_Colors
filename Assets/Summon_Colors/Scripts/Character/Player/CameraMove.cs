@@ -202,8 +202,9 @@ public class CameraMove : MonoBehaviour
     {
         yield return new WaitForSeconds(3.2f);
         _virtualCamera.gameObject.SetActive(true);
-        yield return new WaitForSeconds(1.6f);
+        yield return new WaitForSeconds(1.7f);
         InGameManager.Instance.StopEventCamera();
-        InGameManager.Instance.ViewButtonDisplay();
+        InGameManager.Instance.StopStartAnimators();
+
     }
 }

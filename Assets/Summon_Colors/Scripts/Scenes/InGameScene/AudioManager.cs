@@ -61,12 +61,13 @@ public class AudioManager : MonoBehaviour
         Vacuum,
         Summon,
         Step,
-        Throw
+        Throw,
+        Back
     }
 
     public enum DemonSound
     {
-        Bite = 4,
+        Bite = 5,
         Bite_Small,
         Attack,
         TailAttack,
@@ -86,7 +87,7 @@ public class AudioManager : MonoBehaviour
 
     public enum SystemSound
     {
-        Decide = 20,
+        Decide = 21,
         Select
     }
 

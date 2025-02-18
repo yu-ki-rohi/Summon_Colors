@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class HomeBase : MonoBehaviour
 {
@@ -78,6 +79,7 @@ public class HomeBase : MonoBehaviour
 
     private void SetPosition(Vector3 newPos)
     {
+#if false
         float height = 10.0f;
         float distance = 30.0f;
         newPos.y += height;
@@ -91,6 +93,13 @@ public class HomeBase : MonoBehaviour
         {
             transform.position = hit.point + Vector3.up * _up;
         }
+#else
+        NavMeshHit navMeshHit;
+        if (NavMesh.SamplePosition(newPos, out navMeshHit, 10.0f, NavMesh.AllAreas))
+        {
+            transform.position = navMeshHit.position + Vector3.up * _up;
+        }
+#endif
     }
 
     private void SetStandByPosition()

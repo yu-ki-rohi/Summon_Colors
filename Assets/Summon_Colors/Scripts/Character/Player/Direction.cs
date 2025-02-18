@@ -19,7 +19,23 @@ public class Direction : MonoBehaviour
         }
         Vector3 horizontalCameraForward = Camera.main.transform.forward;
         horizontalCameraForward.y = 0f;
-        _summon.GetHomeBase(_summon.Color).Velocity = (horizontalCameraForward.normalized * stick.y + Camera.main.transform.right * stick.x).normalized * _speed;
+
+        HomeBase homeBase = _summon.GetHomeBase(_summon.Color);
+        float sqrMagni = (homeBase.transform.position - transform.position).sqrMagnitude;
+        // 近すぎる時はこちらには移動させない
+        if(sqrMagni < 16.0f && stick.y < 0.0f)
+        {
+            horizontalCameraForward = Vector3.zero;
+        }
+        else
+        {
+            horizontalCameraForward = horizontalCameraForward.normalized;
+        }
+        float correction01 = 5000.0f;
+        float correction02 = 1000.0f;
+        _summon.GetHomeBase(_summon.Color).Velocity = (
+            horizontalCameraForward * stick.y + 
+            Camera.main.transform.right * stick.x).normalized * (_speed + (sqrMagni - correction01) / correction02);
     }
 
     public void Return()

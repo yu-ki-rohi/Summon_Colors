@@ -130,7 +130,6 @@ GameObject:
   - component: {fileID: 2483347940465097381}
   - component: {fileID: 721807867578505864}
   - component: {fileID: 8144506382928600688}
-  - component: {fileID: 5220310947135134649}
   m_Layer: 12
   m_Name: Model
   m_TagString: Untagged
@@ -208,33 +207,6 @@ MonoBehaviour:
   _bodyCollider: {fileID: 0}
   _agent: {fileID: 639935681624299021}
   _isForwardInverse: 1
---- !u!54 &5220310947135134649
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 298998145665105454}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!1 &639601654372582277
 GameObject:
   m_ObjectHideFlags: 0
@@ -505,6 +477,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5687350519068577767}
   - component: {fileID: 639935681624299021}
+  - component: {fileID: 5516634600812018383}
   m_Layer: 12
   m_Name: Spider
   m_TagString: Untagged
@@ -551,6 +524,33 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!54 &5516634600812018383
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3446854763882078807}
+  serializedVersion: 4
+  m_Mass: 20
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 0
 --- !u!1 &3631290862919621786
 GameObject:
   m_ObjectHideFlags: 0
@@ -796,7 +796,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4946846222882470609}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 0680f02e79577cb43a2057631d0d2774, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

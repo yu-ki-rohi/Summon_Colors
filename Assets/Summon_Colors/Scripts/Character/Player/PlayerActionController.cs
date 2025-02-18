@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static ColorElements;
+using static UIManager;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Absorb))]
 [RequireComponent(typeof(Summon))]
@@ -44,6 +45,7 @@ public class PlayerActionController : MonoBehaviour
     private bool _isLookAtCameraTarget = false;
     private AudioSource _audioSource;
     private Timer _stayVoiceTimer;
+    private Timer _bloomTimer;
 
     public ColorElements.ColorType Color { get { return _summon.Color; } }
     public bool IsAbsorbing()
@@ -79,13 +81,19 @@ public class PlayerActionController : MonoBehaviour
            !InGameManager.Instance.IsClear
            && !InGameManager.Instance.IsEvent)
         {
-            Debug.Log("Create Voice Timer");
             _stayVoiceTimer = new Timer(PlayStayVoice, 5.0f);
         }
     }
 
     public void ChangeToIdle()
     {
+        if (_state == State.Direction)
+        {
+            _animator.SetBool("Order", false);
+            Time.timeScale = 1.0f;
+            _cameraMove.ChangeTarget(transform, false);
+            Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+        }
         _state = State.Idle;
         _canMove = true;
         _isLookAtCameraTarget = false;
@@ -94,6 +102,7 @@ public class PlayerActionController : MonoBehaviour
         _animator.SetBool("Order", false);
         StopSound();
         ViewBloom(false);
+        InGameManager.Instance.ViewButtonDisplay(false);
         _summon.StopSummon();
     }
     public void ChangeToSummon()
@@ -151,7 +160,7 @@ public class PlayerActionController : MonoBehaviour
     public void KnockBack(Vector3 dir, float strength, float time)
     {
         _canMove = false;
-        _knockBackTimer = new Timer(FinishKnockBack, time);
+        _knockBackTimer = new Timer(FinishKnockBack, time / _rigidbody.mass);
         dir.y = 0;
         if(dir.sqrMagnitude != 1.0f)
         {
@@ -229,6 +238,8 @@ public class PlayerActionController : MonoBehaviour
                 forward.y = 0.0f;
                 gameObject.transform.forward = forward.normalized;
                 _stayVoiceTimer = null;
+                int mask = (int)ButtonMask.Avoid | (int)ButtonMask.Absorb;
+                InGameManager.Instance.ViewButtonDisplay(mask);
             }
         }
         else if (context.canceled)
@@ -252,6 +263,14 @@ public class PlayerActionController : MonoBehaviour
                 AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Summon01, 2, transform);
                 _summon.StartSummon();
                 _stayVoiceTimer = null;
+                ViewBloom(true);
+                int mask = (int)ButtonMask.Avoid | (int)ButtonMask.Summon;
+                InGameManager.Instance.ViewButtonDisplay(mask);
+            }
+            else if (_state == State.Prepare)
+            {
+                _animator.SetBool("Summon", true);
+                _summon.StartSummon();
                 ViewBloom(true);
             }
         }
@@ -280,6 +299,8 @@ public class PlayerActionController : MonoBehaviour
                 gameObject.transform.forward = forward.normalized;
                 AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Attack01, 2, transform);
                 _stayVoiceTimer = null;
+                int mask = (int)ButtonMask.Avoid;
+                InGameManager.Instance.ViewButtonDisplay(mask);
             }
         }
         else if (context.canceled)
@@ -306,11 +327,21 @@ public class PlayerActionController : MonoBehaviour
             _animator.SetBool("Order", false);
             _canMove = false;
             ViewBloom(false);
+            if(_isChangingColor)
+            {
+                _lightPalette.ReflectStick(Vector2.zero);
+                _isChangingColor = false;
+                _colorPalette.HideColorPalette();
+                _lightPalette.HideColorPalette();
+            }
             Time.timeScale = 1.0f;
             _cameraMove.ChangeTarget(transform, false);
             Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
             AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Evasion01, 2, transform);
             _stayVoiceTimer = null;
+
+            int mask = (int)ButtonMask.None;
+            InGameManager.Instance.ViewButtonDisplay(mask);
         }
     }
 
@@ -328,7 +359,14 @@ public class PlayerActionController : MonoBehaviour
                 _cameraMove.ChangeTarget(_summon.GetHomeBase(_summon.Color).transform, true);
                 Camera.main.cullingMask |= (1 << LayerMask.NameToLayer("UI"));
                 _stayVoiceTimer = null;
-                ViewBloom(true);
+                int mask = (int)ButtonMask.All;
+                mask &= ~(
+                    (int)ButtonMask.Summon | 
+                    (int)ButtonMask.Absorb | 
+                    (int)ButtonMask.Attack
+                    );
+                InGameManager.Instance.ViewButtonDisplay(mask);
+
             }
         }
         else if (context.canceled)
@@ -340,17 +378,18 @@ public class PlayerActionController : MonoBehaviour
                 Time.timeScale = 1.0f;
                 _cameraMove.ChangeTarget(transform, false);
                 Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
-                ViewBloom(false);
+                InGameManager.Instance.ViewButtonDisplay(false);
             }
         }
     }
-
     public void OnReturn(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
             if (_state == State.Direction)
             {
+                FlushStone();
+                AudioManager.Instance.PlaySoundOneShot((int)AudioManager.PlayerSound.Back, transform);
                 _direction.Return();
             }
             else
@@ -367,8 +406,10 @@ public class PlayerActionController : MonoBehaviour
     {
         if (context.performed)
         {
-            if (_state == State.Direction)
+            if (_state == State.Direction || _state == State.Idle)
             {
+                FlushStone();
+                AudioManager.Instance.PlaySoundOneShot((int)AudioManager.PlayerSound.Back, transform);
                 _direction.CallBack();
             }
             else
@@ -393,6 +434,7 @@ public class PlayerActionController : MonoBehaviour
                 _colorPalette.DisplayColorPalette();
                 _lightPalette.DisplayColorPalette();
                 _lightPalette.TurnOffLight();
+                _summon.PrepareChangeColor(_summon.Color);
                 ViewBloom(true);
             }
             
@@ -475,7 +517,10 @@ public class PlayerActionController : MonoBehaviour
         {
             _stayVoiceTimer.CountUp();
         }
-       
+       if(_bloomTimer != null)
+        {
+            _bloomTimer.CountUp();
+        }
     }
 
     private void FinishKnockBack()
@@ -499,6 +544,11 @@ public class PlayerActionController : MonoBehaviour
     private void PlayStayVoice()
     {
         AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.Stay01, 4, transform);
+    }
+    private void DisableBloom()
+    {
+        ViewBloom(false);
+        _bloomTimer = null;
     }
     private void SetBloom()
     {
@@ -529,5 +579,11 @@ public class PlayerActionController : MonoBehaviour
         main = _particleSystem02.main;
         main.startColor = new ParticleSystem.MinMaxGradient(color);
         _trailRenderer.startColor = color;
+    }
+
+    private void FlushStone()
+    {
+        ViewBloom(true);
+        _bloomTimer = new Timer(DisableBloom, 0.6f);
     }
 }

@@ -6,6 +6,7 @@ public class RedAction : SummonedAction
 {
     [SerializeField] private Collider _attackCollider;
     [SerializeField] private HitEffectManager.Type _type;
+    [SerializeField] private bool _inverseForceVec = false;
     private List<CharacterBase> _characters = new List<CharacterBase>();
     public virtual void Attack(Collider collider)
     {
@@ -19,6 +20,14 @@ public class RedAction : SummonedAction
                     character.Damaged(_summonedBase.Attack, _summonedBase.Break, _summonedBase.Appearance, _summonedBase);
                     HitEffectManager.Instance.Play(_type, collider.ClosestPointOnBounds(transform.position));
                     _characters.Add(character);
+                    float time = 8.0f;
+                    float forcePower = 25.0f;
+                    Vector3 forceVec = (collider.transform.position - transform.position);
+                    if (_inverseForceVec)
+                    {
+                        forceVec *= -1.0f;
+                    }
+                    character.KnockBack(forceVec, forcePower, time);
                 }
             }
         }

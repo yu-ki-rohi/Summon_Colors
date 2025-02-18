@@ -12,10 +12,14 @@ public class InGameBase
     public SummonedPool[] SummonedPools;
     public UIManager UIManager;
     public CameraMove CameraMove;
+    public Player Player;
 
+    // 時短のためにこちらにいれたが、本来はUIManagerにいれるべき
     public TextMeshProUGUI[] _scoreTexts;
     public TextMeshProUGUI[] _rankingTexts;
     public TextMeshProUGUI SummonedNumText;
+
+    public Animator[] StartAnimators;
 
     public ShaderManager ShaderManager;
     private bool _isClear = false;
@@ -57,7 +61,26 @@ public class InGameBase
 
     public void SetSummonedNumText(ColorElements.ColorType  color)
     {
-        SummonedNumText.text = SummonedPools[(int)color].GetActiveNum().ToString();
+        int activeNum = SummonedPools[(int)color].GetActiveNum();
+        SummonedNumText.text = activeNum.ToString();
+        int summonMax = 1;
+        if(color != ColorElements.ColorType.All) { summonMax = Player.SummonMax; }
+        if (activeNum >= summonMax)
+        {
+            SummonedNumText.faceColor = new Color(1.0f, 0.6f, 0.2f);
+        }
+        else
+        {
+            SummonedNumText.faceColor = Color.white;
+        }
+    }
+
+    public void StopStartAnimators()
+    {
+        for(int i = 0; i < StartAnimators.Length; i++)
+        {
+            StartAnimators[i].enabled = false;
+        }
     }
 
     public void AddEnemyNum()

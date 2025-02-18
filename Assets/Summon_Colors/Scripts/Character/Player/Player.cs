@@ -76,6 +76,12 @@ public class Player : CharacterBase
         _actionController.KnockBack(dir, strength, time);
     }
 
+    public override void StartInvincible()
+    {
+        base.StartInvincible();
+        AudioManager.Instance.PlaySoundOneShot((int)AudioManager.PlayerSound.Step, transform);
+    }
+
     protected override void Die()
     {
         AudioManager.Instance.PlayRandomVoice((int)AudioManager.Voice.GameOver01, 2, transform);

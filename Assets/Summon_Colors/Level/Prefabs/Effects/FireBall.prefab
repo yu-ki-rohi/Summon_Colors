@@ -4854,9 +4854,10 @@ GameObject:
   - component: {fileID: 9055024806224266152}
   - component: {fileID: 1110407526348929295}
   - component: {fileID: 1129717046783531108}
+  - component: {fileID: 5607747132323269333}
   m_Layer: 13
   m_Name: FireBall
-  m_TagString: Untagged
+  m_TagString: SubElement
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4890,8 +4891,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _power: 15
-  _range: 20
-  _speed: 7
+  _range: 80
+  _speed: 8
   _useRigidBody: 0
   _flames: {fileID: 1640943796078817888, guid: 85c7f270636730d4e902a118997864cb, type: 3}
   _fire: {fileID: 3269977683936761756, guid: d16aeedae0234a7458ca18bf234a1f63, type: 3}
@@ -4916,6 +4917,26 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.8
   m_Center: {x: 0, y: 0, z: -1}
+--- !u!114 &5607747132323269333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7133818608980691834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2111dbaec596244cbb173726565bf6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorElements:
+    Blue: 0
+    Red: 5
+    Yellow: 0
+  _absorbMagnification: 5
+  _coolTime: 0.2
+  _meshRenderers: []
+  _renderer: {fileID: 0}
 --- !u!1 &8911218420576999162
 GameObject:
   m_ObjectHideFlags: 0

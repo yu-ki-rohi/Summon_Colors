@@ -43,6 +43,13 @@ public class EnemyAction : MonoBehaviour
                 {
                     HitEffectManager.Instance.Play(HitEffectManager.Type.Hit, collider.ClosestPointOnBounds(transform.position));
                 }
+                if (damage > 0)
+                {
+                    float time = 10.0f;
+                    float forcePower = 150.0f;
+                    Vector3 forceVec = (collider.transform.position - transform.position);
+                    character.KnockBack(forceVec, forcePower, time);
+                }
             }
         }
     }
@@ -52,8 +59,6 @@ public class EnemyAction : MonoBehaviour
         _agent.velocity = Vector3.zero;
         _agent.updatePosition = false;
         _agent.updateRotation = false;
-        Debug.Log("Strength = " + strength);
-        Debug.Log("Time = " + time / _rigidbody.mass);
         _knockBackTimer = new Timer(FinishKnockBack, time / _rigidbody.mass);
         dir.y = 0;
         if (dir.sqrMagnitude != 1.0f)

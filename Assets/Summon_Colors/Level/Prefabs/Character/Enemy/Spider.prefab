@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 2483347940465097381}
   - component: {fileID: 721807867578505864}
   - component: {fileID: 8144506382928600688}
+  - component: {fileID: 5959970096030178698}
   m_Layer: 12
   m_Name: Model
   m_TagString: Untagged
@@ -191,6 +192,9 @@ MonoBehaviour:
   _eyesTransform: {fileID: 534881941554879933}
   _enemyData: {fileID: 11400000, guid: eb8bc1515a660744abd1c75f1a06eb53, type: 2}
   _uiMmanager: {fileID: 0}
+  _bodyObjects:
+  - {fileID: 3446854763882078807}
+  - {fileID: 4946846222882470609}
 --- !u!114 &8144506382928600688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,6 +211,26 @@ MonoBehaviour:
   _bodyCollider: {fileID: 0}
   _agent: {fileID: 639935681624299021}
   _isForwardInverse: 1
+--- !u!114 &5959970096030178698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 298998145665105454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2111dbaec596244cbb173726565bf6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorElements:
+    Blue: 15
+    Red: 20
+    Yellow: 5
+  _absorbMagnification: 3
+  _coolTime: 0.2
+  _meshRenderers: []
+  _renderer: {fileID: 1331045363666465053}
 --- !u!1 &639601654372582277
 GameObject:
   m_ObjectHideFlags: 0

@@ -72,12 +72,18 @@ public class CharacterBase : MonoBehaviour
         {
             _currentHp -= damage;
         }
-
-        _armor -= shock;
-        if(_armor <= 0)
+        if(shock > _characterData.Armor)
         {
-            _armor = _characterData.Armor;
-            Broken();
+            BigBroken();
+        }
+        else
+        {
+            _armor -= shock;
+            if (_armor <= 0)
+            {
+                _armor = _characterData.Armor;
+                Broken();
+            }
         }
 
         _invincibleTimer = new Timer(FinishInvincible, _inbincibleTime);
@@ -128,6 +134,13 @@ public class CharacterBase : MonoBehaviour
         if (_animator != null)
         {
             _animator.SetTrigger("Broken");
+        }
+    }
+    protected virtual void BigBroken()
+    {
+        if (_animator != null)
+        {
+            _animator.SetTrigger("Test");
         }
     }
 

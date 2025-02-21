@@ -8,6 +8,7 @@ public class EnemyBase : NPCBase
 {
     [SerializeField] private EnemyData _enemyData;
     [SerializeField] private UIManager _uiMmanager;
+    [SerializeField] private GameObject[] _bodyObjects;
     private EnemyAction _action;
     private CharacterBase _player;
     public float StopDistance { get { return _enemyData.StopDistance; } }
@@ -94,7 +95,19 @@ public class EnemyBase : NPCBase
     protected override void Die()
     {
         _action.Die();
+        ChangeTagAndLayer();
         base.Die();
+    }
+
+    private void ChangeTagAndLayer()
+    {
+        int layer = LayerMask.NameToLayer("Default");
+        for(int i = 0; i < _bodyObjects.Length; i++)
+        {
+            _bodyObjects[i].layer = layer;
+            _bodyObjects[i].tag = "Element";
+
+        }
     }
 
     // Start is called before the first frame update

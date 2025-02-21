@@ -47,9 +47,19 @@ public class Direction : MonoBehaviour
     {
         HomeBase[] homeBases = _summon.HomeBases;
         if (homeBases.Length > _defaultHomeBasePos.Length) { return; }
+        ColorElements.ColorType[] colorTypes = new ColorElements.ColorType[7]
+        {
+            ColorElements.ColorType.All,
+            ColorElements.ColorType.Blue,
+            ColorElements.ColorType.Red,
+            ColorElements.ColorType.Yellow,
+            ColorElements.ColorType.Violet,
+            ColorElements.ColorType.Green,
+            ColorElements.ColorType.Orange,
+        };
         for(int i = 0; i < homeBases.Length; i++)
         {
-            homeBases[i].SetPositionImmediately(_defaultHomeBasePos[i].position);
+            homeBases[(int)colorTypes[i]].SetPositionImmediately(_defaultHomeBasePos[i].position);
         }
     }
 
@@ -63,11 +73,22 @@ public class Direction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         HomeBase[] homeBases = _summon.HomeBases;
         if (homeBases.Length > _defaultHomeBasePos.Length) { return; }
+        ColorElements.ColorType[] colorTypes = new ColorElements.ColorType[7]
+        {
+            ColorElements.ColorType.All,
+            ColorElements.ColorType.Blue,
+            ColorElements.ColorType.Red,
+            ColorElements.ColorType.Yellow,
+            ColorElements.ColorType.Violet,
+            ColorElements.ColorType.Green,
+            ColorElements.ColorType.Orange,
+        };
         for (int i = 0; i < homeBases.Length; i++)
         {
-            homeBases[i].UpdatePositionWithPlayer(_defaultHomeBasePos[i].position);
+            homeBases[(int)colorTypes[i]].UpdatePositionWithPlayer(_defaultHomeBasePos[i].position);
         }
     }
 

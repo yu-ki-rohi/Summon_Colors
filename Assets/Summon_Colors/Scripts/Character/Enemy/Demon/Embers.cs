@@ -21,7 +21,9 @@ public class Embers : MonoBehaviour
         RaycastHit hit;
         int layerNum = LayerMask.NameToLayer("Stage");
         int layerMask = 1 << layerNum;
-        float distance = 1.2f;
+        layerNum = LayerMask.NameToLayer("Ground");
+        layerMask |= 1 << layerNum;
+        float distance = 6.5f;
 
         if (Physics.Raycast(ray, out hit, distance, layerMask))
         {

@@ -92,6 +92,17 @@ public class Explosion : MonoBehaviour
                 HitEffectManager.Instance.Play(HitEffectManager.Type.Darkness, other.ClosestPointOnBounds(transform.position));
             }
         }
+        else if(gameObject.tag == "Untagged")
+        {
+            if (other.tag == "Player" || other.tag == "Summoned" || other.tag == "Enemy")
+            {
+                int damage = HitOther(other);
+                if (damage != 0)
+                {
+                    HitEffectManager.Instance.Play(HitEffectManager.Type.Fire, other.ClosestPointOnBounds(transform.position));
+                }
+            }
+        }
     }
     private int HitOther(Collider other)
     {
@@ -123,7 +134,7 @@ public class Explosion : MonoBehaviour
             int damage;
             if(_attacker == null)
             {
-                damage = characterBase.Damaged(_power);
+                damage = characterBase.Damaged(_power, 500);
                 if (damage > 0)
                 {
                     // 仮置き　下のとまとめてメソッド化したい

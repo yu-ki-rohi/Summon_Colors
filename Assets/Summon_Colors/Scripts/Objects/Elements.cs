@@ -9,6 +9,7 @@ public class Elements : MonoBehaviour
     [SerializeField] private float _absorbMagnification = 1.0f;
     [SerializeField] private float _coolTime = 0.2f;
     [SerializeField] private MeshRenderer[] _meshRenderers;
+    [SerializeField] private Renderer _renderer;
 
     private MeshRenderer _meshRenderer;
     private Material[] _materials;
@@ -26,7 +27,7 @@ public class Elements : MonoBehaviour
     public void ExtractEnergy(ColorElements.ColorType type)
     {
         GenerateEnergy(type);
-        if(_meshRenderer != null)
+        if(_meshRenderer != null || _renderer != null)
         {
             ReflectColorRemaining();
         }
@@ -51,13 +52,17 @@ public class Elements : MonoBehaviour
         {
             _material = _meshRenderer.materials[_meshRenderer.materials.Length - 1];
         }
-        if(_meshRenderers.Length > 0)
+        if(_renderer != null)
+        {
+            _materials = _renderer.materials;
+        }
+        else if(_meshRenderers.Length > 0)
         {
             _materials = new Material[_meshRenderers.Length];
-        }
-        for (int i = 0; i < _meshRenderers.Length; i++)
-        {
-            _materials[i] = _meshRenderers[i].materials[_meshRenderers[i].materials.Length - 1];
+            for (int i = 0; i < _meshRenderers.Length; i++)
+            {
+                _materials[i] = _meshRenderers[i].materials[_meshRenderers[i].materials.Length - 1];
+            }
         }
         
     }
@@ -101,23 +106,55 @@ public class Elements : MonoBehaviour
         }
 
         int value;
+#if true
+        ColorElements.ColorType type = ColorElements.ColorType.Blue;
+        value = _colorElements.CurrentBlue;
+        if(value < _colorElements.CurrentRed)
+        {
+            value = _colorElements.CurrentRed;
+            type = ColorElements.ColorType.Red;
+        }
+        if(value < _colorElements.CurrentYellow)
+        {
+            value = _colorElements.CurrentYellow;
+            type = ColorElements.ColorType.Yellow;
+        }
+        float amount = _absorb.GetPower() * _absorbMagnification;
+        if(amount < 1.0f)
+        {
+            int judge = Random.Range(0, 100);
+            if(judge < (int)(amount * 100.0f))
+            {
+                value = 1;
+            }
+            else
+            {
+                value = 0;
+            }
+        }
+        else
+        {
+            value = (int)amount;
+        }
+#else
         switch (colorType)
         {
             case ColorElements.ColorType.Blue:
                 value = (int)(_absorb.GetPower() * _absorbMagnification * (float)_colorElements.Blue / _colorElements.GetColorSum());
-                break;
+            break;
             case ColorElements.ColorType.Red:
                 value = (int)(_absorb.GetPower() * _absorbMagnification * (float)_colorElements.Red / _colorElements.GetColorSum());
-                break;
+            break;
             case ColorElements.ColorType.Yellow:
                 value = (int)(_absorb.GetPower() * _absorbMagnification * (float)_colorElements.Yellow / _colorElements.GetColorSum());
-                break;
+            break;
             default:
                 value = 0;
-                break;
+            break;
         }
+#endif
 
-        value = _colorElements.Reduce(colorType, value);
+        value = _colorElements.Reduce(type, value);
 
         if (value > 0)
         {
@@ -125,7 +162,7 @@ public class Elements : MonoBehaviour
             if (energyObject.TryGetComponent<Energy>(out var energy))
 
             {
-                energy.Initialize(_absorb, colorType, value);
+                energy.Initialize(_absorb, type, value);
             }
         }
     }
@@ -133,14 +170,30 @@ public class Elements : MonoBehaviour
 
     private void ReflectColorRemaining()
     {
+
         Color newColor = new Color(0.0f, 0.0f, 0.0f, 1.0f - _colorElements.GetRemaining(ColorElements.ColorType.All));
-        for (int i = 0; i < _meshRenderers.Length; i++)
+        if(_renderer == null)
         {
-            _materials[i].SetColor("_BaseColor", newColor);
+            for (int i = 0; i < _meshRenderers.Length; i++)
+            {
+                _materials[i].SetColor("_BaseColor", newColor);
+            }
+            if (_material != null)
+            {
+                _material.SetColor("_BaseColor", newColor);
+            }
         }
-        if (_material != null)
+        else
         {
-            _material.SetColor("_BaseColor", newColor);
+            newColor = new Color(
+                _colorElements.GetRemaining(ColorElements.ColorType.All),
+                _colorElements.GetRemaining(ColorElements.ColorType.All),
+                _colorElements.GetRemaining(ColorElements.ColorType.All),
+                1.0f);
+            for (int i = 0; i < _materials.Length; i++)
+            {
+                _materials[i].SetColor("_BaseColor", newColor);
+            }
         }
     }
 }

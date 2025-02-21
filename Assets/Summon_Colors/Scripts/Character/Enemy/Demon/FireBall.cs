@@ -9,12 +9,21 @@ public class FireBall : Projectiles
     [SerializeField] private GameObject _fire;
     private ObjectPoolBase _embersPool;
     private int _embersPower = 3;
+    private Elements _elements;
 
     public void Initialize(int power, int embersPower, ObjectPoolBase embersPool)
     {
         Initialize(power);
         _embersPower = embersPower;
         _embersPool = embersPool;
+        if(_elements == null)
+        {
+            _elements = GetComponent<Elements>();
+        }
+        else
+        {
+            _elements.Initialize();
+        }
     }
 
     protected override void BehaviorOnHitStage(Collider stage)
@@ -42,6 +51,12 @@ public class FireBall : Projectiles
         
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        CheckElementRemaining();
+    }
+
     protected override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
@@ -64,5 +79,12 @@ public class FireBall : Projectiles
                 }
             }
         }
+    }
+
+    private void CheckElementRemaining()
+    {
+        if (_elements == null) return;
+        if (_elements.IsColorRemaining()) return;
+        DisAppear();
     }
 }

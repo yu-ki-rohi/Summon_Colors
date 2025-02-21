@@ -123,6 +123,11 @@ public class Absorb : MonoBehaviour
         if(IsAbsorbing())
         {
             _shootTimer.CountUp(Time.deltaTime);
+            SetShootDirection(Camera.main.transform.forward);
+
+            Vector3 forward = Camera.main.transform.forward;
+            forward.y = 0.0f;
+            gameObject.transform.forward = forward.normalized;
         }
     }
 

@@ -152,6 +152,7 @@ MonoBehaviour:
     Blue: 60
     Red: 100
     Yellow: 60
-  _absorbMagnification: 1
+  _absorbMagnification: 0.5
   _coolTime: 0.2
   _meshRenderers: []
+  _renderer: {fileID: 0}

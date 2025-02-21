@@ -17,6 +17,7 @@ public class PlayerMove : MonoBehaviour
     private float _speed = 0.0f;
     private float _acceleration;
     private float _cameraY;
+    private int _throwingIndex;
 
     public void SetCameraY() 
     {
@@ -56,8 +57,7 @@ public class PlayerMove : MonoBehaviour
 
     public void ThrowItem()
     {
-        int judge = Random.Range(0, _throwing.Length);
-        GameObject throwing = Instantiate(_throwing[judge], _handTransform.position, Quaternion.identity);
+        GameObject throwing = Instantiate(_throwing[_throwingIndex], _handTransform.position, Quaternion.identity);
         if (throwing.TryGetComponent<ThrowingObject>(out var projectiles))
         {
             projectiles.Initialize(_player.Attack, _player.Break, _player.Appearance, _player);
@@ -65,12 +65,18 @@ public class PlayerMove : MonoBehaviour
         if (throwing.TryGetComponent<Rigidbody>(out var rigidbody))
         {
             SetCameraY();
-            float up = 0.2f;
+            float up = 0.4f;
             float cameraMalti = 0.6f;
             float throwPower = 36.0f;
             Vector3 throwVec = gameObject.transform.forward + Vector3.up * (_cameraY * cameraMalti + up);
             rigidbody.AddForce(throwVec * throwPower,ForceMode.Impulse);
         }
+    }
+
+    public int SetThrowingItem()
+    {
+        _throwingIndex = Random.Range(0, _throwing.Length);
+        return _throwingIndex;
     }
 
     // Start is called before the first frame update

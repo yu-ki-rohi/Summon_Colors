@@ -125,9 +125,10 @@ MonoBehaviour:
     Blue: 20
     Red: 80
     Yellow: 60
-  _absorbMagnification: 1
+  _absorbMagnification: 0.1
   _coolTime: 0.2
   _meshRenderers: []
+  _renderer: {fileID: 0}
 --- !u!54 &1929157108323113459
 Rigidbody:
   m_ObjectHideFlags: 0

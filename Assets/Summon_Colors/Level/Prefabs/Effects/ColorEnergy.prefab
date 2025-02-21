@@ -9825,7 +9825,7 @@ MonoBehaviour:
   _speed: 10
   _varticalRange: 800
   _horizontallyRange: 800
-  _rotateSpeed: 8
+  _rotateSpeed: 10
   _changeTime: 0.3
   _particleSystem01: {fileID: 9162479480654789167}
   _particleSystem02: {fileID: 9081716907951725229}

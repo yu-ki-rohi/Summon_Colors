@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Absorb))]
@@ -25,7 +26,7 @@ public class Summon : MonoBehaviour
     private float _timer = 0.0f;
     private bool _isSuggestingAbsorb = false;
     private bool _isSuggestingSummon = false;
-
+    private Timer _vibrationTimer = null;
     public ColorElements.ColorType Color { get { return _color; } }
 
     public SummonedPool[] SummonedPools { get { return _summonedPools; } }
@@ -129,6 +130,8 @@ public class Summon : MonoBehaviour
                                 {
                                     summonedBase.Initialize(i, _summonBasePositions[_color][i], this, path.corners[path.corners.Length - 1]);
                                 }
+                                SetMotor(0.2f, 0.3f);
+                                _vibrationTimer = new Timer(StopVibration, 0.15f);
                                 return true;
                             }
 
@@ -181,11 +184,16 @@ public class Summon : MonoBehaviour
         {
             if (theta < partition * (i + 1))
             {
-                _color = colorTypes[i];
-                _player.UIManager.ChangeColor(_color);
-                _lightPalette.TurnOffLight();
-                _lightPalette.LightColor(i);
-                _actionController.ViewBloom(true);
+                if(_color != colorTypes[i])
+                {
+                    _color = colorTypes[i];
+                    _player.UIManager.ChangeColor(_color);
+                    _lightPalette.TurnOffLight();
+                    _lightPalette.LightColor(i);
+                    _actionController.ViewBloom(true);
+                    SetMotor(0.2f, 0.3f);
+                    _vibrationTimer = new Timer(StopVibration, 0.01f);
+                }
                 return;
             }
         }
@@ -256,7 +264,10 @@ public class Summon : MonoBehaviour
         {
             _timer = 0.0f;
         }
-
+        if(_vibrationTimer != null)
+        {
+            _vibrationTimer.CountUp();
+        }
         SuggestButton();
     }
 
@@ -502,5 +513,18 @@ public class Summon : MonoBehaviour
             }
             yield return new WaitForSeconds(0.05f);
         }
+    }
+
+    private void StopVibration()
+    {
+        InputSystem.ResetHaptics();
+        _vibrationTimer = null;
+    }
+
+    private void SetMotor(float low, float high)
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad == null) { return; }
+        gamepad.SetMotorSpeeds(low, high);
     }
 }

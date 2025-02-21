@@ -104,6 +104,7 @@ public class PlayerActionController : MonoBehaviour
         ViewBloom(false);
         InGameManager.Instance.ViewButtonDisplay(false);
         _summon.StopSummon();
+        InputSystem.ResetHaptics();
     }
     public void ChangeToSummon()
     {
@@ -130,6 +131,9 @@ public class PlayerActionController : MonoBehaviour
         }
         _state = State.Throw;
         _isLookAtCameraTarget = true;
+        int index = _playerMove.SetThrowingItem();
+        float power = index * 0.06f;
+        SetMotor(power * 3.0f, power);
     }
 
     public void ChangeToAbsorb()
@@ -142,6 +146,7 @@ public class PlayerActionController : MonoBehaviour
             Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
         }
         _state = State.Absorb;
+        SetMotor(0.01f, 0.05f);
     }
 
     public void ViewBloom(bool flag)
@@ -159,6 +164,7 @@ public class PlayerActionController : MonoBehaviour
 
     public void KnockBack(Vector3 dir, float strength, float time)
     {
+        Debug.Log(strength);
         _canMove = false;
         _knockBackTimer = new Timer(FinishKnockBack, time / _rigidbody.mass);
         dir.y = 0;
@@ -167,6 +173,8 @@ public class PlayerActionController : MonoBehaviour
             dir = dir.normalized;
         }
         _rigidbody.AddForce(dir * strength, ForceMode.Impulse);
+        strength = Mathf.Clamp01(strength / 400.0f);
+        SetMotor(strength, strength);
     }
 
     public void OnDie()
@@ -464,6 +472,7 @@ public class PlayerActionController : MonoBehaviour
         {
             if (InGameManager.Instance.IsClear) { return; }
             InGameManager.Instance.ChangePause();
+            InputSystem.PauseHaptics();
         }
         else if (context.canceled)
         {
@@ -529,6 +538,7 @@ public class PlayerActionController : MonoBehaviour
         {
             _canMove = true;
         }
+        InputSystem.ResetHaptics();
         _knockBackTimer = null;
     }
 
@@ -585,5 +595,12 @@ public class PlayerActionController : MonoBehaviour
     {
         ViewBloom(true);
         _bloomTimer = new Timer(DisableBloom, 0.6f);
+    }
+
+    private void SetMotor(float low, float high)
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad == null) { return; }
+        gamepad.SetMotorSpeeds(low, high);
     }
 }

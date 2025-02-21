@@ -21,9 +21,9 @@ MonoBehaviour:
   Agility: 5
   CoolTime: 1
   PowerMagnifications: []
-  RateOfFire: 10
+  RateOfFire: 25
   Accuracy: 3
-  ColorCapacity: 255
-  AbsorbPower: 5
+  ColorCapacity: 150
+  AbsorbPower: 2
   SummonMax: 5
   Money: 0

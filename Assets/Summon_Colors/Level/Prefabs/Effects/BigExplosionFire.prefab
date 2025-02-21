@@ -9631,11 +9631,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _colorElements:
     Blue: 0
-    Red: 3
-    Yellow: 3
-  _absorbMagnification: 1.5
+    Red: 20
+    Yellow: 5
+  _absorbMagnification: 2
   _coolTime: 0.2
   _meshRenderers: []
+  _renderer: {fileID: 0}
 --- !u!65 &5315909807004063880
 BoxCollider:
   m_ObjectHideFlags: 0

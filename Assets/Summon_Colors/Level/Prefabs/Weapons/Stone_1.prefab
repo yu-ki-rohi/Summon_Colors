@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5484984582632537762}
   m_Layer: 11
   m_Name: Stone_1
-  m_TagString: Untagged
+  m_TagString: Element
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,7 +122,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.16434912
+  m_Radius: 0.2
   m_Center: {x: -0.0032969266, y: 0.0079737045, z: -0.005306024}
 --- !u!54 &5484984582632537762
 Rigidbody:

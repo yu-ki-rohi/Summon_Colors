@@ -6,6 +6,7 @@ using UnityEngine.AI;
 using UnityEngine.Rendering.LookDev;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.InputSystem;
 
 public class DemonAction : EnemyAction
 {
@@ -13,6 +14,7 @@ public class DemonAction : EnemyAction
     {
         Bite,
         Clap,
+        EarthQuake,
         Tail,
         Rush,
         Fire_Head,
@@ -67,6 +69,7 @@ public class DemonAction : EnemyAction
     private float _red = 0.5f;
     private float _green = 0.1f;
     private float _blue = 0.1f;
+    private Timer _vibrationTimer = null;
     public void IgnitEventMove()
     {
         _willChangeSky = true;
@@ -136,6 +139,10 @@ public class DemonAction : EnemyAction
     public void CreateEarthQuake()
     {
         GameObject earthQuake = Instantiate(_earthQuake, _handAttackCollider.transform.position + Vector3.down * 1.0f, Quaternion.identity);
+        if(earthQuake.TryGetComponent<EarthQuake>(out var component))
+        {
+            component.Initialize((int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.EarthQuake)));
+        }
         earthQuake.transform.forward = transform.forward;
         _handAttackCollider.enabled = true;
         _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Clap));
@@ -223,7 +230,28 @@ public class DemonAction : EnemyAction
         if(_fireBallPool == null)
         {
             GameObject fireBall = Instantiate(_fireBall, _breathPosition.position, Quaternion.identity);
-            fireBall.transform.forward = _breathPosition.forward;
+
+            Transform target = null;
+            Vector3 vec = Vector3.zero;
+            if (_enemyBase.TargetCharacter!= null)
+            {
+                target = _enemyBase.TargetCharacter.GetNearestPart(transform);
+            }
+            if(target != null)
+            {
+                vec = ((target.position - _breathPosition.position).normalized + Vector3.up * 0.7f + _breathPosition.forward * 0.5f).normalized;
+            }
+
+            float dot = Vector3.Dot(vec, _breathPosition.forward);
+            if(dot > 0.1f)
+            {
+                Debug.Log("Fire on Vec");
+                fireBall.transform.forward = vec;
+            }
+            else
+            {
+                fireBall.transform.forward = _breathPosition.forward;
+            }
             if (fireBall.TryGetComponent<Projectiles>(out var projectile))
             {
                 projectile.Initialize(
@@ -233,7 +261,26 @@ public class DemonAction : EnemyAction
         else
         {
             GameObject breath = _fireBallPool.Get(_breathPosition.position);
-            breath.transform.forward = _breathPosition.forward;
+            Transform target = null;
+            Vector3 vec = Vector3.zero;
+            if (_enemyBase.TargetCharacter != null)
+            {
+                target = _enemyBase.TargetCharacter.GetNearestPart(transform);
+            }
+            if (target != null)
+            {
+                vec = (target.position - _breathPosition.position + Vector3.up * 0.7f).normalized;
+            }
+
+            float dot = Vector3.Dot(vec, _breathPosition.forward);
+            if (dot > 0.4f)
+            {
+                breath.transform.forward = vec;
+            }
+            else
+            {
+                breath.transform.forward = _breathPosition.forward;
+            }
             if (breath.TryGetComponent<FireBall>(out var projectile))
             {
                 projectile.Initialize(
@@ -300,6 +347,8 @@ public class DemonAction : EnemyAction
     {
         _roarIntensity = 0.8f;
         AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.Roar, transform);
+        SetMotor(_roarIntensity, _roarIntensity);
+        _vibrationTimer = new Timer(StopVibration, 0.8f);
     }
 
     private void FinishRush()
@@ -376,6 +425,10 @@ public class DemonAction : EnemyAction
         {
             _shaderManager.SetIntensity(_firePosition.position, _roarIntensity);
             _roarIntensity *= 0.95f;
+        }
+        if(_vibrationTimer != null)
+        {
+            _vibrationTimer.CountUp(Time.fixedDeltaTime);
         }
     }
 
@@ -660,5 +713,18 @@ public class DemonAction : EnemyAction
             RenderSettings.defaultReflectionMode = DefaultReflectionMode.Custom;
             yield return new WaitForSeconds(0.03f);
         }
+    }
+
+    private void StopVibration()
+    {
+        InputSystem.ResetHaptics();
+        _vibrationTimer = null;
+    }
+
+    private void SetMotor(float low, float high)
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad == null) { return; }
+        gamepad.SetMotorSpeeds(low, high);
     }
 }

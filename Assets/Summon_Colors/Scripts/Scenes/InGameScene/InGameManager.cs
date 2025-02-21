@@ -171,6 +171,7 @@ public class InGameManager : MonoBehaviour
             _playerInput.actions.FindActionMap("Player").Enable();
             _inGameBase.UIManager.ChangeAlpha(0);
             _inGameBase.UIManager.ChoiceView(false);
+            InputSystem.ResumeHaptics();
         }
         else
         {
@@ -287,6 +288,8 @@ public class InGameManager : MonoBehaviour
             Time.timeScale *= 0.9f;
             yield return new WaitForSeconds(Time.timeScale * 0.01f);
         }
+
+        InputSystem.ResetHaptics();
         float alpha = 0.0f;
         while(alpha < 1.0f)
         {
@@ -326,6 +329,7 @@ public class InGameManager : MonoBehaviour
                 }
                 break;
             case 1:
+                InputSystem.ResetHaptics();
                 switch (_type)
                 {
                     case Type.Boss:
@@ -337,6 +341,7 @@ public class InGameManager : MonoBehaviour
                 }
                 break;
             case 2:
+                InputSystem.ResetHaptics();
                 SceneManager.LoadScene(2);
                 break;
         }
@@ -373,6 +378,7 @@ public class InGameManager : MonoBehaviour
             _inGameBase.UIManager.ChangeAlpha(_inGameBase.UIManager.GetFadeAlpha() + 0.1f);
             yield return new WaitForSeconds(0.03f);
         }
+        InputSystem.ResetHaptics();
         SceneManager.LoadScene(2);
     }
 }

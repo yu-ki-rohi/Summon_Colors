@@ -124,9 +124,10 @@ MonoBehaviour:
     Blue: 30
     Red: 0
     Yellow: 30
-  _absorbMagnification: 1
+  _absorbMagnification: 0.2
   _coolTime: 0.2
   _meshRenderers: []
+  _renderer: {fileID: 0}
 --- !u!1 &7437926073424318977
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,3 +316,4 @@ MonoBehaviour:
   _absorbMagnification: 1
   _coolTime: 0.2
   _meshRenderers: []
+  _renderer: {fileID: 0}

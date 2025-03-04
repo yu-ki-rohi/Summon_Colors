@@ -32,17 +32,15 @@ public class VolcanicBomb : Projectiles
         }
         if(_flames != null)
         {
-            GameObject embersObj = Instantiate(_flames, stage.ClosestPointOnBounds(this.transform.position), Quaternion.identity);
-            if (embersObj.TryGetComponent<Embers>(out var embers))
-            {
-                embers.Initialize(_embersPower);
-            }
+            CreateEmbers();
         }
         if(_audioSource != null)
         {
             _audioSource.Stop();
         }
     }
+
+   
 
     protected override void Update()
     {
@@ -73,6 +71,24 @@ public class VolcanicBomb : Projectiles
                     HitEffectManager.Instance.Play(HitEffectManager.Type.Fire, other.ClosestPointOnBounds(transform.position));
                 }
             }
+        }
+    }
+
+    private void CreateEmbers()
+    {
+        Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
+        RaycastHit hit;
+        int layerNum = LayerMask.NameToLayer("Stage");
+        int layerMask = 1 << layerNum;
+        layerNum = LayerMask.NameToLayer("Ground");
+        layerMask |= 1 << layerNum;
+        float distance = 2.5f;
+
+        if (!Physics.Raycast(ray, out hit, distance, layerMask)) return;
+        GameObject embersObj = Instantiate(_flames, hit.point, Quaternion.identity);
+        if (embersObj.TryGetComponent<Embers>(out var embers))
+        {
+            embers.Initialize(_embersPower);
         }
     }
 }

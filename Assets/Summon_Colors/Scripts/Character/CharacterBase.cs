@@ -86,8 +86,6 @@ public class CharacterBase : MonoBehaviour
             }
         }
 
-        _invincibleTimer = new Timer(FinishInvincible, _inbincibleTime);
-
         return damage;
     }
 
@@ -113,11 +111,17 @@ public class CharacterBase : MonoBehaviour
     public void StartInvincible(float time)
     {
         _isInvincible = true;
-        _invincibleTimer = new Timer(FinishInvincible, time);
+        _invincibleTimer = new Timer(FinishDamagedInvincible, time);
     }
 
 
     public void FinishInvincible()
+    {
+        if(_invincibleTimer != null) return;
+        _isInvincible = false;
+    }
+
+    public void FinishDamagedInvincible()
     {
         _isInvincible = false;
         _invincibleTimer = null;
@@ -126,7 +130,7 @@ public class CharacterBase : MonoBehaviour
     protected void DamagedInvincible(float time)
     {
         _isInvincible = true;
-        _invincibleTimer = new Timer(FinishInvincible, time);
+        _invincibleTimer = new Timer(FinishDamagedInvincible, time);
     }
 
     protected virtual void Broken()

@@ -10,6 +10,7 @@ public class Elements : MonoBehaviour
     [SerializeField] private float _coolTime = 0.2f;
     [SerializeField] private MeshRenderer[] _meshRenderers;
     [SerializeField] private Renderer _renderer;
+    [SerializeField] private ParticleSystem _particleSystem;
 
     private MeshRenderer _meshRenderer;
     private Material[] _materials;
@@ -30,6 +31,11 @@ public class Elements : MonoBehaviour
         if(_meshRenderer != null || _renderer != null)
         {
             ReflectColorRemaining();
+        }
+        if(_particleSystem  != null &&
+            !IsColorRemaining())
+        {
+            _particleSystem.Stop();
         }
     }
 

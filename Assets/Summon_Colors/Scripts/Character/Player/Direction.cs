@@ -36,6 +36,8 @@ public class Direction : MonoBehaviour
         _summon.GetHomeBase(_summon.Color).Velocity = (
             horizontalCameraForward * stick.y + 
             Camera.main.transform.right * stick.x).normalized * (_speed + (sqrMagni - correction01) / correction02);
+
+        InGameManager.Instance.ProceedTutorialStage((int)UIManager.TutorialStage.Direction);
     }
 
     public void Return()

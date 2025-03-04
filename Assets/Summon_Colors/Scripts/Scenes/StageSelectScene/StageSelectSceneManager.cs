@@ -13,7 +13,7 @@ public class StageSelectSceneManager : MonoBehaviour
     [SerializeField] private FadePanel _fadePanel;
     [SerializeField] private AudioSource _bgmPlayer;
     [SerializeField] private TextMeshProUGUI[] _rankingTexts;
-    private int _selectedIndex = 0;
+    private int _selectedIndex = 1;
     private bool _lockControll = false;
     private Ranking _ranking;
 

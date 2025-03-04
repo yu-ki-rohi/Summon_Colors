@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3012092789140518754
+--- !u!114 &-3716489670930535903
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   _parameters:
-    intensity: 0
+    intensity: 6.52609e-19
     sampleCount: 3
-    radialCenter: {x: 0.5, y: 0.5}
+    radialCenter: {x: 0, y: 1}
     useDither: 1
     blurShader: {fileID: 4800000, guid: bf7e910650f37c74eaeedf43d0193ac6, type: 3}
   _renderPassEvent: 550
@@ -73,8 +73,8 @@ MonoBehaviour:
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
   - {fileID: -1878332245247344467}
-  - {fileID: -3012092789140518754}
-  m_RendererFeatureMap: adc0de57c6d2eee59e88c32891e532d6
+  - {fileID: -3716489670930535903}
+  m_RendererFeatureMap: adc0de57c6d2eee521eac6c855606ccc
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}

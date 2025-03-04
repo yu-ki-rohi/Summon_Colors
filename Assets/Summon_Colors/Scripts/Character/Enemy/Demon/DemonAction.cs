@@ -74,6 +74,8 @@ public class DemonAction : EnemyAction
     {
         _willChangeSky = true;
         _state = State.Action;
+        _agent.updateRotation = false;
+        _agent.updatePosition = false;
         _animator.SetTrigger("Event");
     }
 
@@ -91,6 +93,13 @@ public class DemonAction : EnemyAction
             IgnitTacckle();
         }
     }
+
+    public override void ChangeDown()
+    {
+        base.ChangeDown();
+        _agent.speed = _enemyBase.Agility;
+    }
+
     public void StartAmbientChange()
     {
         StartCoroutine(ChangeAmbient());
@@ -305,6 +314,11 @@ public class DemonAction : EnemyAction
         {
             col.enabled = true;
         }
+
+        foreach (Collider col in _rushColliders)
+        {
+            col.enabled = true;
+        }
         _state = State.Action;
         _power = (int)(_enemyBase.Attack * _enemyBase.GetPowerMagnification((int)Skill.Tail));
         AudioManager.Instance.PlaySoundOneShot((int)AudioManager.DemonSound.TailAttack, transform);
@@ -329,6 +343,7 @@ public class DemonAction : EnemyAction
         _agent.velocity = (_rushVector- transform.position).normalized * _agent.speed * 0.5f;
         _stateLock = false;
         _agent.SetDestination(_rushVector);
+        _agent.updatePosition = true;
         foreach (Collider col in _rushColliders)
         {
             col.enabled = true;
@@ -375,6 +390,7 @@ public class DemonAction : EnemyAction
         _isBreath = false;
         StopSound();
         _agent.updateRotation = true;
+        _agent.updatePosition = true;
         _power = 0;
     }
 

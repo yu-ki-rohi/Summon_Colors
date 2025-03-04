@@ -134,6 +134,7 @@ public class InGameManager : MonoBehaviour
                 StartCoroutine(BossClearCoroutine());
                 break;
             case Type.Enemy:
+                ProceedTutorialStage((int)UIManager.TutorialStage.Defeate02);
                 StartCoroutine(EnemyClearCoroutine());
                 break;
         }
@@ -193,6 +194,7 @@ public class InGameManager : MonoBehaviour
     public void DefeatEnemy()
     {
         _inGameBase.DefeatEnemy();
+        ProceedTutorialStage((int)TutorialStage.Defeate01);
     }
 
     public void AbsorbColor(int energy)
@@ -203,6 +205,11 @@ public class InGameManager : MonoBehaviour
     public void Damage(int damage)
     {
         _inGameBase.Damage(damage);
+    }
+
+    public void ProceedTutorialStage(int targetStage)
+    {
+        _inGameBase.UIManager.ProceedTutorialStage(targetStage);
     }
     #endregion
 

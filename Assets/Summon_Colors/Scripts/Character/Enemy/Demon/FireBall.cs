@@ -30,11 +30,7 @@ public class FireBall : Projectiles
     {
         if (_embersPool != null)
         {
-            GameObject ember = _embersPool.Get(stage.ClosestPointOnBounds(this.transform.position));
-            if (ember.TryGetComponent<Embers>(out var embers))
-            {
-                embers.Initialize(_embersPower);
-            }
+            CreateEmbers();
         }
         else
         {
@@ -50,7 +46,6 @@ public class FireBall : Projectiles
         }
         
     }
-
     protected override void Update()
     {
         base.Update();
@@ -86,5 +81,23 @@ public class FireBall : Projectiles
         if (_elements == null) return;
         if (_elements.IsColorRemaining()) return;
         DisAppear();
+    }
+
+    private void CreateEmbers()
+    {
+        Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
+        RaycastHit hit;
+        int layerNum = LayerMask.NameToLayer("Stage");
+        int layerMask = 1 << layerNum;
+        layerNum = LayerMask.NameToLayer("Ground");
+        layerMask |= 1 << layerNum;
+        float distance = 1.5f;
+
+        if (!Physics.Raycast(ray, out hit, distance, layerMask)) return;
+        GameObject ember = _embersPool.Get(hit.point);
+        if (ember.TryGetComponent<Embers>(out var embers))
+        {
+            embers.Initialize(_embersPower);
+        }
     }
 }

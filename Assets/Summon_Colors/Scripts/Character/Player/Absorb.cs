@@ -48,6 +48,12 @@ public class Absorb : MonoBehaviour
         _colorElements.Add(colorType, value);
         ReflectGemIcon();
         InGameManager.Instance.AbsorbColor(value);
+        if( _colorElements.CurrentRed >= 10 &&
+            _colorElements.CurrentBlue >= 10 &&
+            _colorElements.CurrentYellow >= 10 )
+        {
+            InGameManager.Instance.ProceedTutorialStage((int)UIManager.TutorialStage.Absorb);
+        }
     }
 
     public int ReduceColor(ColorElements.ColorType colorType, int value, bool exhoust = false)

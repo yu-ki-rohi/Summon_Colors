@@ -42,7 +42,7 @@ MonoBehaviour:
     - Name: Call Back
       Clip: {fileID: 8300000, guid: 34bceb2e67f08e647a58d752fa4f898e, type: 3}
       IsLoop: 0
-      Volume: 0.5
+      Volume: 0.7
       MinDistance: 1
       MaxDistance: 100
   - Name: Demon
@@ -86,7 +86,7 @@ MonoBehaviour:
     - Name: Growl
       Clip: {fileID: 8300000, guid: 9763dfcc0f04bfd40ba8cc0a102ffe91, type: 3}
       IsLoop: 0
-      Volume: 0.4
+      Volume: 0.3
       MinDistance: 10
       MaxDistance: 80
     - Name: Breath
@@ -99,8 +99,8 @@ MonoBehaviour:
       Clip: {fileID: 8300000, guid: 1a157e80ff9a2eb4cb727c5639440afe, type: 3}
       IsLoop: 0
       Volume: 0.5
-      MinDistance: 15
-      MaxDistance: 60
+      MinDistance: 30
+      MaxDistance: 80
     - Name: Fire Ball
       Clip: {fileID: 8300000, guid: 22710bf2263fe114e9d1646a87f58b38, type: 3}
       IsLoop: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
       Clip: {fileID: 8300000, guid: 8cd854d788981164d9cbf007c6274627, type: 3}
       IsLoop: 0
       Volume: 0.7
-      MinDistance: 15
+      MinDistance: 30
       MaxDistance: 150
     - Name: Tackle Prepare02
       Clip: {fileID: 8300000, guid: 6dc930d25296960478ddfff3151cf11d, type: 3}
@@ -140,7 +140,7 @@ MonoBehaviour:
     - Name: Die
       Clip: {fileID: 8300000, guid: ea0a6aaa676bd8a4ba431f905c224104, type: 3}
       IsLoop: 0
-      Volume: 0.35
+      Volume: 0.3
       MinDistance: 30
       MaxDistance: 80
   - Name: System
@@ -148,12 +148,12 @@ MonoBehaviour:
     - Name: Decide
       Clip: {fileID: 8300000, guid: 9d556855c7eecb1478b6d0d77a3c9b2c, type: 3}
       IsLoop: 0
-      Volume: 0.5
+      Volume: 0.4
       MinDistance: 40
       MaxDistance: 100
     - Name: Select
       Clip: {fileID: 8300000, guid: f531fe72fbcd555498ec3580d2d094b0, type: 3}
       IsLoop: 0
-      Volume: 0.5
+      Volume: 0.4
       MinDistance: 40
       MaxDistance: 100

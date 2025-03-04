@@ -106,7 +106,7 @@ public class EnemyAction : MonoBehaviour
         _agent.updateRotation = true;
     }
 
-    public void ChangeDown()
+    public virtual void ChangeDown()
     {
         _state = State.Down;
         FinishAttack();
@@ -118,6 +118,10 @@ public class EnemyAction : MonoBehaviour
                 _agent.updateRotation = false;
                 _agent.updatePosition = false;
             }
+        }
+        if(_actionTimer != null)
+        {
+            _actionTimer.Reset();
         }
     }
 

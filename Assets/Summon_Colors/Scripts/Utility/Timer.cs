@@ -25,6 +25,11 @@ public class Timer
         _timer = Time;
     }
 
+    public void Reset()
+    {
+        _timer = 0.0f;
+    }
+
     public float CountUp(float deltaTime)
     {
         if (_behavior == null || Time < 0.0f)

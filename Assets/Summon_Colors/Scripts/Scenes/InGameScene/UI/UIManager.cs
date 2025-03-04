@@ -31,6 +31,17 @@ public class UIManager : MonoBehaviour
         Command,
     }
 
+    public enum TutorialStage
+    {
+        Absorb = 1,
+        Summon01,
+        Change,
+        Summon02,
+        Direction,
+        Defeate01,
+        Defeate02,
+    }
+
 
     [SerializeField] private HitPointBar _hitPointBar;
     [SerializeField] private HitPointBar _enemyHitPointBar;
@@ -44,13 +55,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _rankingSheet;
     [SerializeField] private Image[] _buttonDisplays;
     [SerializeField] private Animator _buttonDisplayAnimator;
+    [SerializeField] private Animator _tutorialAnimator;
     [SerializeField] private TextMeshProUGUI _phisicsTime;
     [SerializeField] private TextMeshProUGUI _scriptsTime;
     [SerializeField] private TextMeshProUGUI _otherTime;
     [SerializeField] private TextMeshProUGUI _fps;
     int _countUpdate = 0;
     float _timer = 0;
-
+    int _currentTutorialStage = 1;
    
 
     #region--- Hit Point bar ---
@@ -249,6 +261,18 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region--- Tutorial ---
+    public void ProceedTutorialStage(int targetStage)
+    {
+        if (_tutorialAnimator == null) return;
+        if (_currentTutorialStage != targetStage) return;
+        _currentTutorialStage++;
+        _tutorialAnimator.SetTrigger("Clear");
+        _tutorialAnimator.SetInteger("Stage", _currentTutorialStage);
+    }
+
     #endregion
     // Start is called before the first frame update
     void Start()

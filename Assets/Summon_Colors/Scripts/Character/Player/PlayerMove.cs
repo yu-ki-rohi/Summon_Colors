@@ -53,6 +53,7 @@ public class PlayerMove : MonoBehaviour
         _acceleration = _velocity.magnitude;
         _dir = _velocity.normalized;
 #endif
+        _player.FinishInvincible();
     }
 
     public void ThrowItem()

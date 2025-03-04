@@ -17,18 +17,6 @@ public class Embers : MonoBehaviour
     public void Initialize(int power)
     {
         _power = power;
-        Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
-        RaycastHit hit;
-        int layerNum = LayerMask.NameToLayer("Stage");
-        int layerMask = 1 << layerNum;
-        layerNum = LayerMask.NameToLayer("Ground");
-        layerMask |= 1 << layerNum;
-        float distance = 6.5f;
-
-        if (Physics.Raycast(ray, out hit, distance, layerMask))
-        {
-            transform.position = hit.point;
-        }
     }
 
     public void Initialize()

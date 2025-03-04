@@ -87,6 +87,10 @@ public class Summon : MonoBehaviour
                 {
                     summonedBlack.Initialize(rank, 0, _summonBasePositions[_color][0], this, navMeshHit.position);
                 }
+                SetMotor(0.2f, 0.3f);
+                _vibrationTimer = new Timer(StopVibration, 0.15f);
+                InGameManager.Instance.ProceedTutorialStage((int)UIManager.TutorialStage.Summon01);
+                InGameManager.Instance.ProceedTutorialStage((int)UIManager.TutorialStage.Summon02);
                 return true;
             }
             return false;
@@ -132,6 +136,8 @@ public class Summon : MonoBehaviour
                                 }
                                 SetMotor(0.2f, 0.3f);
                                 _vibrationTimer = new Timer(StopVibration, 0.15f);
+                                InGameManager.Instance.ProceedTutorialStage((int)UIManager.TutorialStage.Summon01);
+                                InGameManager.Instance.ProceedTutorialStage((int)UIManager.TutorialStage.Summon02);
                                 return true;
                             }
 
@@ -193,6 +199,7 @@ public class Summon : MonoBehaviour
                     _actionController.ViewBloom(true);
                     SetMotor(0.2f, 0.3f);
                     _vibrationTimer = new Timer(StopVibration, 0.01f);
+                    InGameManager.Instance.ProceedTutorialStage((int)UIManager.TutorialStage.Change);
                 }
                 return;
             }
